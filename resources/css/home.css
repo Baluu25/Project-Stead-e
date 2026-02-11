@@ -1,0 +1,496 @@
+.dashboard-container {
+    min-height: calc(100vh - 140px);
+    width: 100%;
+    margin: 0 auto;
+}
+
+.dashboard-layout {
+    display: flex;
+    gap: 1.6rem;
+    min-height: 480px;
+    margin-top: 0.8rem;
+}
+
+.dashboard-sidebar {
+    width: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1.6rem 0;
+    height: fit-content;
+    position: sticky;
+    top: 80px;
+    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+.dashboard-sidebar .sidebar-header {
+    padding: 0 1.2rem 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 0.8rem;
+}
+
+.dashboard-sidebar .sidebar-header h3 {
+    color: white;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.dashboard-sidebar .nav-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dashboard-sidebar .nav-item {
+    margin-bottom: 0.4rem;
+}
+
+.dashboard-sidebar .nav-item a {
+    display: block;
+    padding: 0.8rem 1.2rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+    position: relative;
+}
+
+.dashboard-sidebar .nav-item a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.dashboard-sidebar .nav-item.active a {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border-left-color: white;
+}
+
+.dashboard-sidebar .nav-text {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.dashboard-main {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 1.6rem;
+    min-height: calc(100vh - 160px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-header-with-calendar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 2.4rem;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.welcome-section {
+    flex: 1;
+    min-width: 240px;
+}
+
+.welcome-section h1 {
+    font-size: 2rem;
+    margin-bottom: 0.6rem;
+    color: white;
+    font-weight: 700;
+}
+
+.welcome-section .motivation-text {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+}
+
+.calendar-section {
+    flex: 1;
+    width: 50%;
+}
+
+.dates-line-container {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dates-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14.4px 17.6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dates-header h2 {
+    margin: 0;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.dates-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.date-nav-btn {
+    background: white;
+    border: 1px solid #ddd;
+    color: #333;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.date-nav-btn:hover {
+    background: #f5f5f5;
+    transform: translateY(-2px);
+}
+
+.btn-today {
+    background: white;
+    color: #333;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+}
+
+.btn-today:hover {
+    background: #f5f5f5;
+    transform: translateY(-2px);
+}
+
+.dates-line {
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    background-color: transparent;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.dates-line::-webkit-scrollbar {
+    display: none;
+}
+
+.date-item {
+    min-width: 64px;
+    height: 64px;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    padding: 8px;
+}
+
+.date-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.date-item.today {
+    border: 2px solid transparent;
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(135deg, #ff2a00, #2a51ff) border-box;
+}
+
+.date-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 3px;
+    color: #666;
+}
+
+.date-day {
+    font-size: 1rem;
+    opacity: 0.9;
+    font-weight: 500;
+    color: #666;
+}
+
+.daily-habits-section {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 1.6rem;
+    margin-top: 1.6rem;
+    width: 50%;
+    height: 55vh;
+}
+
+.daily-habits-section h2 {
+    color: white;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 0.64rem;
+}
+
+.habits-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.habit-item {
+    margin-bottom: 0.8rem;
+}
+
+.habit-bar {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 25px;
+    height: 40px;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.habit-bar:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.streak-counter {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 1rem;
+    margin-top: 1.6rem;
+    width: 50%;
+    height: min-content;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    gap: 1rem;
+}
+
+.streak-aside {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.streak-flame {
+    font-size: 2.5rem;
+    animation: flamePulse 1.5s infinite;
+    font-weight: 900;
+    color: white;
+    margin-bottom: 0.4rem;
+}
+
+.streak-number {
+    font-size: 2rem;
+    font-weight: 900;
+    color: white;
+    margin: 0;
+    line-height: 1;
+}
+
+.streak-label {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+    margin-top: 0.2rem;
+}
+
+.streak-week {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 1rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.week-days {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 0.4rem;
+}
+
+.day-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.day-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.day-circle.active {
+    background: #ff2a003e;
+    color: white;
+}
+
+.day-letter {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.main-data{
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 1rem;
+}
+
+@media (max-width: 991px) {
+    .dashboard-container {
+        padding: 0 1.2rem 1.2rem;
+    }
+    
+    .dashboard-sidebar {
+        width: 192px;
+    }
+    
+    .dashboard-header-with-calendar {
+        flex-direction: column;
+    }
+    
+    .welcome-section, .calendar-section {
+        width: 100%;
+        max-width: 100%;
+        min-width: 100%;
+    }
+    
+    .welcome-section {
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 0 0.8rem 0.8rem;
+        min-height: calc(100vh - 120px);
+    }
+    
+    .dashboard-layout {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .dashboard-sidebar {
+        width: 100%;
+        position: static;
+        top: auto;
+        height: auto;
+    }
+    
+    .dashboard-main {
+        padding: 1.2rem;
+        min-height: calc(100vh - 200px);
+    }
+    
+    .welcome-section h1 {
+        font-size: 1.6rem;
+    }
+    
+    .welcome-section .motivation-text {
+        font-size: 0.8rem;
+    }
+    
+    .calendar-section {
+        min-width: 100%;
+    }
+    
+    .date-item {
+        min-width: 56px;
+        height: 56px;
+    }
+    
+    .date-number {
+        font-size: 1.04rem;
+    }
+    
+    .date-day {
+        font-size: 0.6rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .dashboard-main {
+        padding: 0.8rem;
+    }
+    
+    .welcome-section h1 {
+        font-size: 1.44rem;
+    }
+    
+    .dates-header h2 {
+        font-size: 1.04rem;
+    }
+    
+    .date-item {
+        min-width: 48px;
+        height: 48px;
+        padding: 6.4px;
+    }
+    
+    .date-number {
+        font-size: 0.88rem;
+    }
+    
+    .date-day {
+        font-size: 0.56rem;
+    }
+    
+    .date-nav-btn {
+        width: 24px;
+        height: 24px;
+        font-size: 0.8rem;
+    }
+    
+    .btn-today {
+        padding: 0.32rem 0.64rem;
+        font-size: 0.64rem;
+    }
+}
