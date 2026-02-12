@@ -1,3 +1,7 @@
+.main-content {
+  margin: 0;
+}
+
 .main-content .row {
   align-items: center;
 }
@@ -19,7 +23,7 @@
 .lead {
   font-size: 1.25rem;
   opacity: 0.75;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .section-title {
@@ -41,43 +45,61 @@
   text-align: center;
 }
 
+/* Slideshow */
 .slideshow-container {
   position: relative;
-  max-width: 100%;
+  max-width: 600px;
   margin: auto;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .slide {
   display: none;
+  height: 520px;
+  width: 100%;
 }
 
 .slide.active {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .slide-text {
   font-weight: 900;
   font-size: 2rem;
   line-height: 1.1;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-transform: uppercase;
   color: white;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.slide p.lead {
+  text-align: center;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
 }
 
 .slide-image {
-  max-width: 100%;
-  max-height: 400px;
+  width: 500px;
+  height: 400px;
   object-fit: contain;
   border-radius: 10px;
-  margin-bottom: 1.5rem;
+  display: block;
+  flex-shrink: 0;
 }
 
 .slide-indicators {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-top: 1rem;
+  margin-top: auto;
 }
 
 .indicator {
@@ -86,13 +108,14 @@
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s;
 }
 
 .indicator.active {
   background-color: white;
 }
 
+/* Functions */
 .functions-section {
   padding: 4rem 0;
 }
@@ -111,11 +134,8 @@
   padding: 2rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s, box-shadow 0.3s;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   color: #333;
 }
 
@@ -142,6 +162,7 @@
   opacity: 0.8;
 }
 
+/* Download */
 .download-section {
   padding: 4rem 0;
 }
@@ -149,7 +170,7 @@
 .download-card {
   background: white;
   border-radius: 25px;
-  padding: 0rem 4rem 0rem 4rem;
+  padding: 0 4rem;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
   color: #333;
   overflow: hidden;
@@ -185,17 +206,6 @@
   opacity: 0.9;
 }
 
-.download-image-container {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  height: 50%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  z-index: 1;
-}
-
 .download-image {
   height: auto;
   max-height: 600px;
@@ -205,22 +215,21 @@
 .google-play-btn {
   display: inline-block;
   text-decoration: none;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s;
 }
 
 .play-store-badge {
   height: 80px;
   width: auto;
-  transition: all 0.3s ease;
-  display: block;
+  transition: transform 0.3s;
   border-radius: 12px;
 }
 
 .play-store-badge:hover {
   transform: scale(1.05);
-  filter: brightness(1.1);
 }
 
+/* Reviews */
 .reviews-section {
   position: relative;
   margin-bottom: 10rem;
@@ -231,11 +240,8 @@
   border-radius: 20px;
   padding: 2rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s, box-shadow 0.3s;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   color: #333;
 }
 
@@ -287,10 +293,6 @@
   font-size: 1.2rem;
 }
 
-.review-content {
-  flex: 1;
-}
-
 .review-text {
   font-size: 1rem;
   line-height: 1.6;
@@ -299,7 +301,18 @@
   margin: 0;
 }
 
+/* Responsive */
+@media (min-width: 768px) {
+  .main-content {
+    margin-top: -3rem;
+  }
+}
+
 @media (min-width: 1200px) {
+  .main-content {
+    margin-top: -4rem;
+  }
+  
   .gradient-text {
     font-size: 3.2rem;
   }
@@ -327,66 +340,11 @@
     padding: 2.5rem 4rem;
     height: 36rem;
   }
-  
-  .download-title {
-    font-size: 2.4rem;
-  }
-  
-  .download-text {
-    font-size: 1.15rem;
-  }
-  
-  .play-store-badge {
-    height: 80px;
-  }
-  
-  .download-image {
-    max-height: 600px;
-  }
-  
-  .function-card {
-    padding: 2rem;
-  }
-  
-  .card-title {
-    font-size: 1.5rem;
-  }
-  
-  .card-text {
-    font-size: 1.05rem;
-  }
-  
-  .review-card {
-    padding: 2rem;
-  }
-  
-  .review-text {
-    font-size: 1.05rem;
-  }
 }
 
 @media (min-width: 1400px) {
   .gradient-text {
     font-size: 3.4rem;
-  }
-  
-  .lead {
-    font-size: 1.35rem;
-  }
-  
-  .section-title,
-  .download-section-title,
-  .reviews-section-title,
-  .functions-section h2 {
-    font-size: 2.8rem;
-  }
-  
-  .slide-text {
-    font-size: 2.3rem;
-  }
-  
-  .slide-image {
-    max-height: 450px;
   }
   
   .download-card {
@@ -397,46 +355,11 @@
   .download-title {
     font-size: 2.6rem;
   }
-  
-  .download-text {
-    font-size: 1.2rem;
-  }
-  
-  .play-store-badge {
-    height: 85px;
-  }
-  
-  .download-image {
-    max-height: 650px;
-  }
-  
-  .function-card {
-    padding: 2.2rem;
-  }
-  
-  .card-icon {
-    font-size: 3rem;
-  }
-  
-  .card-title {
-    font-size: 1.6rem;
-  }
-  
-  .card-text {
-    font-size: 1.1rem;
-  }
 }
 
 @media (min-width: 1600px) {
   .gradient-text {
     font-size: 3.6rem;
-  }
-  
-  .section-title,
-  .download-section-title,
-  .reviews-section-title,
-  .functions-section h2 {
-    font-size: 3rem;
   }
   
   .download-card {
@@ -446,86 +369,5 @@
   
   .download-title {
     font-size: 2.8rem;
-  }
-  
-  .download-text {
-    font-size: 1.25rem;
-  }
-  
-  .play-store-badge {
-    height: 90px;
-  }
-  
-  .download-image {
-    max-height: 700px;
-  }
-  
-  .function-card {
-    padding: 2.5rem;
-  }
-  
-  .card-icon {
-    font-size: 3.2rem;
-  }
-  
-  .card-title {
-    font-size: 1.7rem;
-  }
-  
-  .card-text {
-    font-size: 1.15rem;
-  }
-}
-
-@media (min-width: 1800px) {
-  .gradient-text {
-    font-size: 3.8rem;
-  }
-  
-  .lead {
-    font-size: 1.45rem;
-  }
-  
-  .section-title,
-  .download-section-title,
-  .reviews-section-title,
-  .functions-section h2 {
-    font-size: 3.1rem;
-  }
-  
-  .download-card {
-    padding: 4rem 7rem;
-    height: 42rem;
-  }
-  
-  .download-title {
-    font-size: 3rem;
-  }
-  
-  .download-text {
-    font-size: 1.3rem;
-  }
-  
-  .play-store-badge {
-    height: 95px;
-  }
-}
-
-@media (min-width: 2000px) {
-  .gradient-text {
-    font-size: 4rem;
-  }
-  
-  .download-card {
-    padding: 4.5rem 8rem;
-    height: 44rem;
-  }
-  
-  .download-title {
-    font-size: 3.2rem;
-  }
-  
-  .play-store-badge {
-    height: 100px;
   }
 }

@@ -115,14 +115,17 @@
       <div class="options-grid">
         <label class="option-card">
           <input type="radio" name="gender" value="male" {{ old('gender') == 'male' ? 'checked' : '' }} required> 
+          <span class="option-icon">👨</span>
           <span>Male</span>
         </label>
         <label class="option-card">
-          <input type="radio" name="gender" value="female" {{ old('gender') == 'female' ? 'checked' : '' }} required> 
+          <input type="radio" name="gender" value="female" {{ old('gender') == 'female' ? 'checked' : '' }} required>
+          <span class="option-icon">👩</span>
           <span>Female</span>
         </label>
         <label class="option-card">
-          <input type="radio" name="gender" value="other" {{ old('gender') == 'other' ? 'checked' : '' }} required> 
+          <input type="radio" name="gender" value="other" {{ old('gender') == 'other' ? 'checked' : '' }} required>
+          <span class="option-icon">🙂</span>
           <span>Other</span>
         </label>
       </div>

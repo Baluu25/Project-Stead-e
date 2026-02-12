@@ -16,7 +16,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark px-4 glass-card">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}" aria-label="Home">
+            <a class="navbar-brand d-flex align-items-center" href="{{ route('dashboard') }}" aria-label="Home">
                 <img src="{{ asset('images/logo.png') }}" alt="logo" width="40" height="40" />
                 <span>Stead-E</span>
             </a>
@@ -27,16 +27,19 @@
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
                 <ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
-                    <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
-                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                        <a href="{{ url('/') }}" class="btn btn-danger btn-start">Logout</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('profile.edit') }}">Profile</a>
                     </li>
-                </ul>
-            </div>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Settings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-logout" href="{{ route("logout") }}">Logout</a>
+                    </li>
+            </ul>
         </div>
-    </nav>
-    
+    </div>
+</nav>
     <main>
         @yield('content')
     </main>

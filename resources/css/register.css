@@ -313,15 +313,18 @@ body {
 
 .options-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.8rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
   margin-top: 0.5rem;
+}
+
+#step6 .options-grid {
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .option-card {
   display: block;
   cursor: pointer;
-  transform: translateZ(0);
 }
 
 .option-card input {
@@ -329,57 +332,48 @@ body {
 }
 
 .option-content {
-  padding: 1.2rem 0.8rem;
+  padding: 1.2rem 0.5rem;
   border: 2px solid #e0e0e0;
   border-radius: 12px;
   text-align: center;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   background: #f8f9fa;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-}
-
-.option-card input:checked + .option-content {
-  border-color: #25408f;
-  background: linear-gradient(135deg, #25408f, #3c5bbf);
-  color: white;
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 8px 25px rgba(37, 64, 143, 0.3);
-}
-
-.option-card:hover .option-content {
-  border-color: #25408f;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(37, 64, 143, 0.2);
+  gap: 0.4rem;
+  transition: all 0.2s ease;
 }
 
 .option-icon {
-  font-size: 1.8rem;
-  display: block;
+  font-size: 2rem;
 }
 
 .option-text {
   font-weight: 600;
-  font-size: 0.9rem;
-  display: block;
+  font-size: 0.95rem;
+  color: #333;
 }
 
 .option-content small {
   font-size: 0.75rem;
-  opacity: 0.8;
-  display: block;
+  color: #666;
 }
 
-.option-card input:checked + .option-content small {
-  opacity: 0.9;
+.option-card:hover .option-content {
+  border-color: #25408f;
+  background: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(37, 64, 143, 0.1);
 }
 
-.option-card input:checked + .option-content * {
+.option-card input:checked + .option-content {
+  border-color: #25408f;
+  background: #25408f;
+}
+
+.option-card input:checked + .option-content .option-text,
+.option-card input:checked + .option-content small,
+.option-card input:checked + .option-content .option-icon {
   color: white;
 }
 

@@ -14,7 +14,7 @@
     @vite(['resources/js/script.js'])
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark px-4 glass-card">
+   <nav class="navbar navbar-expand-lg navbar-dark px-4 glass-card">
     <div class="container-fluid px-0 px-lg-3">
         <div class="d-flex justify-content-between w-100 align-items-center">
             <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}" aria-label="Home">
@@ -33,9 +33,42 @@
                         <li class="nav-item"><a class="nav-link" onclick="window.location.hash='functions'">Functions</a></li>
                         <li class="nav-item"><a class="nav-link" onclick="window.location.hash='download'">Download</a></li>
                         <li class="nav-item"><a class="nav-link" onclick="window.location.hash='reviews'">Reviews</a></li>
-                        <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                            <a href="{{ url('/login') }}" class="btn btn-primary btn-start">Login</a>
-                        </li>
+                        
+                        @guest
+                            {{-- Show Login button only for guests --}}
+                            <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                                <a href="{{ route('login') }}" class="btn btn-primary btn-start">Login</a>
+                            </li>
+                        @else
+                            {{-- Show user menu for authenticated users --}}
+                            <li class="nav-item dropdown ms-lg-3 mt-2 mt-lg-0">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" 
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{ Auth::user()->name }}
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('dashboard') }}">
+                                            Dashboard
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                                            Profile
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <button type="submit" class="dropdown-item">
+                                                Logout
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endguest
                     </ul>
                 </div>
             </div>

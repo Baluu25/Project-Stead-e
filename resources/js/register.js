@@ -109,18 +109,19 @@ function validateStep(step) {
     }
     
     if (step === 5) {
-        const goalSelected = document.querySelector('input[name="user_goal"]:checked');
-        if (!goalSelected) {
-            alert('Please select goal');
+        const sleepTime = document.getElementById('sleep_time').value;
+        const wakeTime = document.getElementById('wake_time').value;
+        if (sleepTime === '' || wakeTime === '') {
+            alert('Please enter both sleep and wake times');
             return false;
         }
         return true;
     }
-    
+
     if (step === 6) {
-        const activitySelected = document.querySelector('input[name="activity_level"]:checked');
-        if (!activitySelected) {
-            alert('Please select activity level');
+        const goalSelected = document.querySelector('input[name="user_goal"]:checked');
+        if (!goalSelected) {
+            alert('Please select goal');
             return false;
         }
         return true;
