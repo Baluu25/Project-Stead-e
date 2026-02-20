@@ -112,7 +112,14 @@
     font-weight: 500;
 }
 
-.main-data {
+.overview-row {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.main-row {
     display: flex;
     flex-flow: row nowrap;
     gap: 1rem;
@@ -385,6 +392,24 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+.daily-progress-section {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 1.25rem;
+    width: 30%;
+}
+
+.daily-progress-section h2 {
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 0.5rem;
+}
+
+
 @media (max-width: 991px) {
     .dashboard-container {
         padding: 0 1.2rem 1.2rem;
@@ -394,7 +419,7 @@
         width: 180px;
     }
     
-    .main-data {
+    .overview-row {
         flex-direction: column;
     }
 
@@ -447,7 +472,7 @@
         font-size: 0.7rem;
     }
 
-    .main-data {
+    .overview-row {
         flex-direction: column;
     }
 

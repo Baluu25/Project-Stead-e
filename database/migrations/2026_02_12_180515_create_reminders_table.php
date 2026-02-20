@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('habit_completions', function (Blueprint $table) {
+        Schema::create('reminders', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('completed_at');
-            $table->bigInteger('quantity')->default(1);
-            $table->text('notes')->nullable();
-            $table->string('mood', 255)->nullable();
-            $table->boolean('is_skipped')->default(false);
-            $table->foreignId('habit_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->softDeletes();
+            $table->foreignId('habit_id')->constrained()->onDelete('cascade');
+            $table->string('title', 255);
+            $table->time('reminder_time');
+            $table->string('days_of_week', 255)->comment('Comma-separated days: 0=Sun,1=Mon,...');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('habit_completions');
+        Schema::dropIfExists('reminders');
     }
 };

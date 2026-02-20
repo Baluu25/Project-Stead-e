@@ -11,16 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('habit_completions', function (Blueprint $table) {
+        Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('completed_at');
-            $table->bigInteger('quantity')->default(1);
-            $table->text('notes')->nullable();
-            $table->string('mood', 255)->nullable();
-            $table->boolean('is_skipped')->default(false);
-            $table->foreignId('habit_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->softDeletes();
+            $table->enum('notification_type', ['reminder', 'achievement', 'friend_request', 'challenge', 'system'])->default('system');
+            $table->string('title', 255);
+            $table->text('message');
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('habit_completions');
+        Schema::dropIfExists('notifications');
     }
 };

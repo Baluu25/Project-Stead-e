@@ -43,6 +43,7 @@
         </aside>
 
         <main class="dashboard-main">
+
             <!-- Welcome Section -->
             <div class="dashboard-header-with-calendar">
                 <div class="welcome-section">
@@ -51,8 +52,8 @@
                 </div>
             </div>
 
-            <!-- Main data -->
-            <div class="main-data">
+            <!-- Overview row -->
+            <div class="overview-row">
                 <div class="calendar-section">
                     <div class="dates-line-container">
                         <div class="dates-header">
@@ -67,6 +68,7 @@
                     </div>
                 </div>
 
+                <!-- Streak counter -->
                 <div class="streak-counter">
                     <div class="streak-aside">
                         <div class="streak-flame">🔥</div>
@@ -107,26 +109,35 @@
                 </div>
             </div>
 
-            <!-- Daily Habits Section - 75% width, centered below -->
-            <div class="daily-habits-section">
-                <h2>Daily Habits</h2>
-                <ul class="habits-list">
-                    <li class="habit-item">
-                        <div class="habit-bar"></div>
-                    </li>
-                    <li class="habit-item">
-                        <div class="habit-bar"></div>
-                    </li>
-                    <li class="habit-item">
-                        <div class="habit-bar"></div>
-                    </li>
-                    <li class="habit-item">
-                        <div class="habit-bar"></div>
-                    </li>
-                    <li class="habit-item">
-                        <div class="habit-bar"></div>
-                    </li>
-                </ul>
+            <!-- Main row -->
+            <div class="main-row">
+                
+                <!-- Daily habits -->
+                <div class="daily-habits-section">
+                    <h2>Daily Habits</h2>
+                    <ul class="habits-list">
+                        <li class="habit-item">
+                            <div class="habit-bar"></div>
+                        </li>
+                        <li class="habit-item">
+                            <div class="habit-bar"></div>
+                        </li>
+                        <li class="habit-item">
+                            <div class="habit-bar"></div>
+                        </li>
+                        <li class="habit-item">
+                            <div class="habit-bar"></div>
+                        </li>
+                        <li class="habit-item">
+                            <div class="habit-bar"></div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="daily-progress-section">
+                    <h2>Daily Progress</h2>
+
+                </div>
             </div>
         </main>
     </div>

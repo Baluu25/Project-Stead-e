@@ -33,4 +33,5 @@ class Habit extends Model
         'is_active',
         'is_public',
     ];
+
 }

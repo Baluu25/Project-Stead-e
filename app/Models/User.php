@@ -2,56 +2,77 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    protected $table = 'users';
+    
     protected $fillable = [
-        'name',
         'username',
         'email',
-        'password',
-        'gender',
-        'birthdate',
-        'weight',
-        'height',
-        'sleep_time',
-        'wake_time',
-        'user_goal',
+        'password_hash',
+        'timezone',
+        'current_streak',
+        'longest_streak'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password_hash',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+    public function habits(): HasMany
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'birthdate' => 'date'
-        ];
+        return $this->hasMany(Habit::class);
+    }
+
+    public function habitCompletions(): HasMany
+    {
+        return $this->hasMany(HabitCompletion::class);
+    }
+
+    public function achievements(): HasMany
+    {
+        return $this->hasMany(Achievement::class);
+    }
+
+    public function reminders(): HasMany
+    {
+        return $this->hasMany(Reminder::class);
+    }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class);
+    }
+
+    public function settings(): HasOne
+    {
+        return $this->hasOne(UserSetting::class);
+    }
+
+    public function friends(): HasMany
+    {
+        return $this->hasMany(Friend::class, 'user_id');
+    }
+
+    public function friendOf(): HasMany
+    {
+        return $this->hasMany(Friend::class, 'friend_id');
+    }
+
+    public function createdChallenges(): HasMany
+    {
+        return $this->hasMany(Challenge::class, 'created_by_id');
     }
 }
