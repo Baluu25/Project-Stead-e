@@ -1,4 +1,5 @@
-![STEAD-E Banner](images/banner_placeholder.png)
+<img src="images/banner_placeholder.png" alt="STEAD-E Banner" width="50" style="display: block; margin: 0 auto;">
+
 # STEAD-E – Szokás Követő
 
 

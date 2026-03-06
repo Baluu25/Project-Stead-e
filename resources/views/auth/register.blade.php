@@ -6,10 +6,11 @@
   <link rel="icon" type="image/x-icon" href="{{ asset('images/logo.png') }}">
   <title>Stead-E - Create Account</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-  @vite(['resources/js/app.js', 'resources/css/register.css', 'resources/js/register.js'])
+  <script src="{{ asset('storage/js/register.js') }}" defer></script>
+  <script src="{{ asset('storage/js/app.js') }}" defer></script>
+  <link rel="stylesheet" href="{{ asset('storage/css/register.css') }}">
 </head>
 <body>
-<div class="background-gradient"></div>
 
 <div class="back-to-home-container">
   <a href="{{ url('/') }}" class="back-to-home">

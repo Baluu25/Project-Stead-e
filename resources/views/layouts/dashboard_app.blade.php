@@ -10,16 +10,17 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
             integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
             crossorigin="anonymous" defer></script>
-    @vite(['resources/css/dashboard.css'])
-    @vite(['resources/js/script.js'])
+    <link rel="stylesheet" href="{{ asset('storage/css/dashboard.css') }}">
+    <script src="{{ asset('storage/js/script.js') }}" defer></script>
+    @yield('dashboard-styles')
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark px-4 glass-card">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="{{ route('dashboard') }}" aria-label="Home">
+            <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}" aria-label="Home">
                 <img src="{{ asset('images/logo.png') }}" alt="logo" width="40" height="40" />
                 <span>Stead-E</span>
-            </a>
+            </a>    
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
                     aria-controls="navbarContent" aria-expanded="false" aria-label="Navigáció váltása">
                 <span class="navbar-toggler-icon"></span>
@@ -28,7 +29,7 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
                 <ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('profile.edit') }}">Profile</a>
+                        <a class="nav-link" href="#">Profile</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Settings</a>
@@ -40,10 +41,48 @@
         </div>
     </div>
 </nav>
-    <main>
-        @yield('content')
-    </main>
-    
+<div class="dashboard-container">
+    <div class="dashboard-layout">
+        <aside class="dashboard-sidebar">
+            <nav class="sidebar-nav">
+                <div class="sidebar-header">
+                    <h3>Dashboard</h3>
+                </div>
+                <ul class="nav-items">
+                    <li class="nav-item {{ request()->routeIs('home') ? 'active' : '' }}">
+                        <a href="#">
+                            <span class="nav-text">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" {{ request()->routeIs('habits') ? 'active' : '' }}>
+                        <a href="/habits">
+                            <span class="nav-text">Habits</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" {{ request()->routeIs('statistics') ? 'active' : '' }}>
+                        <a href="#">
+                            <span class="nav-text">Statistics</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" {{ request()->routeIs('goals') ? 'active' : '' }}>
+                        <a href="#">
+                            <span class="nav-text">Goals</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" {{ request()->routeIs('achievements') ? 'active' : '' }}>
+                        <a href="#">
+                            <span class="nav-text">Achievements</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="dashboard-main">
+            @yield('content')
+        </main>
+    </div>
+</div>
     <footer class="footer py-5">
         <div class="container">
             <div class="row">

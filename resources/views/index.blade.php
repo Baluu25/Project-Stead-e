@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('title', 'Home')
-@vite(['resources/css/index.css'])
+@section('styles')
+  <link rel="stylesheet" href="{{ asset('storage/css/index.css') }}">
+@endsection
 
 @section('content')
     <main class="container main-content">

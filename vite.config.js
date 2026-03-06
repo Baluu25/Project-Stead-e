@@ -19,7 +19,7 @@ export default defineConfig({
                 'resources/css/register.css',
                 'resources/css/login.css',
                 'resources/css/dashboard.css',
-                'resources/css/home.css'
+                'resources/css/dashboard_home.css'
             ],
             refresh: true,
         }),

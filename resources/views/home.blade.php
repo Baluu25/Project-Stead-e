@@ -2,50 +2,13 @@
 
 @section('title', 'dashboard')
 
-@vite(['resources/css/dashboard_home.css'])
+@section('dashboard-styles')
+    <link rel="stylesheet" href="{{ asset('storage/css/dashboard_home.css') }}">
+@endsection
 
 @section('content')
-<div class="dashboard-container">
-    <div class="dashboard-layout">
-        <aside class="dashboard-sidebar">
-            <nav class="sidebar-nav">
-                <div class="sidebar-header">
-                    <h3>Dashboard</h3>
-                </div>
-                <ul class="nav-items">
-                    <li class="nav-item active">
-                        <a href="#">
-                            <span class="nav-text">Home</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#">
-                            <span class="nav-text">Habits</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#">
-                            <span class="nav-text">Statistics</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#">
-                            <span class="nav-text">Goals</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#">
-                            <span class="nav-text">Achievements</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-
-        <main class="dashboard-main">
-
             <!-- Welcome Section -->
-            <div class="dashboard-header-with-calendar">
+            <div class="dashboard-header">
                 <div class="welcome-section">
                     <h1>Welcome, {{ Auth::user()->username ?? 'User' }}!</h1>
                     <p class="motivation-text">Every step counts. Stay consistent!</p>
@@ -139,7 +102,4 @@
 
                 </div>
             </div>
-        </main>
-    </div>
-</div>
 @endsection

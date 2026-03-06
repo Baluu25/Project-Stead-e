@@ -8,7 +8,9 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" 
           integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
           crossorigin="anonymous">
-  @vite(['resources/js/app.js', 'resources/js/login.js', 'resources/css/login.css'])
+  <script src="{{ asset('storage/js/app.js') }}" defer></script>
+  <script src="{{ asset('storage/js/login.js') }}" defer></script>
+  <link rel="stylesheet" href="{{ asset('storage/css/login.css') }}">
 </head>
 <body>
     <div class="background-gradient"></div>
