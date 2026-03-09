@@ -50,27 +50,27 @@
                 </div>
                 <ul class="nav-items">
                     <li class="nav-item {{ request()->routeIs('home') ? 'active' : '' }}">
-                        <a href="#">
+                        <a href="{{ request()->routeIs('home') ? '#' : '/home' }}">
                             <span class="nav-text">Home</span>
                         </a>
                     </li>
-                    <li class="nav-item" {{ request()->routeIs('habits') ? 'active' : '' }}>
-                        <a href="/habits">
+                    <li class="nav-item {{ request()->routeIs('habits') ? 'active' : '' }}">
+                        <a href="{{ request()->routeIs('habits') ? '#' : '/habits' }}">
                             <span class="nav-text">Habits</span>
                         </a>
                     </li>
-                    <li class="nav-item" {{ request()->routeIs('statistics') ? 'active' : '' }}>
-                        <a href="#">
+                    <li class="nav-item {{ request()->routeIs('statistics') ? 'active' : '' }}">
+                        <a href="{{ request()->routeIs('statistics') ? '#' : '/statistics' }}">
                             <span class="nav-text">Statistics</span>
                         </a>
                     </li>
-                    <li class="nav-item" {{ request()->routeIs('goals') ? 'active' : '' }}>
-                        <a href="#">
+                    <li class="nav-item {{ request()->routeIs('goals') ? 'active' : '' }}">
+                        <a href="{{ request()->routeIs('goals') ? '#' : '/goals' }}">
                             <span class="nav-text">Goals</span>
                         </a>
                     </li>
-                    <li class="nav-item" {{ request()->routeIs('achievements') ? 'active' : '' }}>
-                        <a href="#">
+                    <li class="nav-item {{ request()->routeIs('achievements') ? 'active' : '' }}">
+                        <a href="{{ request()->routeIs('achievements') ? '#' : '/achievements' }}">
                             <span class="nav-text">Achievements</span>
                         </a>
                     </li>

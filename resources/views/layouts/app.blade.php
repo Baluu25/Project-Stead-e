@@ -49,7 +49,7 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('dashboard') }}">
+                                        <a class="dropdown-item" href="{{ route('home') }}">
                                             Dashboard
                                         </a>
                                     </li>

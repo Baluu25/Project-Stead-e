@@ -1,42 +1,65 @@
 @extends('layouts.dashboard_app')
 
+@section('dashboard-styles')
+    <link rel="stylesheet" href="{{ asset('storage/css/dashboard_habits.css') }}">
+@endsection
+
 @section('title', 'Habits')
 
 @section('content')
-    <div class="dashboard-container">
-    <div class="dashboard-layout">
-        <aside class="dashboard-sidebar">
-            <nav class="sidebar-nav">
-                <div class="sidebar-header">
-                    <h3>Dashboard</h3>
-                </div>
-                <ul class="nav-items">
-                    <li class="nav-item active">
-                        <a href="#">
-                            <span class="nav-text">Home</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/habits">
-                            <span class="nav-text">Habits</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#">
-                            <span class="nav-text">Statistics</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#">
-                            <span class="nav-text">Goals</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#">
-                            <span class="nav-text">Achievements</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
+    <!-- Title -->
+     <div class="dashboard-header">
+        <div class="welcome-section">
+            <h1>Manage habits</h1>
+        </div>
+    </div>
+    <div class="input-section">
+        <input type="text" placeholder="Enter habit name..." class="habit-input">
+        <button class="btn btn-add">Add habit</button>
+    </div>
+    <div class="habits-section">
+        <div class="habits-header">
+            <span></span>
+            <span>Name</span>
+            <span>Frequency</span>
+            <span>Status</span>
+            <span>Actions</span>
+        </div>
+        <div class="habit-item">
+            <span class="habit-icon">💧</span>
+            <span>Drink Water</span>
+            <span>Daily</span>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+            </div>
+            <span>
+                <button class="icon-btn edit-btn"></button>
+                <button class="icon-btn delete-btn"></button>
+            </span>
+        </div>
+        <div class="habit-item">
+            <span class="habit-icon">📚</span>
+            <span>Read</span>
+            <span>Daily</span>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+            </div>
+            <span> 
+                <button class="icon-btn edit-btn"></button>
+                <button class="icon-btn delete-btn"></button>
+            </span>
+        </div>
+        <div class="habit-item">
+            <span class="habit-icon">💪</span>
+            <span>Workout</span>
+            <span>3x/week</span>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+            </div>
+            <span>
+                <button class="icon-btn edit-btn"></button>
+                <button class="icon-btn delete-btn"></button>
+            </span>
+        </div>
+    </div>
 @endsection
