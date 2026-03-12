@@ -1,6 +1,6 @@
 <img src="images/banner_placeholder.png" alt="STEAD-E Banner" width="50" style="display: block; margin: 0 auto;">
 
-# Jelenlegi állapot (Március 2026.)
+# Jelenlegi állapot (Március 2026. 03. 01.)
 
 ## Ami kész
 
@@ -31,3 +31,25 @@
 | `habit_completions` migráció | Csak id és timestamp mezők – hiányoznak a kulcsfontosságú mezők |
 | `HabitCompletion` modell | Nincsenek kapcsolatok vagy fillable tulajdonságok |
 | `Routes (web.php)` | Nincsenek resource route-ok a habits vagy completions számára |
+
+# Fejlesztés
+
+## Dátum: 2026.03.12.
+
+## Áttekintés
+A statistics aloldal, illetve az achievements aloldal nem befejezett változata megírva. A test userhez 20 habits létrehozva factoryval. Illetve az adatbázis habits tábláján módosítás történt.
+
+---
+
+## Elvégzett feladatok
+
+### 1. Adatbázis módosítások
+- `habits` tábla módosítása: `is_public`, `colors` mezők el lettek távolítva, 
+- Adatbázis újratöltése: `php artisan migrate:fresh --seed`
+- 20 teszt habit generálva a factory használatával
+
+
+### 3. Dashboard fejlesztések
+- Statistics aloldal tartalma megírva, **nem befejezett**
+- Achievements aloldal tartalma megírva, **nem befejezett**
+
