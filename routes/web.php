@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HabitController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\StatisticsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -32,9 +33,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/habits', [HabitController::class, 'index'])->name('habits');
     
     // Statistics
-    Route::get('/statistics', function () {
-        return view('statistics');
-    })->name('statistics');
+    Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics');
     
     // Goals
     Route::get('/goals', function () {

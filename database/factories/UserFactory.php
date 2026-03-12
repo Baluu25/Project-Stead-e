@@ -24,11 +24,14 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'username'   => fake()->unique()->userName(),
+            'gender'     => fake()->randomElement(['male', 'female', 'other']),
+            'birthdate'  => fake()->dateTimeBetween('-50 years', '-18 years')->format('Y-m-d'),
+            'weight'     => fake()->randomFloat(1, 45, 130),
+            'height'     => fake()->numberBetween(150, 200),
+            'sleep_time' => fake()->randomElement(['21:00','22:00','23:00','00:00']),
+            'wake_time'  => fake()->randomElement(['05:00','06:00','07:00','08:00']),
+            'user_goal'  => fake()->randomElement(['weight_loss','consistency','quit_habit','explore']),
         ];
     }
 

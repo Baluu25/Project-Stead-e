@@ -33,8 +33,12 @@
                 <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
             </div>
             <span>
-                <button class="icon-btn edit-btn"></button>
-                <button class="icon-btn delete-btn"></button>
+                <button class="icon-btn">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button class="icon-btn">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
             </span>
         </div>
         <div class="habit-item">
@@ -44,9 +48,13 @@
             <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
             </div>
-            <span> 
-                <button class="icon-btn edit-btn"></button>
-                <button class="icon-btn delete-btn"></button>
+            <span>
+                <button class="icon-btn">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button class="icon-btn">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
             </span>
         </div>
         <div class="habit-item">
@@ -57,8 +65,12 @@
                 <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
             </div>
             <span>
-                <button class="icon-btn edit-btn"></button>
-                <button class="icon-btn delete-btn"></button>
+                <button class="icon-btn">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button class="icon-btn">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
             </span>
         </div>
     </div>

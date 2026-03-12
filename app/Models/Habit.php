@@ -14,7 +14,7 @@ class Habit extends Model
      *
      * @var string
      */
-    protected $table = 'Habits';
+    protected $table = 'habits';
 
     /**
      * The attributes that are mass assignable.
@@ -28,10 +28,12 @@ class Habit extends Model
         'category',
         'frequency',
         'target_count',
-        'color',
         'icon',
         'is_active',
-        'is_public',
     ];
+
+    public function completions() {
+    return $this->hasMany(HabitCompletion::class);
+    }
 
 }

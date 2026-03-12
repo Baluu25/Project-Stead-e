@@ -19,10 +19,8 @@ return new class extends Migration
             $table->string('category');
             $table->enum('frequency', ['daily', 'weekly', 'monthly', 'custom']);
             $table->bigInteger('target_count')->default(1);
-            $table->string('color')->default('#3B82F6');
             $table->string('icon')->default('star');
             $table->boolean('is_active')->default(true);
-            $table->boolean('is_public')->default(false);
             $table->dateTime('created_at');
             $table->dateTime('updated_at');
             $table->foreign('user_id')
