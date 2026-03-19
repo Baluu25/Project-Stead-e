@@ -15,10 +15,9 @@ Route::get('/index', function () {
     return view('index');
 })->name('index');
 
-Route::get('/home', function () {
-    return redirect()->route('dashboard');
-})->middleware(['auth']);
-
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
 // Protected routes (requires login)
 Route::middleware(['auth'])->group(function () {
     // Dashboard

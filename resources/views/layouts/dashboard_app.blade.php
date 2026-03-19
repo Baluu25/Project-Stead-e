@@ -11,6 +11,7 @@
             integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
             crossorigin="anonymous" defer></script>
     <script src="https://kit.fontawesome.com/0bf932704c.js" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/x-icon" href="images/stead-e_logo.png">
     <link rel="stylesheet" href="{{ asset('storage/css/dashboard.css') }}">
     <script src="{{ asset('storage/js/script.js') }}" defer></script>
     @yield('dashboard-styles')
@@ -19,7 +20,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark px-4 glass-card">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}" aria-label="Home">
-                <img src="{{ asset('images/logo.png') }}" alt="logo" width="40" height="40" />
+                <img src="{{ asset('images/stead-e_logo.png') }}" alt="logo" width="40" height="40" />
                 <span>Stead-E</span>
             </a>    
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
@@ -33,15 +34,12 @@
                         <a class="nav-link" href="#">Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Settings</a>
+                        <a class="btn btn-logout" href="{{ route("logout") }}">Logout</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-logout" href="{{ route("logout") }}">Logout</a>
-                    </li>
-            </ul>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 <div class="dashboard-container">
     <div class="dashboard-layout">
         <aside class="dashboard-sidebar">
@@ -89,7 +87,7 @@
             <div class="row">
                 <div class="col-lg-4 mb-4 mb-lg-0">
                     <div class="footer-brand d-flex align-items-center mb-3">
-                        <img src="{{ asset('images/logo.png') }}" alt="Stead-E Logo" width="40" height="40" />
+                        <img src="{{ asset('images/stead-e_logo.png') }}" alt="Stead-E Logo" width="40" height="40" />
                         <span class="ms-2">Stead-E</span>
                     </div>
                     <p class="footer-text">Your all-in-one fitness partner. Track hydration, exercise, and health metrics together.</p>

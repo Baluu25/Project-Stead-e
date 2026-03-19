@@ -19,7 +19,7 @@
           Your all-in-one fitness partner. Track hydration, exercise, <br/>
           and health metrics together.
         </p>
-        <a href="{{ url('/register') }}" class="btn btn-primary btn-start">Start for Free</a>
+        <a href="{{ url('/register') }}" class="btn btn-primary">Start for Free</a>
       </div>
       <div class="col-lg-6">
         <div class="slideshow-container">

@@ -10,10 +10,10 @@
           crossorigin="anonymous">
   <script src="{{ asset('storage/js/app.js') }}" defer></script>
   <script src="{{ asset('storage/js/login.js') }}" defer></script>
+  <link rel="icon" type="image/x-icon" href="images/stead-e_logo.png">
   <link rel="stylesheet" href="{{ asset('storage/css/login.css') }}">
 </head>
 <body>
-    <div class="background-gradient"></div>
     
     <div class="back-to-home-container">
         <a href="{{ url('/') }}" class="back-to-home">
@@ -28,7 +28,7 @@
                     <div class="login-card">
                         <div class="text-center mb-4">
                             <a href="{{ url('/') }}" class="logo-link">
-                                <img src="{{ asset('images/logo.png') }}" alt="Stead-E" class="login-logo">
+                                <img src="{{ asset('images/stead-e_logo.png') }}" alt="Stead-E" class="login-logo">
                             </a>
                         </div>
                         

@@ -19,7 +19,7 @@
     <div class="container-fluid px-0 px-lg-3">
         <div class="d-flex justify-content-between w-100 align-items-center">
             <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}" aria-label="Home">
-                <img src="{{ asset('images/logo.png') }}" alt="logo" width="40" height="40" />
+                <img src="{{ asset('images/stead-e_logo.png') }}" alt="logo" width="40" height="40" />
                 <span>Stead-E</span>
             </a>
             
@@ -62,7 +62,7 @@
                                     <li>
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
-                                            <button type="submit" class="dropdown-item">
+                                            <button type="submit" class="dropdown-item btn-primary">
                                                 Logout
                                             </button>
                                         </form>
@@ -86,7 +86,7 @@
             <div class="row">
                 <div class="col-lg-4 mb-4 mb-lg-0">
                     <div class="footer-brand d-flex align-items-center mb-3">
-                        <img src="{{ asset('images/logo.png') }}" alt="Stead-E Logo" width="40" height="40" />
+                        <img src="{{ asset('images/stead-e_logo.png') }}" alt="Stead-E Logo" width="40" height="40" />
                         <span class="ms-2">Stead-E</span>
                     </div>
                     <p class="footer-text">Your all-in-one fitness partner. Track hydration, exercise, and health metrics together.</p>
@@ -113,7 +113,7 @@
                 <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
                     <h5 class="footer-heading">Support</h5>
                     <ul class="footer-links">
-                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="{{ url("/contact") }}">Contact Us</a></li>
                         <li><a href="#">Privacy Policy</a></li>
                         <li><a href="#">Terms of Service</a></li>
                     </ul>

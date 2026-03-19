@@ -1,6 +1,6 @@
 @extends('layouts.dashboard_app')
 
-@section('title', 'dashboard')
+@section('title', 'Home')
 
 @section('dashboard-styles')
     <link rel="stylesheet" href="{{ asset('storage/css/dashboard_home.css') }}">
@@ -34,7 +34,7 @@
                 <!-- Streak counter -->
                 <div class="streak-counter">
                     <div class="streak-aside">
-                        <div class="streak-flame">🔥</div>
+                        <div class="streak-flame"><i class="fa-solid fa-fire"></i></div>
                         <p class="streak-number">7 days</p>
                     </div>
                     <div class="streak-week">
@@ -52,19 +52,19 @@
                                 <div class="day-letter">We</div>
                             </div>
                             <div class="day-container">
-                                <div class="day-circle active" data-day="T">&#10004;</div>
+                                <div class="day-circle active" data-day="T"><i class="fa-solid fa-check"></i></div>
                                 <div class="day-letter">Th</div>
                             </div>
                             <div class="day-container">
-                                <div class="day-circle active" data-day="F">&#10004;</div>
+                                <div class="day-circle active" data-day="F"><i class="fa-solid fa-check"></i></div>
                                 <div class="day-letter">Fr</div>
                             </div>
                             <div class="day-container">
-                                <div class="day-circle active" data-day="S">&#10004;</div>
+                                <div class="day-circle active" data-day="S"><i class="fa-solid fa-check"></i></div>
                                 <div class="day-letter">Sa</div>
                             </div>
                             <div class="day-container">
-                                <div class="day-circle active" data-day="S">&#10004;</div>
+                                <div class="day-circle active" data-day="S"><i class="fa-solid fa-check"></i></div>
                                 <div class="day-letter">Su</div>
                             </div>
                         </div>

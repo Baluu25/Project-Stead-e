@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ asset('storage/css/splash.css') }}">
+    <link rel="icon" type="image/x-icon" href="images/stead-e_logo.png">
     <script src="{{ asset('storage/js/script.js') }}" defer></script>
     <title>Stead-E - Welcome</title>
 </head>
 <body>
     <div class="splash-container">
         <div class="logo">
-            <img src="images/logo.png" alt="logo">
+            <img src="images/stead-e_logo.png" alt="logo">
         </div>
         <h1>Stead-E</h1>
         <p class="tagline">Build Better Habits</p>

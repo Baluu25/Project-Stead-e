@@ -4,10 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/x-icon" href="{{ asset('images/logo.png') }}">
-  <title>Stead-E - Create Account</title>
+  <title>Stead-E | Create Account</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="{{ asset('storage/js/register.js') }}" defer></script>
   <script src="{{ asset('storage/js/app.js') }}" defer></script>
+  <link rel="icon" type="image/x-icon" href="images/stead-e_logo.png">
   <link rel="stylesheet" href="{{ asset('storage/css/register.css') }}">
 </head>
 <body>
@@ -37,7 +38,6 @@
 <div class="row justify-content-center">
 <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
 
-<!-- Display validation errors -->
 @if ($errors->any())
   <div class="alert alert-danger">
     <ul class="mb-0">
@@ -51,7 +51,7 @@
 <!-- Step 1 -->
 <div class="registration-card active" id="step1">
   <div class="text-center mb-2">
-    <img src="{{ asset('images/logo.png') }}" class="registration-logo">
+    <img src="{{ asset('images/stead-e_logo.png') }}" class="registration-logo">
   </div>
 
   <h1 class="registration-title">Create Account</h1>
@@ -93,7 +93,7 @@
       @enderror
     </div>
 
-    <button type="button" class="btn btn-primary mt-2" onclick="nextStep()">Continue</button>
+    <button type="button" class="btn btn-primary" onclick="nextStep()">Continue</button>
   </form>
 
   <div class="login-redirect mt-2">

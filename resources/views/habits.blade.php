@@ -26,7 +26,7 @@
             <span>Actions</span>
         </div>
         <div class="habit-item">
-            <span class="habit-icon">💧</span>
+            <span class="habit-icon"><i class="fa-solid fa-droplet"></i></span>
             <span>Drink Water</span>
             <span>Daily</span>
             <div class="form-check form-switch">
@@ -42,7 +42,7 @@
             </span>
         </div>
         <div class="habit-item">
-            <span class="habit-icon">📚</span>
+            <span class="habit-icon"><i class="fa-solid fa-book"></i></span>
             <span>Read</span>
             <span>Daily</span>
             <div class="form-check form-switch">
@@ -58,7 +58,7 @@
             </span>
         </div>
         <div class="habit-item">
-            <span class="habit-icon">💪</span>
+            <span class="habit-icon"><i class="fa-solid fa-dumbbell"></i></span>
             <span>Workout</span>
             <span>3x/week</span>
             <div class="form-check form-switch">
