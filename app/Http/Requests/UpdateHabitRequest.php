@@ -11,7 +11,7 @@ class UpdateHabitRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class UpdateHabitRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'habit_id'    => ['required', 'integer', 'exists:habits,id'],
+            'mood'        => ['nullable', 'in:happy,neutral,sad,energetic,tired'],
+            'notes'       => ['nullable', 'string'],
+            'is_skipped'  => ['nullable', 'boolean'],
         ];
     }
 }

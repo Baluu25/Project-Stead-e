@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HabitCompletionController;
 use App\Http\Controllers\HabitController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\StatisticsController;
@@ -29,7 +30,11 @@ Route::middleware(['auth'])->group(function () {
     })->name('profile.edit');
     
     // Habits
-    Route::get('/habits', [HabitController::class, 'index'])->name('habits');
+    Route::resource('habits', HabitController::class)
+        ->except(['create', 'edit', 'show']);
+
+    Route::post('/habit-completions', [HabitCompletionController::class, 'store'])
+        ->name('habit-completions.store');
     
     // Statistics
     Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics');

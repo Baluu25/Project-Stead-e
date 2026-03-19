@@ -11,7 +11,7 @@ class StoreHabitRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,12 @@ class StoreHabitRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name'        => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'category'    => ['required', 'in:Nutrition,Fitness,Mindfulness,Study,Work'],
+            'frequency'   => ['required', 'in:daily,weekly,monthly,custom'],
+            'target_count'=> ['nullable', 'integer', 'min:1'],
+            'icon'        => ['nullable', 'string', 'max:50'],
         ];
     }
 }
