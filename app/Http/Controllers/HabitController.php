@@ -9,32 +9,18 @@ use Illuminate\Support\Facades\Auth;
 
 class HabitController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $habits = Habit::where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('habits', compact('habits'));
+        return response()->json($habits);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreHabitRequest $request)
     {
-        Habit::create([
+        $habit = Habit::create([
             'user_id'      => Auth::id(),
             'name'         => $request->name,
             'description'  => $request->description,
@@ -44,43 +30,29 @@ class HabitController extends Controller
             'icon'         => $request->icon ?? 'star',
             'is_active'    => true,
         ]);
-        return redirect()->route('habits.index')->with('success', 'Habit added!');
+
+        return response()->json($habit, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Habit $habit)
+    public function update(UpdateHabitRequest $request, $id)
     {
-        //
-    }
+        $habit = Habit::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Habit $habit)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateHabitRequest $request, Habit $habit)
-    {
-        $this->authorize('update', $habit);
         $habit->update($request->validated());
-        return redirect()->route('habits.index')->with('success', 'Habit updated!');
+
+        return response()->json($habit);
     }
 
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Habit $habit)
+    public function destroy($id)
     {
-        $this->authorize('delete', $habit);
+        $habit = Habit::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
         $habit->delete();
-        return redirect()->route('habits.index')->with('success', 'Habit deleted!');
+
+        return response()->json(null, 204);
     }
 }

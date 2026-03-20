@@ -8,6 +8,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="{{ asset('storage/js/register.js') }}" defer></script>
   <script src="{{ asset('storage/js/app.js') }}" defer></script>
+  <script src="https://kit.fontawesome.com/0bf932704c.js" crossorigin="anonymous"></script>
   <link rel="icon" type="image/x-icon" href="images/stead-e_logo.png">
   <link rel="stylesheet" href="{{ asset('storage/css/register.css') }}">
 </head>
@@ -92,8 +93,10 @@
         <div class="invalid-feedback">{{ $message }}</div>
       @enderror
     </div>
-
-    <button type="button" class="btn btn-primary" onclick="nextStep()">Continue</button>
+    <div class="form-buttons">
+      <button type="button" class="btn btn-primary" onclick="nextStep()">Continue</button>
+    </div>
+    
   </form>
 
   <div class="login-redirect mt-2">
@@ -104,7 +107,7 @@
 <!-- Step 2 -->
 <div class="registration-card" id="step2">
   <div class="text-center mb-2">
-    <img src="{{ asset('images/logo.png') }}" class="registration-logo">
+    <img src="{{ asset('images/stead-e_logo.png') }}" class="registration-logo">
   </div>
 
   <h1 class="registration-title">About You</h1>
@@ -116,17 +119,17 @@
       <div class="options-grid">
         <label class="option-card">
           <input type="radio" name="gender" value="male" {{ old('gender') == 'male' ? 'checked' : '' }} required> 
-          <span class="option-icon">👨</span>
+          <span class="option-icon"><i class="fa-solid fa-mars" style="color: rgb(0, 0, 0);"></i></span>
           <span>Male</span>
         </label>
         <label class="option-card">
           <input type="radio" name="gender" value="female" {{ old('gender') == 'female' ? 'checked' : '' }} required>
-          <span class="option-icon">👩</span>
+          <span class="option-icon"><i class="fa-solid fa-venus" style="color: rgb(0, 0, 0);"></i></span>
           <span>Female</span>
         </label>
         <label class="option-card">
           <input type="radio" name="gender" value="other" {{ old('gender') == 'other' ? 'checked' : '' }} required>
-          <span class="option-icon">🙂</span>
+          <span class="option-icon"><i class="fa-solid fa-genderless" style="color: rgb(0, 0, 0);"></i></span>
           <span>Other</span>
         </label>
       </div>
@@ -154,7 +157,7 @@
 <!-- Step 3 -->
 <div class="registration-card" id="step3">
   <div class="text-center mb-2">
-    <img src="{{ asset('images/logo.png') }}" class="registration-logo">
+    <img src="{{ asset('images/stead-e_logo.png') }}" class="registration-logo">
   </div>
 
   <h1 class="registration-title">Your Weight</h1>
@@ -180,7 +183,7 @@
 <!-- Step 4 -->
 <div class="registration-card" id="step4">
   <div class="text-center mb-2">
-    <img src="{{ asset('images/logo.png') }}" class="registration-logo">
+    <img src="{{ asset('images/stead-e_logo.png') }}" class="registration-logo">
   </div>
 
   <h1 class="registration-title">Your Height</h1>
@@ -206,7 +209,7 @@
 <!-- Step 5 -->
 <div class="registration-card" id="step5">
   <div class="text-center mb-2">
-    <img src="{{ asset('images/logo.png') }}" class="registration-logo">
+    <img src="{{ asset('images/stead-e_logo.png') }}" class="registration-logo">
   </div>
 
   <h1 class="registration-title">Sleep Schedule</h1>
@@ -241,7 +244,7 @@
 <!-- Step 6 -->
 <div class="registration-card" id="step6">
   <div class="text-center mb-2">
-    <img src="{{ asset('images/logo.png') }}" class="registration-logo">
+    <img src="{{ asset('images/stead-e_logo.png') }}" class="registration-logo">
   </div>
 
   <h1 class="registration-title">Your Goal</h1>
