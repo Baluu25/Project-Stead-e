@@ -6,20 +6,27 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     use HasFactory;
+    use HasApiTokens;
 
     protected $table = 'users';
     
     protected $fillable = [
+        'name',
         'username',
         'email',
-        'password_hash',
-        'timezone',
-        'current_streak',
-        'longest_streak'
+        'password',
+        'gender',
+        'birthdate',
+        'weight',
+        'height',
+        'sleep_time',
+        'wake_time',
+        'user_goal',
     ];
 
     protected $hidden = [
