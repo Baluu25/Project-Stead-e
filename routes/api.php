@@ -6,7 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\StatisticsController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['web', 'auth'])->group(function () {
 
     // Habits API
     Route::get('/habits', [HabitController::class, 'apiIndex']);
@@ -18,7 +18,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/habit-completions', [HabitCompletionController::class, 'store']);
 
     // Statistics
-    Route::get('/statistics', [StatisticsController::class, 'index']);
+    Route::get('/statistics', [StatisticsController::class, 'apiIndex']);
 
     Route::get('/home', [HomeController::class, 'apiIndex']);
 });

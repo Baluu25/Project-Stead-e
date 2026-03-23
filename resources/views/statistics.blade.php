@@ -20,7 +20,7 @@
                 <h2>Total habits tracked</h2>
                 <i class="fa-solid fa-hashtag"></i>
             </div>
-            <div class="counter-value">24</div>
+            <div class="counter-value">{{ $total_habits }}</div>
         </div>
 
         <div class="counter-section">
@@ -28,7 +28,7 @@
                 <h2>Active habits</h2>
                 <i class="fa-solid fa-check-circle"></i>
             </div>
-            <div class="counter-value">12</div>
+            <div class="counter-value">{{ $active_habits }}</div>
         </div>
 
         <div class="counter-section">

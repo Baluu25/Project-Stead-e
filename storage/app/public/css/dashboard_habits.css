@@ -79,7 +79,7 @@
     background-color: rgba(76, 175, 80, 0.2);
     color: #a5d6a5;
     padding: 5px 12px;
-    border-radius: 30px;
+    border-radius: 12px;
     font-weight: 600;
     font-size: 0.85rem;
     display: inline-block;
@@ -121,7 +121,6 @@
     transform: scale(1.1);
 }
 
-/* Form Styles */
 .form-group {
     margin-bottom: 1.25rem;
 }
@@ -178,7 +177,6 @@ textarea.form-control {
     margin-top: 0.25rem;
 }
 
-/* Icon Selector Styles */
 .icon-selector {
     position: relative;
     width: 100%;
@@ -248,7 +246,6 @@ textarea.form-control {
     color: black;
 }
 
-/* Popup Styles */
 .habit-form-card {
     position: fixed;
     top: 50%;
@@ -272,7 +269,6 @@ textarea.form-control {
     margin: auto;
 }
 
-/* Habit Form Header */
 .habit-form-header {
     display: flex;
     justify-content: center;
@@ -324,7 +320,6 @@ textarea.form-control {
     text-align: center;
 }
 
-/* Placeholder Styles */
 #placeholder-msg {
     font-size: 1.2rem;
     margin-bottom: 0.4rem;
@@ -343,7 +338,6 @@ textarea.form-control {
     opacity: 0.5;
 }
 
-/* Button Styles */
 .edit-btn,
 .delete-btn {
     border: none;
@@ -351,12 +345,11 @@ textarea.form-control {
     cursor: pointer;
     border-radius: 6px;
     padding: 4px;
-    display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.2s;
     width: 32px;
     height: 32px;
+    color: white;
 }
 
 .edit-btn:hover,
@@ -365,11 +358,9 @@ textarea.form-control {
 }
 
 .edit-btn::before {
-    content: "";
     display: block;
     width: 25px;
     height: 25px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M16.7574 2.99678L14.7574 4.99678H5V18.9968H19V9.23943L21 7.23943V19.9968C21 20.5491 20.5523 20.9968 20 20.9968H4C3.44772 20.9968 3 20.5491 3 19.9968V3.99678C3 3.4445 3.44772 2.99678 4 2.99678H16.7574ZM20.4853 2.09729L21.8995 3.5115L12.7071 12.7039L11.2954 12.7064L11.2929 11.2897L20.4853 2.09729Z'%3E%3C/path%3E%3C/svg%3E");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -377,11 +368,9 @@ textarea.form-control {
 }
 
 .delete-btn::before {
-    content: "";
     display: block;
     width: 25px;
     height: 25px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M17 6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6ZM18 8H6V20H18V8ZM9 11H11V17H9V11ZM13 11H15V17H13V11ZM9 4V6H15V4H9Z'%3E%3C/path%3E%3C/svg%3E");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -393,7 +382,6 @@ textarea.form-control {
     opacity: 1;
 }
 
-/* Checkbox Styles */
 .form-check-input {
     background-color: #bf3c3c !important;
     border-color: #bf3c3c !important;
@@ -410,7 +398,6 @@ textarea.form-control {
     border-color: #25408f !important;
 }
 
-/* Responsive Styles */
 @media (max-width: 768px) {
     .icon-grid {
         grid-template-columns: repeat(4, 1fr);
