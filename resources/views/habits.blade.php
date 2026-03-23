@@ -2,6 +2,7 @@
 
 @section('dashboard-styles')
     <link rel="stylesheet" href="{{ asset('storage/css/dashboard_habits.css') }}">
+    <script src="{{ asset('storage/js/habits.js') }}" defer></script>
 @endsection
 
 @section('title', 'Habits')
@@ -13,25 +14,114 @@
         </div>
     </div>
 
-    <!-- Habit Form -->
     <div class="input-section">
         <input type="text" id="habit-name" placeholder="Enter habit name..." class="habit-input">
-        <select id="habit-category" class="habit-input">
-            <option value="Nutrition">Nutrition</option>
-            <option value="Fitness">Fitness</option>
-            <option value="Mindfulness">Mindfulness</option>
-            <option value="Study">Study</option>
-            <option value="Work">Work</option>
-        </select>
-        <select id="habit-frequency" class="habit-input">
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-            <option value="monthly">Monthly</option>
-        </select>
-        <button class="btn btn-add" onclick="addHabit()">Add habit</button>
+        <button class="btn btn-add" id="addHabitBtn">Add habit</button>
     </div>
 
-    <!-- Habits List -->
+    <div class="habit-form-card" id="habitFormPopup" style="display: none;"> 
+        <div class="habit-form-header">
+            <h1 class="habit-form-title">Add habit</h1>
+            <button type="button" class="close-habit-form" id="closePopupBtn">&times;</button>
+        </div>
+        <p class="habit-form-subtitle">Add a habit to your profile</p>
+
+        <form method="POST" action="{{ route('habits.store') }}" id="habit-form">
+            @csrf
+        
+            <div class="form-group">
+                <label for="name" class="form-label">Habit Name</label>
+                <input type="text" 
+                   id="name" 
+                   name="name" 
+                   class="form-control @error('name') is-invalid @enderror" 
+                   value="{{ old('name') }}" 
+                   required 
+                   autofocus>
+                @error('name')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="description" class="form-label">Description</label>
+                <textarea id="description" 
+                      name="description" 
+                      rows="3" 
+                      class="form-control @error('description') is-invalid @enderror">{{ old('description') }}</textarea>
+                @error('description')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="category" class="form-label">Category</label>
+                <select id="category" 
+                    name="category" 
+                    class="form-control @error('category') is-invalid @enderror" 
+                    required>
+                    <option value="">Select a category</option>
+                    <option value="Nutrition" {{ old('category') == 'Nutrition' ? 'selected' : '' }}>Nutrition</option>
+                    <option value="Fitness" {{ old('category') == 'Fitness' ? 'selected' : '' }}>Fitness</option>
+                    <option value="Mindfullness" {{ old('category') == 'Mindfullness' ? 'selected' : '' }}>Mindfulness</option>
+                    <option value="Study" {{ old('category') == 'Study' ? 'selected' : '' }}>Study</option>
+                    <option value="Work" {{ old('category') == 'Work' ? 'selected' : '' }}>Work</option>
+                </select>
+                @error('category')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="frequency" class="form-label">Frequency</label>
+                <select id="frequency" 
+                    name="frequency" 
+                    class="form-control @error('frequency') is-invalid @enderror" 
+                    required>
+                    <option value="">Select frequency</option>
+                    <option value="daily" {{ old('frequency') == 'daily' ? 'selected' : '' }}>Daily</option>
+                    <option value="weekly" {{ old('frequency') == 'weekly' ? 'selected' : '' }}>Weekly</option>
+                    <option value="monthly" {{ old('frequency') == 'monthly' ? 'selected' : '' }}>Monthly</option>
+                </select>
+                @error('frequency')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="target_count" class="form-label">Target Count</label>
+                <input type="number" 
+                   id="target_count" 
+                   name="target_count" 
+                   class="form-control @error('target_count') is-invalid @enderror" 
+                   value="{{ old('target_count', 1) }}" 
+                   min="1"
+                   required>
+                @error('target_count')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="icon" class="form-label">Icon</label>
+                <div class="icon-selector" id="icon-selector">
+                    <div class="selected-icon" id="selected-icon">
+                        <i class="fa-solid fa-smile" id="selected-icon-display"></i>
+                        <span>Select an icon</span>
+                    </div>
+                    <div class="icon-grid" id="icon-grid" style="display: none;">
+                        <!-- Icons -->
+                    </div>
+                </div>
+                <input type="hidden" id="icon" name="icon" value="{{ old('icon', 'fa-solid fa-smile') }}">
+                @error('icon')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <button type="submit" class="btn btn-add">Add Habit</button>
+        </form>
+    </div>
+
     <div class="habits-section">
         <div class="habits-header">
             <span></span>
@@ -41,75 +131,10 @@
             <span>Actions</span>
         </div>
         <div id="habits-list">
-            <p id="loading-msg">Loading habits...</p>
+            <div id="placeholder-container">
+                <img src="images/placeholder-img.png" alt="placeholder" id="placeholder-img">
+                <p id="placeholder-msg">No habits added</p>
+            </div>      
         </div>
     </div>
-
-    <script>
-        // Load habits
-        document.addEventListener('DOMContentLoaded', loadHabits);
-
-        function loadHabits() {
-            apiGet('/api/habits').then(habits => {
-                const list = document.getElementById('habits-list');
-
-                if (habits.length === 0) {
-                    list.innerHTML = '<p>No habits yet. Add your first one above!</p>';
-                    return;
-                }
-
-                list.innerHTML = habits.map(habit => `
-                    <div class="habit-item" id="habit-${habit.id}">
-                        <span class="habit-icon"><i class="fa-solid fa-star"></i></span>
-                        <span>${habit.name}</span>
-                        <span>${habit.frequency}</span>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch"
-                                onchange="toggleComplete(${habit.id}, this)">
-                        </div>
-                        <span>
-                            <button class="icon-btn" onclick="deleteHabit(${habit.id})">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </span>
-                    </div>
-                `).join('');
-            });
-        }
-
-        function addHabit() {
-            const name      = document.getElementById('habit-name').value.trim();
-            const category  = document.getElementById('habit-category').value;
-            const frequency = document.getElementById('habit-frequency').value;
-
-            if (!name) {
-                alert('Please enter a habit name.');
-                return;
-            }
-
-            apiPost('/api/habits', { name, category, frequency })
-                .then(habit => {
-                    document.getElementById('habit-name').value = '';
-                    loadHabits();
-                });
-        }
-
-        function deleteHabit(id) {
-            if (!confirm('Delete this habit?')) return;
-
-            apiDelete('/api/habits/' + id).then(() => {
-                document.getElementById('habit-' + id).remove();
-            });
-        }
-
-        function toggleComplete(habitId, checkbox) {
-            apiPost('/api/habit-completions', { habit_id: habitId })
-                .then(data => {
-                    checkbox.disabled = true;
-                })
-                .catch(() => {
-                    checkbox.checked = false;
-                });
-        }
-    </script>
 @endsection

@@ -2,12 +2,14 @@
 
 use App\Http\Controllers\HabitController;
 use App\Http\Controllers\HabitCompletionController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\StatisticsController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->group(function () {
+
     // Habits API
-    Route::get('/habits', [HabitController::class, 'index']);
+    Route::get('/habits', [HabitController::class, 'apiIndex']);
     Route::post('/habits', [HabitController::class, 'store']);
     Route::put('/habits/{id}', [HabitController::class, 'update']);
     Route::delete('/habits/{id}', [HabitController::class, 'destroy']);
@@ -17,4 +19,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // Statistics
     Route::get('/statistics', [StatisticsController::class, 'index']);
+
+    Route::get('/home', [HomeController::class, 'apiIndex']);
 });

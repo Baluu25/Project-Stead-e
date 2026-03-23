@@ -35,7 +35,7 @@
                 <div class="streak-counter">
                     <div class="streak-aside">
                         <div class="streak-flame"><i class="fa-solid fa-fire"></i></div>
-                        <p class="streak-number">7 days</p>
+                        <p class="streak-number">{{ $currentStreak }} days</p>
                     </div>
                     <div class="streak-week">
                         <div class="week-days">

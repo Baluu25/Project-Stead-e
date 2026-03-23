@@ -11,12 +11,18 @@ class HabitController extends Controller
 {
     public function index()
     {
+        return view('habits');
+    }
+
+    public function apiIndex()
+    {
         $habits = Habit::where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->get();
 
         return response()->json($habits);
     }
+
 
     public function store(StoreHabitRequest $request)
     {
