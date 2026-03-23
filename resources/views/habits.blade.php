@@ -64,7 +64,7 @@
                     <option value="">Select a category</option>
                     <option value="Nutrition" {{ old('category') == 'Nutrition' ? 'selected' : '' }}>Nutrition</option>
                     <option value="Fitness" {{ old('category') == 'Fitness' ? 'selected' : '' }}>Fitness</option>
-                    <option value="Mindfullness" {{ old('category') == 'Mindfullness' ? 'selected' : '' }}>Mindfulness</option>
+                    <option value="Mindfulness" {{ old('category') == 'Mindfullness' ? 'selected' : '' }}>Mindfulness</option>
                     <option value="Study" {{ old('category') == 'Study' ? 'selected' : '' }}>Study</option>
                     <option value="Work" {{ old('category') == 'Work' ? 'selected' : '' }}>Work</option>
                 </select>
