@@ -14,6 +14,9 @@ class StatisticsController extends Controller
         $userId = Auth::id();
 
         $totalHabits = Habit::where('user_id', $userId)
+            ->count();
+
+        $activeHabits = Habit::where('user_id', $userId)
             ->where('is_active', true)
             ->count();
 
@@ -37,11 +40,12 @@ class StatisticsController extends Controller
             ->groupBy('habits.category')
             ->pluck('count', 'category');
 
-        return response()->json([
+        return view('statistics', [
             'total_habits'          => $totalHabits,
+            'active_habits'         => $activeHabits,
             'completions_this_week' => $completionsThisWeek,
             'daily_completions'     => $dailyCompletions,
             'category_breakdown'    => $categoryBreakdown,
-        ]);
+]);
     }
 }
