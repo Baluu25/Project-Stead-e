@@ -15,7 +15,7 @@
     <link rel="icon" type="image/x-icon" href="images/stead-e_logo.png">
     <link rel="stylesheet" href="{{ asset('storage/css/dashboard.css') }}">
     <script src="{{ asset('storage/js/script.js') }}" defer></script>
-    <script src="{{ asset('js/api.js') }}" defer></script>
+    <script src="{{ asset('storage/js/api.js') }}" defer></script>
     @yield('dashboard-styles')
 </head>
 <body>
