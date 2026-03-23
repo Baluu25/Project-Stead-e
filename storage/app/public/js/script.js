@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   
   function showSlide(index) {
+    if (slides.length === 0) return;
     slides.forEach(slide => {
       slide.classList.remove('active');
     });
