@@ -22,10 +22,13 @@ class UpdateHabitRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'habit_id'    => ['required', 'integer', 'exists:habits,id'],
-            'mood'        => ['nullable', 'in:happy,neutral,sad,energetic,tired'],
-            'notes'       => ['nullable', 'string'],
-            'is_skipped'  => ['nullable', 'boolean'],
+            'name'  => ['sometimes', 'required', 'string', 'max:255'],
+            'description'   => ['nullable', 'string'],
+            'category'  => ['sometimes', 'required', 'in:Nutrition,Fitness,Mindfulness,Study,Work'],
+            'frequency' => ['sometimes', 'required', 'in:daily,weekly,monthly,custom'],
+            'target_count'  => ['nullable', 'integer', 'min:1'],
+            'icon'  => ['nullable', 'string', 'max:50'],
+            'is_active' => ['nullable', 'boolean'],
         ];
     }
 }

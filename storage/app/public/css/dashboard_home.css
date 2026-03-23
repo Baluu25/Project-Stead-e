@@ -1,0 +1,384 @@
+.overview-row {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.main-row {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.calendar-section {
+    flex: 1;
+    height: 20vh;
+}
+
+.dates-line-container {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.dates-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dates-header h2 {
+    margin: 0;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.dates-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.date-nav-btn {
+    background: white;
+    border: 1px solid #ddd;
+    color: #333;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.date-nav-btn:hover {
+    background: #f5f5f5;
+    transform: translateY(-2px);
+}
+
+.btn-today {
+    background: white;
+    color: #333;
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: none;
+}
+
+.btn-today:hover {
+    background: #f5f5f5;
+    transform: translateY(-2px);
+}
+
+.dates-line {
+    padding: 1rem;
+    display: flex;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    background-color: transparent;
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex: 1;
+}
+
+.dates-line::-webkit-scrollbar {
+    display: none;
+}
+
+.date-item {
+    min-width: 56px;
+    height: 56px;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    padding: 0.5rem;
+}
+
+.date-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.date-item.today {
+    border: 2px solid transparent;
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(135deg, #ff2a00, #2a51ff) border-box;
+}
+
+.date-number {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+    color: #666;
+}
+
+.date-day {
+    font-size: 0.75rem;
+    opacity: 0.9;
+    font-weight: 500;
+    color: #666;
+}
+
+.streak-counter {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    gap: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem 1.5rem;
+}
+
+.streak-aside {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.streak-flame {
+    font-size: 2rem;
+}
+
+.streak-number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+}
+
+.week-days {
+    display: flex;
+    flex-direction: row;
+    margin: 0 auto;
+    gap: 0.75rem;
+}
+
+.day-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.day-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.day-circle.active {
+    background: #25408F;
+    color: white;
+}
+
+.day-letter {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+}
+
+.daily-habits-section {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 1.25rem;
+    width: 70%;
+}
+
+.daily-habits-section h2 {
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 0.5rem;
+}
+
+.habits-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.habit-item {
+    margin-bottom: 0.75rem;
+}
+
+.habit-bar {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    height: 36px;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.habit-bar:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.daily-progress-section {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 1.25rem;
+    width: 30%;
+}
+
+.daily-progress-section h2 {
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 0.5rem;
+}
+
+
+@media (max-width: 991px) {
+    .dashboard-container {
+        padding: 0 1.2rem 1.2rem;
+    }
+    
+    .dashboard-sidebar {
+        width: 180px;
+    }
+    
+    .overview-row {
+        flex-direction: column;
+    }
+
+    .daily-habits-section {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 0 0.8rem 0.8rem;
+        min-height: calc(100vh - 120px);
+    }
+    
+    .dashboard-layout {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .dashboard-sidebar {
+        width: 100%;
+        position: static;
+        top: auto;
+        height: auto;
+    }
+    
+    .dashboard-main {
+        padding: 1rem;
+        min-height: calc(100vh - 200px);
+    }
+    
+    .welcome-section h1 {
+        font-size: 1.35rem;
+    }
+    
+    .welcome-section .motivation-text {
+        font-size: 0.85rem;
+    }
+    
+    .date-item {
+        min-width: 50px;
+        height: 50px;
+    }
+    
+    .date-number {
+        font-size: 1.1rem;
+    }
+    
+    .date-day {
+        font-size: 0.7rem;
+    }
+
+    .overview-row {
+        flex-direction: column;
+    }
+
+    .daily-habits-section {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .dashboard-main {
+        padding: 0.8rem;
+    }
+    
+    .welcome-section h1 {
+        font-size: 1.25rem;
+    }
+    
+    .dates-header h2 {
+        font-size: 1rem;
+    }
+    
+    .date-item {
+        min-width: 45px;
+        height: 45px;
+        padding: 0.4rem;
+    }
+    
+    .date-number {
+        font-size: 1rem;
+    }
+    
+    .date-day {
+        font-size: 0.65rem;
+    }
+    
+    .date-nav-btn {
+        width: 26px;
+        height: 26px;
+        font-size: 0.9rem;
+    }
+    
+    .btn-today {
+        padding: 0.35rem 0.6rem;
+        font-size: 0.75rem;
+    }
+
+    .daily-habits-section {
+        width: 100%;
+    }
+}

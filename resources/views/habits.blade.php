@@ -3,6 +3,7 @@
 @section('dashboard-styles')
     <link rel="stylesheet" href="{{ asset('storage/css/dashboard_habits.css') }}">
     <script src="{{ asset('storage/js/habits.js') }}" defer></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 
 @section('title', 'Habits')
