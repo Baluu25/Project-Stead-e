@@ -32,7 +32,7 @@
                             </a>
                         </div>
                         
-                        <h1 class="login-title">Welcome Back</h1>
+                        <h1 class="card-title">Welcome Back</h1>
                         <p class="login-subtitle">Sign in to continue your journey</p>
                         
                         <!-- Display validation errors -->
