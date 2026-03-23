@@ -27,7 +27,7 @@
         </div>
         <p class="habit-form-subtitle">Add a habit to your profile</p>
 
-        <form method="POST" action="{{ route('habits.store') }}" id="habit-form">
+        <form method="POST" action="loadHabits()" id="habit-form">
             @csrf
         
             <div class="form-group">
@@ -132,10 +132,6 @@
             <span>Actions</span>
         </div>
         <div id="habits-list">
-            <div id="placeholder-container">
-                <img src="images/placeholder-img.png" alt="placeholder" id="placeholder-img">
-                <p id="placeholder-msg">No habits added</p>
-            </div>      
         </div>
     </div>
 @endsection

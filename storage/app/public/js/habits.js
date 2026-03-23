@@ -79,16 +79,43 @@ document.addEventListener('DOMContentLoaded', function() {
     const addHabitBtn = document.getElementById('addHabitBtn');
     const habitFormPopup = document.getElementById('habitFormPopup');
     const closePopupBtn = document.getElementById('closePopupBtn');
+    const habitForm = document.getElementById('habit-form');
+    
+    // API helper functions
+    function apiGet(url) {
+        return fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            }
+        }).then(response => response.json());
+    }
+    
+    function apiPost(url, data) {
+        return fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify(data)
+        }).then(response => response.json());
+    }
+    
+    function apiDelete(url) {
+        return fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            }
+        }).then(response => response.json());
+    }
     
     // Check if elements exist
     if (!categorySelect || !iconGrid || !selectedIcon || !iconInput || !selectedIconDisplay) {
-        console.error('Required elements not found!', {
-            categorySelect: !!categorySelect,
-            iconGrid: !!iconGrid,
-            selectedIcon: !!selectedIcon,
-            iconInput: !!iconInput,
-            selectedIconDisplay: !!selectedIconDisplay
-        });
+        console.error('Required elements not found!');
         return;
     }
     
@@ -149,44 +176,48 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Toggle icon grid visibility
-    selectedIcon.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log('Selected icon clicked');
-        
-        // Check if a category is selected
-        if (!categorySelect.value) {
-            alert('Please select a category first');
-            return;
-        }
-        
-        // Check if icons are populated for this category
-        if (!categoryIcons[categorySelect.value]) {
-            alert('Please select a valid category');
-            return;
-        }
-        
-        const isVisible = iconGrid.style.display === 'grid';
-        iconGrid.style.display = isVisible ? 'none' : 'grid';
-        console.log('Icon grid visibility toggled:', !isVisible);
-    });
+    if (selectedIcon) {
+        selectedIcon.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Selected icon clicked');
+            
+            // Check if a category is selected
+            if (!categorySelect.value) {
+                alert('Please select a category first');
+                return;
+            }
+            
+            // Check if icons are populated for this category
+            if (!categoryIcons[categorySelect.value]) {
+                alert('Please select a valid category');
+                return;
+            }
+            
+            const isVisible = iconGrid.style.display === 'grid';
+            iconGrid.style.display = isVisible ? 'none' : 'grid';
+            console.log('Icon grid visibility toggled:', !isVisible);
+        });
+    }
     
     // Update icons when category changes
-    categorySelect.addEventListener('change', function() {
-        const category = this.value;
-        console.log('Category changed to:', category);
-        
-        if (category && categoryIcons[category]) {
-            populateIcons(categoryIcons[category]);
-            // Reset selected icon
-            selectedIconDisplay.className = 'fa-solid fa-smile';
-            selectedIconDisplay.style.fontSize = '24px';
-            iconInput.value = 'fa-solid fa-smile';
-        } else {
-            iconGrid.innerHTML = '';
-            iconGrid.style.display = 'none';
-        }
-    });
+    if (categorySelect) {
+        categorySelect.addEventListener('change', function() {
+            const category = this.value;
+            console.log('Category changed to:', category);
+            
+            if (category && categoryIcons[category]) {
+                populateIcons(categoryIcons[category]);
+                // Reset selected icon
+                selectedIconDisplay.className = 'fa-solid fa-smile';
+                selectedIconDisplay.style.fontSize = '24px';
+                iconInput.value = 'fa-solid fa-smile';
+            } else {
+                iconGrid.innerHTML = '';
+                iconGrid.style.display = 'none';
+            }
+        });
+    }
     
     // Close icon grid when clicking outside
     document.addEventListener('click', function(e) {
@@ -208,13 +239,111 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedIconDisplay.style.fontSize = '24px';
     }
     
+    // Render habits function
+    function renderHabits(habits) {
+        const list = document.getElementById('habits-list');
+        if (!list) return;
+        
+        if (!habits || habits.length === 0) {
+            list.innerHTML = `
+                <div id="placeholder-container">
+                    <img src="images/placeholder-img.png" alt="placeholder" id="placeholder-img">
+                    <p id="placeholder-msg">No habits added</p>
+                </div>`;
+            return;
+        }
+        
+        list.innerHTML = habits.map(h => `
+            <div class="habit-item" data-id="${h.id}">
+                <div class="habit-icon">
+                    <i class="${h.icon || 'fa-solid fa-smile'}"></i>
+                </div>
+                <div class="habit-name">${escapeHtml(h.name)}</div>
+                <div class="habit-frequency">${h.frequency}</div>
+                <div class="habit-status">
+                    <span class="status-${h.is_active ? 'active' : 'paused'}">${h.is_active ? 'Active' : 'Paused'}</span>
+                </div>
+                <div class="habit-actions">
+                    <button class="edit-btn" data-id="${h.id}"></button>
+                    <button class="delete-btn" data-id="${h.id}"></button>
+                </div>
+            </div>`).join('');
+        
+        // Add delete event listeners
+        list.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', () => deleteHabit(btn.dataset.id));
+        });
+        
+        // Add edit event listeners
+        list.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', () => editHabit(btn.dataset.id));
+        });
+    }
+    
+    // Helper function to escape HTML
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    // Load habits function
+    function loadHabits() {
+        apiGet('/api/habits').then(renderHabits).catch(error => {
+            console.error('Error loading habits:', error);
+        });
+    }
+    
+    // Delete habit function
+    function deleteHabit(id) {
+        if (confirm('Are you sure you want to delete this habit?')) {
+            apiDelete('/api/habits/' + id).then(() => {
+                loadHabits();
+                showNotification('Habit deleted successfully!', 'success');
+            }).catch(error => {
+                console.error('Error deleting habit:', error);
+                showNotification('Error deleting habit', 'error');
+            });
+        }
+    }
+    
+    // Edit habit function
+    function editHabit(id) {
+        console.log('Edit habit:', id);
+        // Implement edit functionality
+    }
+    
+    // Show notification function
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.textContent = message;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background: ${type === 'success' ? '#4CAF50' : '#f44336'};
+            color: white;
+            border-radius: 8px;
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+    
     // Popup functionality
     if (addHabitBtn && habitFormPopup && closePopupBtn) {
         // Function to show popup
         function showPopup() {
             habitFormPopup.style.display = 'block';
-            // Reset form
-            document.getElementById('habit-form').reset();
+            if (habitForm) habitForm.reset();
             // Reset icon
             selectedIconDisplay.className = 'fa-solid fa-smile';
             selectedIconDisplay.style.fontSize = '24px';
@@ -263,7 +392,65 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    console.log('Habit form initialized successfully');
-
+    // Handle form submission
+    if (habitForm) {
+        habitForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const data = {
+                name: document.getElementById('name').value,
+                description: document.getElementById('description').value,
+                category: document.getElementById('category').value,
+                frequency: document.getElementById('frequency').value,
+                target_count: document.getElementById('target_count').value,
+                icon: document.getElementById('icon').value,
+            };
+            
+            apiPost('/api/habits', data).then(habit => {
+                if (habit.id || habit.success) {
+                    hidePopup();
+                    loadHabits();
+                    showNotification('Habit added successfully!', 'success');
+                    habitForm.reset();
+                } else if (habit.errors) {
+                    // Handle validation errors
+                    showNotification('Please check the form for errors', 'error');
+                }
+            }).catch(error => {
+                console.error('Error adding habit:', error);
+                showNotification('Error adding habit', 'error');
+            });
+        });
+    }
     
+    // Load habits on page load
+    loadHabits();
+    
+    console.log('Habit form initialized successfully');
 });
+
+// Add CSS animations for notifications
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
