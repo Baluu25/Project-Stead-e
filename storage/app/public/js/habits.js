@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
             'fa-solid fa-person-swimming',
         ],
         
-        'Mindfullness': [
+        'Mindfulness': [
             'fa-solid fa-brain',
             'fa-solid fa-heart',
             'fa-solid fa-spa',
@@ -110,7 +110,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Accept': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             }
-        }).then(response => response.json());
+        }).then(response => {
+            if (response.status === 204) return null;
+            return response.json();
+        });
     }
     
     // Check if elements exist
@@ -291,6 +294,13 @@ document.addEventListener('DOMContentLoaded', function() {
     function loadHabits() {
         apiGet('/api/habits').then(renderHabits).catch(error => {
             console.error('Error loading habits:', error);
+            const list = document.getElementById('habits-list');
+            if (list) {
+                list.innerHTML = `
+                    <div id="placeholder-container">
+                        <p id="placeholder-msg">Could not load habits. Please refresh the page.</p>
+                    </div>`;
+            }
         });
     }
     
