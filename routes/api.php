@@ -6,7 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\StatisticsController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth'])->group(function () {
 
     // Habits API
     Route::get('/habits', [HabitController::class, 'apiIndex']);

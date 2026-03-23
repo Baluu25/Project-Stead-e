@@ -88,7 +88,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Accept': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             }
-        }).then(response => response.json());
+        }).then(response => {
+            if (!response.ok) throw new Error('HTTP ' + response.status);
+            return response.json();
+        });
     }
     
     function apiPost(url, data) {
@@ -247,7 +250,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const list = document.getElementById('habits-list');
         if (!list) return;
         
-        if (!habits || habits.length === 0) {
+        if (!habits || !Array.isArray(habits) || habits.length === 0) {
             list.innerHTML = `
                 <div id="placeholder-container">
                     <img src="images/placeholder-img.png" alt="placeholder" id="placeholder-img">
