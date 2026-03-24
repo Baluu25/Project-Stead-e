@@ -56,3 +56,7 @@ Route::get('/logout', function () {
     request()->session()->regenerateToken();
     return redirect('/');
 })->name('logout');
+
+Route::fallback(function () {
+    abort(404);
+});

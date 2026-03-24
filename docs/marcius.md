@@ -53,3 +53,49 @@ A statistics aloldal, illetve az achievements aloldal nem befejezett változata 
 - Statistics aloldal tartalma megírva, **nem befejezett**
 - Achievements aloldal tartalma megírva, **nem befejezett**
 
+
+
+## Dátum: 2026.03.24.
+
+## Elvégzett feladatok
+
+### 1. Achievements Aloldal
+Az achievements aloldalon az achievementek hardcoded módon lettek elkészítve.
+
+**Achievement kategóriák:**
+- Streak Achievements - kitartási rekordok
+- Milestone Achievements - mérföldkövek
+- Nutrition Achievements - Étrend szokás rekordok
+- Fitness Achievements - Fizikai mozgás szokás rekordok
+- Mindfullness Achievements - Szellemi szokás rekordok
+- Study Achievements - Tanulási szokás rekordok
+- Work Achievements - Munka szokás rekordok
+
+
+**Megjelenítés:**
+- Progress bar az előrehaladás mutatására
+- Achievement ikonok
+---
+
+### 2. Error Oldalak Frontendje és Struktúrája
+
+**Létrehozott error oldalak:**
+
+| Hibakód | Fájl |
+|---------|------|
+| 403 | `errors/403.blade.php` |
+| 404 | `errors/404.blade.php` |
+| 500 | `errors/500.blade.php` |
+| 503 | `errors/503.blade.php` |
+
+**Kialakított struktúra:**
+- Közös `errors/layout.blade.php` állomány minden error oldalhoz
+- Egységes megjelenés és dizájn
+- Dinamikus hibakód és üzenet megjelenítés a `@yield` direktívák segítségével
+
+**Error oldalak tartalma:**
+- Vissza a főoldalra gomb
+- Hibakód megjelenítése
+- Hibaüzenet megjelenítése
+- Egységes header és footer a főoldallal megegyezően
+
