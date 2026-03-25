@@ -15,10 +15,10 @@ class AchievementController extends Controller
     {
         $achievements = auth()->user()
             ->achievements()
-            ->orderBy('category')
+            ->orderBy('achievement_type')
             ->orderBy('threshold_value')
             ->get()
-            ->groupBy('category');
+            ->groupBy('achievement_type');
         return view('achievements', compact('achievements'));
     }
     /**

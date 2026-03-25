@@ -12,7 +12,7 @@ class AchievementSeeder extends Seeder
      */
     public function run(): void
     {
-        $userId = 1;
+        $userId = \App\Models\User::first()->id;
 
         $achievements = [
             // Streaks
