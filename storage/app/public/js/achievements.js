@@ -16,10 +16,21 @@ function applyFilters() {
         const status = block.dataset.status;
         const name   = block.dataset.name;
 
-        const matchFilter =
-            filter === 'all' ||
-            (filter === 'completed'   && status === 'completed') ||
-            (filter === 'in progress' && (status === 'in-progress' || status === 'locked'));
+        const progressBar = block.querySelector('.achievement-progress');
+        let progress = 0;
+        if (progressBar) {
+            progress = parseFloat(progressBar.style.width) || 0;
+        }
+
+        let matchFilter = true;
+        
+        if (filter === 'all') {
+            matchFilter = true;
+        } else if (filter === 'completed') {
+            matchFilter = status === 'completed';
+        } else if (filter === 'in progress') {
+            matchFilter = progress > 0 && progress < 100;
+        }
 
         const matchSearch = !search || name.includes(search);
 
