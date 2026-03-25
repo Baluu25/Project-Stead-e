@@ -18,8 +18,9 @@ return new class extends Migration
             $table->text('description');
             $table->bigInteger('threshold_value')->default(0);
             $table->string('icon', 255)->nullable();
-            $table->enum('achievement_type', ['streak', 'completion', 'social', 'milestone'])->default('milestone');
-            $table->timestamp('unlocked_at');
+            $table->enum('achievement_type', ['Streaks', 'Milestones', 'Nutrition', 'Fitness', 'Mindfulness', 'Study', 'Work'])->default('Milestones');
+            $table->Integer('progress')->default(0);
+            $table->timestamp('unlocked_at')->nullable();
             $table->timestamps();
         });
     }
