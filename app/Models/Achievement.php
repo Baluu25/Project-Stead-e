@@ -15,7 +15,7 @@ class Achievement extends Model
         'name', 
         'description', 
         'threshold_value',
-        'icon', 
+        'icon',
         'achievement_type', 
         'progress', 
         'unlocked_at',
