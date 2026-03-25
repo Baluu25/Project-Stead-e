@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Achievement;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -71,7 +72,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'username' => $data['username'],
             'email' => $data['email'],
@@ -84,6 +85,44 @@ class RegisterController extends Controller
             'wake_time' => $data['wake_time'],
             'user_goal' => $data['user_goal'],
         ]);
+
+        $achievements = [
+            ['Streaks',     'First step',           'Complete your first day', 1],
+            ['Streaks',     'Getting Warmed Up',    'Keep your habit alive for 3 days straight.', 3],
+            ['Streaks',     'Locked In',            'Reach a 7-day streak', 7],
+            ['Milestones',  'Habit Formed',         'Complete a habit 10 times total', 10],
+            ['Milestones',  'On a Roll',            'Complete 50 habits total', 50],
+            ['Milestones',  'Century Club',         'Complete 100 habits total', 100],
+            ['Nutrition',   'First Bite',           'Log your first nutrition habit', 1],
+            ['Nutrition',   'Hydration Hero',       'Log water intake 7 days in a row', 7],
+            ['Nutrition',   'Clean Plate',          'Track all meals for 5 full days', 5],
+            ['Fitness',     'First Sweat',          'Complete your first workout habit', 1],
+            ['Fitness',     'Weekly Warrior',       'Work out 3 times in one week', 3],
+            ['Fitness',     'Iron Will',            'Complete 30 fitness habits', 30],
+            ['Mindfulness', 'First Breath',         'Complete your first mindfulness session', 1],
+            ['Mindfulness', 'Finding Peace',        'Complete 3 mindfulness sessions', 3],
+            ['Mindfulness', 'Zen Master',           'Complete 7 mindfulness sessions', 7],
+            ['Study',       'First Focus',          'Log your first study session', 1],
+            ['Study',       'Study Streak',         'Study 5 days in a row', 5],
+            ['Study',       'Consistency Builder',  'Study 10 total hours', 10],
+            ['Work',        'First Task',           'Complete your first work task', 1],
+            ['Work',        'Getting Productive',   'Complete 5 tasks', 5],
+            ['Work',        'Work Warrior',         'Complete 10 tasks', 10],
+        ];
+
+        foreach ($achievements as [$type, $name, $description, $threshold]) {
+            Achievement::create([
+                'user_id'          => $user->id,
+                'achievement_type' => $type,
+                'name'             => $name,
+                'description'      => $description,
+                'threshold_value'  => $threshold,
+                'progress'         => 0,
+                'unlocked_at'      => null,
+            ]);
+        }
+
+        return $user;
     }
 
     public function showRegistrationForm()
