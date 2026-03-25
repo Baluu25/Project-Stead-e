@@ -13,9 +13,14 @@ class AchievementController extends Controller
      */
     public function index()
     {
-        //
+        $achievements = auth()->user()
+            ->achievements()
+            ->orderBy('category')
+            ->orderBy('threshold_value')
+            ->get()
+            ->groupBy('category');
+        return view('achievements', compact('achievements'));
     }
-
     /**
      * Show the form for creating a new resource.
      */

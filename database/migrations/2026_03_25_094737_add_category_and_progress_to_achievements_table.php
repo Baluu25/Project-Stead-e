@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('achievements', function (Blueprint $table) {
-            //
+            $table->string('category')->nullable()->after('achievement_type');
+            $table->integer('progress')->default(0)->after('category');
+            $table->timestamp('unlocked_at')->nullable()->change();
         });
     }
 
@@ -22,7 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('achievements', function (Blueprint $table) {
-            //
+            $table->dropColumn(['category', 'progress']);
         });
     }
 };

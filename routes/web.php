@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AchievementController;
 use App\Http\Controllers\HabitCompletionController;
 use App\Http\Controllers\HabitController;
 use App\Http\Controllers\HomeController;
@@ -45,9 +46,7 @@ Route::middleware(['auth'])->group(function () {
     })->name('goals');
     
     // Achievements
-    Route::get('/achievements', function () {
-        return view('achievements');
-    })->name('achievements');
+    Route::get('/achievements', [AchievementController::class, 'index'])->name('achievements');
 });
 
 Route::get('/logout', function () {
