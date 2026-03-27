@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const categoryIcons = {
         'Nutrition': [
-            'fa-solid fa-apple',
+            'fa-solid fa-apple-whole',
             'fa-solid fa-carrot',
             'fa-solid fa-lemon',
             'fa-solid fa-bowl-food',

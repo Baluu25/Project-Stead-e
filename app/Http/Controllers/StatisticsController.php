@@ -43,6 +43,8 @@ class StatisticsController extends Controller
         return view('statistics', [
             'total_habits'          => $totalHabits,
             'active_habits'         => $activeHabits,
+            'current_streak' => $user->current_streak ?? 0,
+           'longest_streak' => $user->longest_streak ?? 0,
             'completions_this_week' => $completionsThisWeek,
             'daily_completions'     => $dailyCompletions,
             'category_breakdown'    => $categoryBreakdown,

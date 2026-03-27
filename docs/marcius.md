@@ -99,3 +99,31 @@ Az achievements aloldalon az achievementek hardcoded módon lettek elkészítve.
 - Hibaüzenet megjelenítése
 - Egységes header és footer a főoldallal megegyezően
 
+## Dátum: 2026.03.25.
+
+## Elvégzett feladatok
+
+### 1. Achievements Dinamikus Generálása
+
+A regisztrációs folyamat bővítése: új felhasználó regisztrációjakor automatikusan létrejönnek az achievementek az adatbázisban.
+
+**Achievement kategóriák:**
+- **Streak Achievements** - Széria rekordok
+- **Milestone Achievements** - Mérföldkövek
+- **Nutrition Achievements** - Étrend szokás rekordok
+- **Fitness Achievements** - Fizikai mozgás szokás rekordok
+- **Mindfulness Achievements** - Szellemi szokás rekordok
+- **Study Achievements** - Tanulási szokás rekordok
+- **Work Achievements** - Munka szokás rekordok
+
+---
+
+### 2. Achievements Filter Gombok Javítása
+
+A szűrő gombok normálisan működnek.
+
+**Változtatások:**
+
+- **"In Progress"** szűrő: azokat mutatja, ahol a progress  0% és 100% között van
+- **"Completed"** szűrő: csak a 100%-os achievementeket mutatja (`status === 'completed'`)
+- **"All"** szűrő: minden achievement megjelenik státusztól függetlenül
