@@ -74,105 +74,69 @@
 
 <!-- Main row -->
 <div class="main-row">
-    <!-- Daily habits -->
     <div class="daily-habits-section">
-        <h2>Daily Habits</h2>
-        <ul class="habits-list">
-            <li class="habit-item">
-                <div class="habit-bar">
-                    <i class="fa-solid fa-dog"></i>
-                    <div class="habit-info">
-                        <p class="habit-name">Walk the dog</p>
-                        <div class="habit-meta">
-                            <span>Fitness</span>
-                            <span>•</span>
-                            <span>Daily</span>
-                        </div>
-                    </div>
-                    <div class="habit-progress-container">
-                        <div class="progress-stats">
-                            <span class="progress-current">7,500</span>
-                            <span class="progress-separator">/</span>
-                            <span class="progress-target">10,000 steps</span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 75%"></div>
-                        </div>
-                    </div>
-                    <div class="checkbox-wrapper-19">
-                        <input type="checkbox" id="habit-1">
-                        <label for="habit-1" class="check-box"></label>
-                    </div>
+    <h3>Today's Habits</h3>
+    @forelse($todaysHabits as $habit)
+        @php
+            $completed  = $habit->completions->count();
+            $target     = $habit->target_count ?? 1;
+            $percent    = $target > 0 ? min(100, round(($completed / $target) * 100)) : 0;
+            $isDone     = $percent >= 100;
+        @endphp
+        <div class="habit-item {{ $isDone ? 'completed' : '' }}">
+            {{-- Icon --}}
+            <div class="habit-icon">
+                <i class="fa-solid fa-{{ $habit->icon ?? 'circle-check' }}"></i>
+            </div>
+            {{-- Name + Category --}}
+            <div class="habit-info">
+                <span class="habit-name">{{ $habit->name }}</span>
+                <span class="habit-category badge">{{ $habit->category }}</span>
+            </div>
+            {{-- Progress --}}
+            <div class="habit-progress">
+                <div class="progress-numbers">
+                    <span class="progress-current">{{ $completed }}</span>
+                    <span class="progress-separator">/</span>
+                    <span class="progress-target">{{ $target }} {{ $habit->unit ?? '' }}</span>
                 </div>
-            </li>
-            <li class="habit-item">
-                <div class="habit-bar">
-                    <i class="fa-solid fa-book"></i>
-                    <div class="habit-info">
-                        <p class="habit-name">Read a book</p>
-                        <div class="habit-meta">
-                            <span>Learning</span>
-                            <span>•</span>
-                            <span>Daily</span>
-                        </div>
-                    </div>
-                    <div class="habit-progress-container">
-                        <div class="progress-stats">
-                            <span class="progress-current">20</span>
-                            <span class="progress-separator">/</span>
-                            <span class="progress-target">50 pages</span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 40%"></div>
-                        </div>
-                    </div>
-                    <div class="checkbox-wrapper-19">
-                        <input type="checkbox" id="habit-2">
-                        <label for="habit-2" class="check-box"></label>
-                    </div>
+                <div class="progress-bar-track">
+                    <div class="progress-bar-fill" style="width: {{ $percent }}%"></div>
                 </div>
-            </li>
-            <li class="habit-item">
-                <div class="habit-bar">
-                    <i class="fa-solid fa-dumbbell"></i>
-                    <div class="habit-info">
-                        <p class="habit-name">Workout</p>
-                        <div class="habit-meta">
-                            <span>Fitness</span>
-                            <span>•</span>
-                            <span>Daily</span>
-                        </div>
-                    </div>
-                    <div class="habit-progress-container">
-                        <div class="progress-stats">
-                            <span class="progress-current">45</span>
-                            <span class="progress-separator">/</span>
-                            <span class="progress-target">45 minutes</span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 100%"></div>
-                        </div>
-                    </div>
-                    <div class="checkbox-wrapper-19">
-                        <input type="checkbox" id="habit-3" checked>
-                        <label for="habit-3" class="check-box"></label>
-                    </div>
+                <div class="habit-actions">
+                    <button class="btn btn-add-progress" id="addHabitProgressBtn"></button>
                 </div>
-            </li>
-        </ul>
-    </div>
+            </div>
+            @if($isDone)
+                <div class="habit-done-badge">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+            @endif
+        </div>
+    @empty
+        <div class="no-habits-message">
+            <p>No habits scheduled for today.</p>
+            <a href="{{ route('habits') }}">Add your first habit</a>
+        </div>
+    @endforelse
+</div>
+
 
     <!-- Daily progress -->
     <div class="daily-progress-section">
         <h2>Daily Progress</h2>
         <div class="circular-progress">
             <div class="circular-progress-inner">
-                <div class="progress-percentage">75%</div>
-            </div>
-            <svg class="progress-ring" viewBox="0 0 120 120">
-                <circle class="progress-ring-bg" cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="8"/>
-                <circle class="progress-ring-fill" cx="60" cy="60" r="54" fill="none" stroke="#ff2a00" stroke-width="8" stroke-linecap="round" stroke-dasharray="339.292" stroke-dashoffset="84.823"/>
+            @php
+                $circumference = 2 * pi() * 54;
+                $offset = $circumference - ($dailyProgressPercent / 100) * $circumference;
+            @endphp
+            <svg class="progress-ring" width="140" height="140" viewBox="0 0 140 140">
+                <circle class="progress-ring-bg" cx="70" cy="70" r="54" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="8"/>
+                <circle class="progress-ring-fill" cx="70" cy="70" r="54" fill="none" stroke="#ff2a00" stroke-width="8" stroke-linecap="round" stroke-dasharray="{{ $circumference }}" stroke-dashoffset="{{ $offset }}"/>
             </svg>
+            <span class="progress-percentage">{{ $dailyProgressPercent }}%</span>
+            </div>
         </div>
     </div>
 @endsection
