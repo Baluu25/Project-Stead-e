@@ -127,3 +127,26 @@ A szűrő gombok normálisan működnek.
 - **"In Progress"** szűrő: azokat mutatja, ahol a progress  0% és 100% között van
 - **"Completed"** szűrő: csak a 100%-os achievementeket mutatja (`status === 'completed'`)
 - **"All"** szűrő: minden achievement megjelenik státusztól függetlenül
+
+## Dátum: 2026. 03. 31.
+
+## Elvégzett feladatok
+
+### 1. Goals Page Hardcode
+
+A Goals aloldal tartalma hardcodeolva lett. Hasonló képpen mint az Achievement aloldal.
+
+**Felépítés:**
+
+- `header`: Cím, Add Goal button, kontrollpanel a különböző kategóriájú goal-ok között
+- `goals-section`: A goal-ok elemenkénti kiíratása.
+- `goal-card`: Itt megtalálható minden információ a kitűzött célról, ami a user habitjeinek előrehaladását fogja használni a kitűzött cél eléréséhez.
+- `goals-summary`: Az összes kitűzött célt mutatja, az alapján mennyi aktív goal van összesen, mennyi van folyamatban, mennyi van készen, és mennyi nincs még elkezdve
+
+### 2. Home page dinamikusabb működése
+
+
+- `streak-counter`: A streak mostmár nem csak hardcoded értéket mutat, a heti jelenlét még nem dinamikus.
+- `daily-habits-section`: a kiválasztott nap szokásait mutatja, ami alapértelmezetten az aktuális napot jelenti, ez a késöbbiekben össze lesz kötve a naptárral
+- `daily-progress-section`: A daily progress dinamikus megjelenítése százalékos adatban, ami vizuálisan is megjelenik a `progress-ring`ben.
+
