@@ -13,7 +13,7 @@
     </div>
 
     <div class="controls-section">
-    <button class="btn btn-add" id="addHabitBtn">Add habit</button>
+    <button class="btn btn-add" id="addGoalButton">Add goal</button>
     <div class="filter-container">
         <button class="filter-btn active">All</button>
         <button class="filter-btn">Completed</button>
