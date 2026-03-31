@@ -89,8 +89,8 @@
     border: 1px solid rgba(76, 175, 80, 0.3);
 }
 
-.status-paused {
-    background-color: rgba(244, 67, 54, 0.2);
+.status-in-progress {
+    background-color: rgba(255, 230, 0, 0.2);
     color: #ef9a9a;
     padding: 5px 12px;
     border-radius: 30px;
