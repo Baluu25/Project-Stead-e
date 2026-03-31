@@ -119,8 +119,10 @@
 
     <div class="goals-summary">
         <div class="summary-stats">
-            <span class="stat-badge">4 Active Goals</span>
-            <span class="stat-badge">1 Completed Goal</span>
+            <span class="stat-badge">4 Goals Active</span>
+            <span class="stat-badge">1 Goals Completed</span>
+            <span class="stat-badge">2 Goals In Progress</span>
+            <span class="stat-badge">1 Goals Not Started</span>
         </div>
     </div>
 </div>
