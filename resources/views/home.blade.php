@@ -1,0 +1,142 @@
+@extends('layouts.dashboard_app')
+
+@section('title', 'Home')
+
+@section('dashboard-styles')
+    <link rel="stylesheet" href="{{ asset('storage/css/dashboard_home.css') }}">
+@endsection
+
+@section('content')
+<!-- Welcome Section -->
+<div class="dashboard-header">
+    <div class="welcome-section">
+        <h1>Welcome, {{ Auth::user()->username ?? 'User' }}!</h1>
+        <p class="motivation-text">Every step counts. Stay consistent!</p>
+    </div>
+</div>
+
+<!-- Overview row -->
+<div class="overview-row">
+    <div class="calendar-section">
+        <div class="dates-line-container">
+            <div class="dates-header">
+                <h2>February 2026</h2>
+                <div class="dates-controls">
+                    <button class="btn-today" id="todayBtn">Today</button>
+                    <button class="date-nav-btn" id="prevDateBtn">‹</button>
+                    <button class="date-nav-btn" id="nextDateBtn">›</button>
+                </div>
+            </div>
+            <div class="dates-line" id="datesLine"></div>
+        </div>
+    </div>
+
+    <!-- Streak counter -->
+    <div class="streak-counter">
+        <div class="streak-aside">
+            <div class="streak-flame"><i class="fa-solid fa-fire"></i></div>
+            <p class="streak-number">{{ $currentStreak }} days</p>
+        </div>
+        <div class="streak-week">
+            <div class="week-days">
+                <div class="day-container">
+                    <div class="day-circle" data-day="M"></div>
+                    <div class="day-letter">Mo</div>
+                </div>
+                <div class="day-container">
+                    <div class="day-circle" data-day="T"></div>
+                    <div class="day-letter">Tu</div>
+                </div>
+                <div class="day-container">
+                    <div class="day-circle" data-day="W"></div>
+                    <div class="day-letter">We</div>
+                </div>
+                <div class="day-container">
+                    <div class="day-circle active" data-day="T"><i class="fa-solid fa-check"></i></div>
+                    <div class="day-letter">Th</div>
+                </div>
+                <div class="day-container">
+                    <div class="day-circle active" data-day="F"><i class="fa-solid fa-check"></i></div>
+                    <div class="day-letter">Fr</div>
+                </div>
+                <div class="day-container">
+                    <div class="day-circle active" data-day="S"><i class="fa-solid fa-check"></i></div>
+                    <div class="day-letter">Sa</div>
+                </div>
+                <div class="day-container">
+                    <div class="day-circle active" data-day="S"><i class="fa-solid fa-check"></i></div>
+                    <div class="day-letter">Su</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main row -->
+<div class="main-row">
+    <div class="daily-habits-section">
+    <h3>Today's Habits</h3>
+    @forelse($todaysHabits as $habit)
+        @php
+            $completed  = $habit->completions->count();
+            $target     = $habit->target_count ?? 1;
+            $percent    = $target > 0 ? min(100, round(($completed / $target) * 100)) : 0;
+            $isDone     = $percent >= 100;
+        @endphp
+        <div class="habit-item {{ $isDone ? 'completed' : '' }}">
+            {{-- Icon --}}
+            <div class="habit-icon">
+                <i class="fa-solid fa-{{ $habit->icon ?? 'circle-check' }}"></i>
+            </div>
+            {{-- Name + Category --}}
+            <div class="habit-info">
+                <span class="habit-name">{{ $habit->name }}</span>
+                <span class="habit-category badge">{{ $habit->category }}</span>
+            </div>
+            {{-- Progress --}}
+            <div class="habit-progress">
+                <div class="progress-numbers">
+                    <span class="progress-current">{{ $completed }}</span>
+                    <span class="progress-separator">/</span>
+                    <span class="progress-target">{{ $target }} {{ $habit->unit ?? '' }}</span>
+                </div>
+                <div class="progress-bar-track">
+                    <div class="progress-bar-fill" style="width: {{ $percent }}%"></div>
+                </div>
+                <div class="habit-actions">
+                    <button class="btn btn-add-progress" id="addHabitProgressBtn"></button>
+                </div>
+            </div>
+            @if($isDone)
+                <div class="habit-done-badge">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+            @endif
+        </div>
+    @empty
+        <div class="no-habits-message">
+            <p>No habits scheduled for today.</p>
+            <a href="{{ route('habits') }}">Add your first habit</a>
+        </div>
+    @endforelse
+</div>
+
+
+    <!-- Daily progress -->
+    <div class="daily-progress-section">
+        <h2>Daily Progress</h2>
+        <div class="circular-progress">
+            <div class="circular-progress-inner">
+            @php
+                $circumference = 2 * pi() * 54;
+                $offset = $circumference - ($dailyProgressPercent / 100) * $circumference;
+            @endphp
+            <svg class="progress-ring" width="140" height="140" viewBox="0 0 140 140">
+                <circle class="progress-ring-bg" cx="70" cy="70" r="54" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="8"/>
+                <circle class="progress-ring-fill" cx="70" cy="70" r="54" fill="none" stroke="#ff2a00" stroke-width="8" stroke-linecap="round" stroke-dasharray="{{ $circumference }}" stroke-dashoffset="{{ $offset }}"/>
+            </svg>
+            <span class="progress-percentage">{{ $dailyProgressPercent }}%</span>
+            </div>
+        </div>
+    </div>
+@endsection
