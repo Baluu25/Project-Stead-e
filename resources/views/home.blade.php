@@ -10,8 +10,7 @@
 <!-- Welcome Section -->
 <div class="dashboard-header">
     <div class="welcome-section">
-        <h1>Welcome, {{ Auth::user()->username ?? 'User' }}!</h1>
-        <p class="motivation-text">Every step counts. Stay consistent!</p>
+        <h1>Home</h1>
     </div>
 </div>
 
