@@ -33,7 +33,7 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
                 <ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Profile</a>
+                        <a class="nav-link" href="{{ route("profile") }}">Profile</a>
                     </li>
                     <li class="nav-item">
                         <a class="btn btn-logout" href="{{ route("logout") }}">Logout</a>
@@ -45,6 +45,13 @@
 <div class="dashboard-container">
     <div class="dashboard-layout">
         <aside class="dashboard-sidebar">
+            <div class="user-sidebar">
+                <div class="user-section">
+                <img src="images/default_profile.png" alt="profile-pic">
+                <h1>Welcome, {{ Auth::user()->username ?? 'User' }}!</h1>
+                <p class="motivation-text">Every step counts. Stay consistent!</p>
+            </div>
+            </div>
             <nav class="sidebar-nav">
                 <div class="sidebar-header">
                     <h3>Dashboard</h3>
