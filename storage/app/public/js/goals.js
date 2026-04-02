@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Category icons data
     const categoryIcons = {
         'Nutrition': ['fa-solid fa-apple-whole', 'fa-solid fa-carrot', 'fa-solid fa-lemon', 'fa-solid fa-bowl-food', 'fa-solid fa-mug-saucer', 'fa-solid fa-burger', 'fa-solid fa-fish', 'fa-solid fa-egg', 'fa-solid fa-droplet', 'fa-solid fa-wine-bottle'],
         'Fitness': ['fa-solid fa-dumbbell', 'fa-solid fa-person-running', 'fa-solid fa-person-walking', 'fa-solid fa-bicycle', 'fa-solid fa-heart-pulse', 'fa-solid fa-fire', 'fa-solid fa-stopwatch', 'fa-solid fa-shoe-prints', 'fa-solid fa-weight-scale', 'fa-solid fa-person-swimming'],
@@ -8,52 +7,18 @@ document.addEventListener('DOMContentLoaded', function() {
         'Work': ['fa-solid fa-briefcase', 'fa-solid fa-laptop', 'fa-solid fa-computer', 'fa-solid fa-clock', 'fa-solid fa-calendar-check', 'fa-solid fa-chart-line', 'fa-solid fa-chart-simple', 'fa-solid fa-envelope', 'fa-solid fa-users', 'fa-solid fa-mug-hot']
     };
 
-    // DOM elements
     const elements = {
         category: document.getElementById('category'),
         iconGrid: document.getElementById('icon-grid'),
         selectedIcon: document.getElementById('selected-icon'),
         iconInput: document.getElementById('icon'),
         iconDisplay: document.getElementById('selected-icon-display'),
-        addBtn: document.getElementById('addHabitBtn'),
-        popup: document.getElementById('habitFormPopup'),
+        addBtn: document.getElementById('addGoalButton'),
+        popup: document.getElementById('goalFormPopup'),
         closeBtn: document.getElementById('closePopupBtn'),
-        form: document.getElementById('habit-form'),
-        habitsList: document.getElementById('habits-list')
-    };
-
-    // Helper functions
-    const api = {
-        get: (url) => fetch(url, {
-            headers: {
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            }
-        }).then(res => res.ok ? res.json() : Promise.reject('HTTP ' + res.status)),
-        
-        post: (url, data) => fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
-            body: JSON.stringify(data)
-        }).then(res => res.json()),
-        
-        delete: (url) => fetch(url, {
-            method: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            }
-        }).then(res => res.status === 204 ? null : res.json())
-    };
-
-    const escapeHtml = (text) => {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+        form: document.getElementById('goal-form'),
+        filterBtns: document.querySelectorAll('.filter-btn'),
+        stats: document.querySelectorAll('.stat-badge')
     };
 
     const selectIcon = (iconClass) => {
@@ -81,50 +46,43 @@ document.addEventListener('DOMContentLoaded', function() {
         elements.iconGrid.style.display = 'grid';
     };
 
-    const loadHabits = () => {
-        api.get('/api/habits').then(habits => {
-            if (!habits || habits.length === 0) {
-                elements.habitsList.innerHTML = `<div id="placeholder-container"><img src="images/placeholder-img.png" alt="placeholder" id="placeholder-img"><p id="placeholder-msg">No habits added</p></div>`;
-                return;
+    const filterGoals = (filter) => {
+        const goals = document.querySelectorAll('.goal-card');
+        goals.forEach(goal => {
+            if (filter === 'All') {
+                goal.style.display = 'block';
+            } else if (filter === 'Completed' && goal.classList.contains('completed')) {
+                goal.style.display = 'block';
+            } else if (filter === 'In Progress' && (goal.classList.contains('in-progress') || goal.classList.contains('not-started'))) {
+                goal.style.display = 'block';
+            } else {
+                goal.style.display = 'none';
             }
-            elements.habitsList.innerHTML = habits.map(h => `
-                <div class="habit-item" data-id="${h.id}">
-                    <div class="habit-icon"><i class="${h.icon || 'fa-solid fa-smile'}"></i></div>
-                    <div class="habit-name">${escapeHtml(h.name)}</div>
-                    <div class="habit-frequency">${h.frequency}</div>
-                    <div class="habit-status"><span class="status-${h.is_active ? 'active' : 'paused'}">${h.is_active ? 'Active' : 'Paused'}</span></div>
-                    <div class="habit-actions">
-                        <button class="edit-btn" data-id="${h.id}"><i class="fa-solid fa-edit"></i></button>
-                        <button class="delete-btn" data-id="${h.id}"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                </div>`).join('');
-            
-            document.querySelectorAll('.delete-btn').forEach(btn => btn.onclick = () => deleteHabit(btn.dataset.id));
-            document.querySelectorAll('.edit-btn').forEach(btn => btn.onclick = () => console.log('Edit habit:', btn.dataset.id));
-        }).catch(() => {
-            if (elements.habitsList) elements.habitsList.innerHTML = `<div id="placeholder-container"><p id="placeholder-msg">Could not load habits. Please refresh the page.</p></div>`;
         });
     };
 
-    const deleteHabit = (id) => {
-        if (confirm('Are you sure you want to delete this habit?')) {
-            api.delete('/api/habits/' + id).then(() => loadHabits()).catch(() => alert('Error deleting habit'));
-        }
+    const updateStats = () => {
+        const completed = document.querySelectorAll('.goal-card.completed').length;
+        const inProgress = document.querySelectorAll('.goal-card.in-progress').length;
+        const notStarted = document.querySelectorAll('.goal-card.not-started').length;
+        
+        if (elements.stats[0]) elements.stats[0].textContent = `${completed} Goals Completed`;
+        if (elements.stats[1]) elements.stats[1].textContent = `${inProgress} Goals In Progress`;
+        if (elements.stats[2]) elements.stats[2].textContent = `${notStarted} Goals Not Started`;
     };
 
     const showPopup = () => {
         elements.popup.style.display = 'block';
         if (elements.form) elements.form.reset();
-        elements.iconDisplay.className = 'fa-solid fa-smile';
-        elements.iconInput.value = 'fa-solid fa-smile';
-        elements.category.value = '';
+        elements.iconDisplay.className = 'fa-solid fa-bullseye';
+        elements.iconInput.value = 'fa-solid fa-bullseye';
+        if (elements.category) elements.category.value = '';
         elements.iconGrid.innerHTML = '';
         elements.iconGrid.style.display = 'none';
     };
 
     const hidePopup = () => elements.popup.style.display = 'none';
 
-    // Event listeners
     if (elements.selectedIcon) {
         elements.selectedIcon.onclick = (e) => {
             e.preventDefault();
@@ -139,8 +97,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const category = elements.category.value;
             if (category && categoryIcons[category]) {
                 populateIcons(categoryIcons[category]);
-                elements.iconDisplay.className = 'fa-solid fa-smile';
-                elements.iconInput.value = 'fa-solid fa-smile';
+                elements.iconDisplay.className = 'fa-solid fa-bullseye';
+                elements.iconInput.value = 'fa-solid fa-bullseye';
             } else {
                 elements.iconGrid.innerHTML = '';
                 elements.iconGrid.style.display = 'none';
@@ -160,31 +118,67 @@ document.addEventListener('DOMContentLoaded', function() {
         document.onkeydown = (e) => { if (e.key === 'Escape' && elements.popup.style.display === 'block') hidePopup(); };
     }
 
+    if (elements.filterBtns) {
+        elements.filterBtns.forEach(btn => {
+            btn.onclick = () => {
+                elements.filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                filterGoals(btn.textContent.trim());
+            };
+        });
+    }
+
     if (elements.form) {
         elements.form.onsubmit = (e) => {
             e.preventDefault();
-            const data = {
-                name: document.getElementById('name').value,
-                description: document.getElementById('description').value,
-                category: document.getElementById('category').value,
-                frequency: document.getElementById('frequency').value,
-                target_count: document.getElementById('target_count').value,
-                icon: document.getElementById('icon').value,
-            };
-            api.post('/api/habits', data).then(habit => {
-                if (habit.id || habit.success) {
-                    hidePopup();
-                    loadHabits();
-                    alert('Habit added successfully!');
-                    elements.form.reset();
-                } else if (habit.errors) alert('Please check the form for errors');
-            }).catch(() => alert('Error adding habit'));
+            const formData = new FormData(elements.form);
+            
+            fetch(elements.form.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: formData
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.success || data.id) {
+                      hidePopup();
+                      alert('Goal added successfully!');
+                      location.reload();
+                  } else if (data.errors) {
+                      let errorMsg = 'Please fix the following errors:\n';
+                      Object.values(data.errors).forEach(error => {
+                          errorMsg += `- ${error[0]}\n`;
+                      });
+                      alert(errorMsg);
+                  }
+              }).catch(() => alert('Error adding goal'));
         };
     }
 
-    if (elements.iconInput.value && elements.iconInput.value !== 'fa-solid fa-smile') {
+    document.querySelectorAll('.goal-card form').forEach(form => {
+        form.onsubmit = (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: formData
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      location.reload();
+                  }
+              }).catch(() => alert('Error updating progress'));
+        };
+    });
+
+    if (elements.iconInput && elements.iconInput.value && elements.iconInput.value !== 'fa-solid fa-bullseye') {
         elements.iconDisplay.className = elements.iconInput.value;
     }
 
-    loadHabits();
+    updateStats();
 });

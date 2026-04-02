@@ -2,6 +2,8 @@
 
 @section('dashboard-styles')
     <link rel="stylesheet" href="{{ asset('storage/css/dashboard_goals.css') }}">
+    <script src="{{ asset('storage/js/goals.js') }}" defer></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 
 @section('title', 'Goals')
@@ -24,106 +26,152 @@
 
 <div class="goals-section">
     <div class="goals-grid">
-        <div class="goal-card">
-            <div class="goal-header">
-                <i class="fa-solid fa-person-running"></i>
-                <h3>Run a 5K</h3>
-                <div class="goal-percentage">65%</div>
+        @foreach($goals as $goal)
+        <div class="goal-card {{ $goal->status }}" data-id="{{ $goal->id }}">
+            <div class="goal-icon"><i class="{{ $goal->icon }}"></i></div>
+            <h5>{{ $goal->title }}</h5>
+            <p>{{ $goal->description }}</p>
+            <div class="progress">
+                <div class="progress-bar" style="width: {{ $goal->progress }}%"></div>
             </div>
-            <div class="goal-progress-bar-container">
-                <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" style="width: 65%"></div>
-                </div>
-            </div>
-            <div class="goal-details">
-                <div class="goal-progress-row">
-                    <span class="status status-in-progress"><i class="fa-solid fa-spinner"></i> Status: In progress</span>
-                    <div class="goal-progress-text">3.2km / 5km reached</div>
-                </div>
-                <div class="goal-habits">
-                    <span><i class="fa-solid fa-person-walking-arrow-right"></i> Habits: Run (x3 wk)</span>
-                    <span><i class="fa-regular fa-calendar"></i> Target: Aug 1st</span>
-                </div>
-            </div>
-        </div>
+            <span>{{ $goal->current_value }} / {{ $goal->target_value }} {{ $goal->unit }}</span>
+            <span class="status-{{ str_replace(' ', '-', $goal->status) }}">{{ ucfirst($goal->status) }}</span>
 
-        <div class="goal-card">
-            <div class="goal-header">
-                <i class="fa-brands fa-python"></i>
-                <h3>Master Python</h3>
-                <div class="goal-percentage">100%</div>
-            </div>
-            <div class="goal-progress-bar-container">
-                <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" style="width: 100%"></div>
-                </div>
-            </div>
-            <div class="goal-details">
-                <div class="goal-progress-row">
-                    <span class="status status-completed"><i class="fa-solid fa-check"></i> Status: Completed</span>
-                    <div class="goal-progress-text">40 / 40 lessons completed</div>
-                </div>
-                <div class="goal-habits">
-                    <span><i class="fa-solid fa-laptop-code"></i> Habits: Study Python (daily)</span>
-                    <span><i class="fa-regular fa-calendar"></i> Target: Oct 15th</span>
-                </div>
-            </div>
+            <form action="{{ route('goals.progress', $goal) }}" method="POST">
+                @csrf 
+                <button type="submit">+1 Progress</button>
+            </form>
         </div>
-
-        <div class="goal-card">
-            <div class="goal-header">
-                <i class="fa-solid fa-book"></i>
-                <h3>Read 12 Books</h3>
-                <div class="goal-percentage">0%</div>
-            </div>
-            <div class="goal-progress-bar-container">
-                <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" style="width: 0%"></div>
-                </div>
-            </div>
-            <div class="goal-details">
-                <div class="goal-progress-row">
-                    <span class="status status-not-started"><i class="fa-solid fa-ban"></i> Status: Not Started</span>
-                    <div class="goal-progress-text">0 / 12 books read</div>
-                </div>
-                <div class="goal-habits">
-                    <span><i class="fa-solid fa-book-open"></i> Habits: Read 20 min (daily)</span>
-                    <span><i class="fa-regular fa-calendar"></i> Target: Dec 31st</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="goal-card">
-            <div class="goal-header">
-                <i class="fa-solid fa-spa"></i>
-                <h3>30-Day Meditation Streak</h3>
-                <div class="goal-percentage">60%</div>
-            </div>
-            <div class="goal-progress-bar-container">
-                <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" style="width: 60%"></div>
-                </div>
-            </div>
-            <div class="goal-details">
-                <div class="goal-progress-row">
-                    <span class="status status-in-progress"><i class="fa-solid fa-spinner"></i> Status: In Progress</span>
-                    <div class="goal-progress-text">18/30 days</div>
-                </div>
-                <div class="goal-habits">
-                    <span><i class="fa-solid fa-brain"></i> Habits: Meditate (daily)</span>
-                    <span><i class="fa-regular fa-calendar"></i> Target: 30 days</span>
-                </div>
-            </div>
-        </div>
+        @endforeach
     </div>
+</div>
 
     <div class="goals-summary">
         <div class="summary-stats">
-            <span class="stat-badge">4 Goals Active</span>
-            <span class="stat-badge">1 Goals Completed</span>
-            <span class="stat-badge">2 Goals In Progress</span>
-            <span class="stat-badge">1 Goals Not Started</span>
+            <span class="stat-badge">{{ 0 }} Goals Completed</span>
+            <span class="stat-badge">{{ 0 }} Goals In Progress</span>
+            <span class="stat-badge">{{ 0 }} Goals Not Started</span>
         </div>
     </div>
+
+    <div class="goal-form-card" id="goalFormPopup" style="display: none;"> 
+    <div class="goal-form-header">
+        <h1 class="goal-form-title">Add Goal</h1>
+        <button type="button" class="close-goal-form" id="closePopupBtn">&times;</button>
+    </div>
+    <p class="goal-form-subtitle">Add a new goal to track your progress</p>
+
+    <form method="POST" action="{{ route('goals.store') }}" id="goal-form">
+        @csrf
+    
+        <div class="form-group">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" 
+               id="title" 
+               name="title" 
+               class="form-control @error('title') is-invalid @enderror" 
+               value="{{ old('title') }}" 
+               required 
+               autofocus>
+            @error('title')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="description" class="form-label">Description</label>
+            <textarea id="description" 
+                  name="description" 
+                  rows="3" 
+                  class="form-control @error('description') is-invalid @enderror">{{ old('description') }}</textarea>
+            @error('description')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="category" class="form-label">Category</label>
+            <select id="category" 
+                name="category" 
+                class="form-control @error('category') is-invalid @enderror" 
+                required>
+                <option value="">Select a category</option>
+                <option value="general" {{ old('category') == 'nutrition' ? 'selected' : '' }}>Nutrition</option>
+                <option value="fitness" {{ old('category') == 'fitness' ? 'selected' : '' }}>Fitness</option>
+                <option value="health" {{ old('category') == 'mindfullness' ? 'selected' : '' }}>Mindfullness</option>
+                <option value="career" {{ old('category') == 'study' ? 'selected' : '' }}>Study</option>
+                <option value="learning" {{ old('category') == 'work' ? 'selected' : '' }}>Work</option>
+            </select>
+            @error('category')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-row">
+            <div class="form-group half">
+                <label for="target_value" class="form-label">Target Value</label>
+                <input type="number" 
+                   id="target_value" 
+                   name="target_value" 
+                   class="form-control @error('target_value') is-invalid @enderror" 
+                   value="{{ old('target_value', 1) }}" 
+                   min="1"
+                   required>
+                @error('target_value')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group half">
+                <label for="unit" class="form-label">Unit</label>
+                <select id="unit" 
+                    name="unit" 
+                    class="form-control @error('unit') is-invalid @enderror" 
+                    required>
+                    <option value="times" {{ old('unit') == 'times' ? 'selected' : '' }}>Times</option>
+                    <option value="days" {{ old('unit') == 'days' ? 'selected' : '' }}>Days</option>
+                    <option value="km" {{ old('unit') == 'km' ? 'selected' : '' }}>Kilometers (km)</option>
+                    <option value="books" {{ old('unit') == 'books' ? 'selected' : '' }}>Books</option>
+                    <option value="minutes" {{ old('unit') == 'minutes' ? 'selected' : '' }}>Minutes</option>
+                    <option value="custom" {{ old('unit') == 'custom' ? 'selected' : '' }}>Custom</option>
+                </select>
+                @error('unit')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="deadline" class="form-label">Deadline (Optional)</label>
+            <input type="date" 
+               id="deadline" 
+               name="deadline" 
+               class="form-control @error('deadline') is-invalid @enderror" 
+               value="{{ old('deadline') }}">
+            @error('deadline')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="icon" class="form-label">Icon</label>
+            <div class="icon-selector" id="icon-selector">
+                <div class="selected-icon" id="selected-icon">
+                    <i class="fa-solid fa-bullseye" id="selected-icon-display"></i>
+                    <span>Select an icon</span>
+                </div>
+                <div class="icon-grid" id="icon-grid" style="display: none;">
+
+                </div>
+            </div>
+            <input type="hidden" id="icon" name="icon" value="{{ old('icon', 'fa-solid fa-bullseye') }}">
+            @error('icon')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <button type="submit" class="btn btn-add">Add Goal</button>
+    </form>
+</div>
 </div>
 @endsection
