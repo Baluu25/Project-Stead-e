@@ -82,4 +82,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Challenge::class, 'created_by_id');
     }
+
+    public function goals() {
+    return $this->hasMany(Goal::class);
+    }
 }

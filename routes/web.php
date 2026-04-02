@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AchievementController;
+use App\Http\Controllers\GoalController;
 use App\Http\Controllers\HabitCompletionController;
 use App\Http\Controllers\HabitController;
 use App\Http\Controllers\HomeController;
@@ -41,9 +42,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics');
     
     // Goals
-    Route::get('/goals', function () {
-        return view('goals');
-    })->name('goals');
+    Route::get('/goals', [GoalController::class, 'index'])->name('goals');
+    Route::post('/goals', [GoalController::class, 'store'])->name('goals.store');
+    Route::put('/goals/{goal}', [GoalController::class, 'update'])->name('goals.update');
+    Route::post('/goals/{goal}/progress', [GoalController::class, 'progress'])->name('goals.progress');
+    Route::delete('/goals/{goal}', [GoalController::class, 'destroy'])->name('goals.destroy');
     
     // Achievements
     Route::get('/achievements', [AchievementController::class, 'index'])->name('achievements');
