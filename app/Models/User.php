@@ -53,34 +53,9 @@ class User extends Authenticatable
         return $this->hasMany(Achievement::class);
     }
 
-    public function reminders(): HasMany
-    {
-        return $this->hasMany(Reminder::class);
-    }
-
-    public function notifications(): HasMany
-    {
-        return $this->hasMany(Notification::class);
-    }
-
     public function settings(): HasOne
     {
         return $this->hasOne(UserSetting::class);
-    }
-
-    public function friends(): HasMany
-    {
-        return $this->hasMany(Friend::class, 'user_id');
-    }
-
-    public function friendOf(): HasMany
-    {
-        return $this->hasMany(Friend::class, 'friend_id');
-    }
-
-    public function createdChallenges(): HasMany
-    {
-        return $this->hasMany(Challenge::class, 'created_by_id');
     }
 
     public function goals() {
