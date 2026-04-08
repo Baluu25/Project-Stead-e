@@ -32,8 +32,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profile', [UserController::class, 'update'])->name('profile.update')->middleware('auth');
     
     // Habits
-    Route::resource('habits', HabitController::class)
-        ->except(['create', 'edit', 'show']);
+    Route::get('/habits', [HabitController::class, 'index'])->name('habits')->middleware('auth');
 
     Route::post('/habit-completions', [HabitCompletionController::class, 'store'])
         ->name('habit-completions.store');
