@@ -21,4 +21,6 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/statistics', [StatisticsController::class, 'apiIndex']);
 
     Route::get('/home', [HomeController::class, 'apiIndex']);
+
+    Route::delete('/habit-completions/{habitId}/today/last', [HabitCompletionController::class, 'destroyLast']);
 });

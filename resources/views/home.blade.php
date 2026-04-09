@@ -65,7 +65,10 @@
             $percent    = $target > 0 ? min(100, round(($completed / $target) * 100)) : 0;
             $isDone     = $percent >= 100;
         @endphp
-        <div class="habit-item {{ $isDone ? 'completed' : '' }}">
+        <div class="habit-item {{ $isDone ? 'completed' : '' }}"
+            data-habit-id="{{ $habit->id }}"
+            data-completed="{{ $completed }}"
+            data-target="{{ $target }}">
             {{-- Icon --}}
             <div class="habit-icon">
                 <i class="fa-solid fa-{{ $habit->icon ?? 'circle-check' }}"></i>
@@ -78,22 +81,27 @@
             {{-- Progress --}}
             <div class="habit-progress">
                 <div class="progress-numbers">
-                    <span class="progress-current">{{ $completed }}</span>
+                    <span class="progress-current" data-habit-id="{{ $habit->id }}">{{ $completed }}</span>
                     <span class="progress-separator">/</span>
                     <span class="progress-target">{{ $target }} {{ $habit->unit ?? '' }}</span>
                 </div>
                 <div class="progress-bar-track">
-                    <div class="progress-bar-fill" style="width: {{ $percent }}%"></div>
-                </div>
-                <div class="habit-actions">
-                    <button class="btn btn-remove-progress" id="removeHabitProgressBtn"><i class="fa-solid fa-minus"></i></button>
-                    <button class="btn btn-add-progress" id="addHabitProgressBtn"><i class="fa-solid fa-plus"></i></button>
+                    <div class="progress-bar-fill"
+                    data-habit-id="{{ $habit->id }}"
+                    style="width: {{ $percent }}%"></div>
                 </div>
             </div>
-            @if($isDone)
-                <div class="habit-done-badge">
-                    <i class="fa-solid fa-check"></i>
-                </div>
+            @if(!$isDone)
+            <div class="habit-actions">
+                <button class="btn btn-remove-progress"
+                data-habit-id="{{ $habit->id }}">
+                    <i class="fa-solid fa-minus"></i>
+                </button>
+                <button class="btn btn-add-progress"
+                data-habit-id="{{ $habit->id }}">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </div>
             @endif
         </div>
     @empty

@@ -17,9 +17,16 @@ class HabitController extends Controller
     public function apiIndex()
     {
         $habits = Habit::where('user_id', Auth::id())
-            ->orderBy('created_at', 'desc')
-            ->get();
-
+        ->with(['completions' => function($q) {
+            $q->whereDate('completed_at', today());
+        }])
+        ->orderBy('created_at', 'desc')
+        ->get()
+        ->map(function ($habit) {
+            $habit->completed_today = $habit->completions->count();
+            return $habit;
+        });
+        
         return response()->json($habits);
     }
 
