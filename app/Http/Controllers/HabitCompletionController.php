@@ -32,7 +32,7 @@ class HabitCompletionController extends Controller
 
         return response()->json([
             'completed' => $newCount,
-            'target'    => $habit->target_count
+            'target'    => $habit->target_count ?? 1
         ], 201);
     }
 
@@ -57,6 +57,6 @@ class HabitCompletionController extends Controller
         ->whereDate('completed_at', today())
         ->count();
 
-        return response()->json(['completed' => $newCount, 'target' => $habit->target_count]);
+        return response()->json(['completed' => $newCount, 'target' => $habit->target_count ?? 1]);
     }
 }
