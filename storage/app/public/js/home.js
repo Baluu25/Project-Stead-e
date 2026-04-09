@@ -112,7 +112,8 @@ function updateHabitCard(habitId, completed, target) {
 
     if (!card) return;
 
-    const percent = target > 0 ? Math.min(100, Math.round((completed / target) * 100)) : 0;
+    const safeTarget = target ?? 1;
+    const percent = safeTarget > 0 ? Math.min(100, Math.round((completed / safeTarget) * 100)) : 0;
     const isDone  = percent >= 100;
 
     if (countEl) countEl.textContent = completed;
@@ -149,7 +150,7 @@ document.addEventListener('click', function(e) {
         },
         body: JSON.stringify({ habit_id: habitId })
     })
-    .then(r => r.json())
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .then(data => updateHabitCard(habitId, data.completed, data.target))
     .catch(() => alert('Could not record progress. Please try again.'));
 });
@@ -169,7 +170,7 @@ document.addEventListener('click', function(e) {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
         }
     })
-    .then(r => r.json())
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .then(data => updateHabitCard(habitId, data.completed, data.target))
-    .catch(() => {});
+    .catch(() => alert('Could not remove progress. Please try again.'));
 });
