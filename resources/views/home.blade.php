@@ -104,6 +104,11 @@
                 </button>
             </div>
             @endif
+            @if($isDone)
+            <div class="habit-done-badge">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            @endif
         </div>
     @empty
         <div class="no-habits-message">
