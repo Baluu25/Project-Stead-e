@@ -91,3 +91,85 @@ const todayBtn = document.getElementById('todayBtn');
         updateMonthYear();
         updateDatesLine();
     }
+
+function habitFetch(url, method) {
+    return fetch(url, {
+        method: method,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: method === 'POST' ? JSON.stringify({ habit_id: url.match(/\d+/) ? undefined : null }) : undefined
+    }).then(r => r.json());
+}
+
+function updateHabitCard(habitId, completed, target) {
+    const card      = document.querySelector(`.habit-item[data-habit-id="${habitId}"]`);
+    const countEl   = document.querySelector(`.progress-current[data-habit-id="${habitId}"]`);
+    const fillEl    = document.querySelector(`.progress-bar-fill[data-habit-id="${habitId}"]`);
+    const actionsEl = card ? card.querySelector('.habit-actions') : null;
+
+    if (!card) return;
+
+    const percent = target > 0 ? Math.min(100, Math.round((completed / target) * 100)) : 0;
+    const isDone  = percent >= 100;
+
+    if (countEl) countEl.textContent = completed;
+    if (fillEl)  fillEl.style.width = percent + '%';
+
+
+    card.classList.toggle('completed', isDone);
+
+    if (isDone) {
+        if (actionsEl) actionsEl.remove();
+        if (!card.querySelector('.habit-done-badge')) {
+            const badge = document.createElement('div');
+            badge.className = 'habit-done-badge';
+            badge.innerHTML = '<i class="fa-solid fa-check"></i>';
+            card.appendChild(badge);
+        }
+    }
+}
+
+document.addEventListener('click', function(e) {
+    const addBtn = e.target.closest('.btn-add-progress');
+    if (!addBtn) return;
+
+    const habitId = addBtn.dataset.habitId;
+    const card    = document.querySelector(`.habit-item[data-habit-id="${habitId}"]`);
+    const target  = card ? parseInt(card.dataset.target, 10) : 1;
+
+    fetch('/api/habit-completions', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ habit_id: habitId })
+    })
+    .then(r => r.json())
+    .then(data => updateHabitCard(habitId, data.completed, data.target))
+    .catch(() => alert('Could not record progress. Please try again.'));
+});
+
+document.addEventListener('click', function(e) {
+    const removeBtn = e.target.closest('.btn-remove-progress');
+    if (!removeBtn) return;
+
+    const habitId = removeBtn.dataset.habitId;
+    const card    = document.querySelector(`.habit-item[data-habit-id="${habitId}"]`);
+    const target  = card ? parseInt(card.dataset.target, 10) : 1;
+
+    fetch(`/api/habit-completions/${habitId}/today/last`, {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+    })
+    .then(r => r.json())
+    .then(data => updateHabitCard(habitId, data.completed, data.target))
+    .catch(() => {});
+});

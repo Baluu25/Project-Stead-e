@@ -87,17 +87,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 elements.habitsList.innerHTML = `<div id="placeholder-container"><img src="images/placeholder-img.png" alt="placeholder" id="placeholder-img"><p id="placeholder-msg">No habits added</p></div>`;
                 return;
             }
-            elements.habitsList.innerHTML = habits.map(h => `
-                <div class="habit-item" data-id="${h.id}">
-                    <div class="habit-icon"><i class="${h.icon || 'fa-solid fa-smile'}"></i></div>
-                    <div class="habit-name">${escapeHtml(h.name)}</div>
-                    <div class="habit-frequency">${h.frequency}</div>
-                    <div class="habit-status"><span class="status-${h.is_active ? 'active' : 'paused'}">${h.is_active ? 'Active' : 'Paused'}</span></div>
-                    <div class="habit-actions">
-                        <button class="edit-btn" data-id="${h.id}"><i class="fa-solid fa-edit"></i></button>
-                        <button class="delete-btn" data-id="${h.id}"><i class="fa-solid fa-trash"></i></button>
+            elements.habitsList.innerHTML = habits.map(h => {
+                const isCompleted = (h.completed_today ?? 0) >= (h.target_count ?? 1);
+                const statusClass = isCompleted ? 'completed' : (h.is_active ? 'active' : 'paused');
+                const statusText  = isCompleted ? 'Completed' : (h.is_active ? 'Active' : 'Paused');
+    
+                return `
+                    <div class="habit-item" data-id="${h.id}">
+                        <div class="habit-icon"><i class="${h.icon || 'fa-solid fa-smile'}"></i></div>
+                        <div class="habit-name">${escapeHtml(h.name)}</div>
+                        <div class="habit-frequency">${h.frequency}</div>
+                        <div class="habit-status"><span class="status-${statusClass}">${statusText}</span></div>
+                        <div class="habit-actions">
+                            <button class="edit-btn" data-id="${h.id}"><i class="fa-solid fa-edit"></i></button>
+                            <button class="delete-btn" data-id="${h.id}"><i class="fa-solid fa-trash"></i></button>
+                        </div>
                     </div>
-                </div>`).join('');
+                    `;
+        }).join('');
             
             document.querySelectorAll('.delete-btn').forEach(btn => btn.onclick = () => deleteHabit(btn.dataset.id));
             document.querySelectorAll('.edit-btn').forEach(btn => btn.onclick = () => console.log('Edit habit:', btn.dataset.id));
