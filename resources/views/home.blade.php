@@ -4,6 +4,7 @@
 
 @section('dashboard-styles')
     <link rel="stylesheet" href="{{ asset('storage/css/dashboard_home.css') }}">
+    <script src="{{ asset("storage/js/home.js") }}" defer></script>
 @endsection
 
 @section('content')
@@ -19,7 +20,7 @@
     <div class="calendar-section">
         <div class="dates-line-container">
             <div class="dates-header">
-                <h2>February 2026</h2>
+                <h2> 2026</h2>
                 <div class="dates-controls">
                     <button class="btn-today" id="todayBtn">Today</button>
                     <button class="date-nav-btn" id="prevDateBtn">‹</button>
@@ -38,34 +39,16 @@
         </div>
         <div class="streak-week">
             <div class="week-days">
+            @foreach($streakDays as $day)
                 <div class="day-container">
-                    <div class="day-circle" data-day="M"></div>
-                    <div class="day-letter">Mo</div>
+                    <div class="day-circle {{ $day['completed'] ? 'active' : '' }}">
+                    @if($day['completed'])
+                        <i class="fa-solid fa-check"></i>
+                    @endif
+                    </div>
+                    <div class="day-letter">{{ $day['label'] }}</div>
                 </div>
-                <div class="day-container">
-                    <div class="day-circle" data-day="T"></div>
-                    <div class="day-letter">Tu</div>
-                </div>
-                <div class="day-container">
-                    <div class="day-circle" data-day="W"></div>
-                    <div class="day-letter">We</div>
-                </div>
-                <div class="day-container">
-                    <div class="day-circle active" data-day="T"><i class="fa-solid fa-check"></i></div>
-                    <div class="day-letter">Th</div>
-                </div>
-                <div class="day-container">
-                    <div class="day-circle active" data-day="F"><i class="fa-solid fa-check"></i></div>
-                    <div class="day-letter">Fr</div>
-                </div>
-                <div class="day-container">
-                    <div class="day-circle active" data-day="S"><i class="fa-solid fa-check"></i></div>
-                    <div class="day-letter">Sa</div>
-                </div>
-                <div class="day-container">
-                    <div class="day-circle active" data-day="S"><i class="fa-solid fa-check"></i></div>
-                    <div class="day-letter">Su</div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -103,7 +86,8 @@
                     <div class="progress-bar-fill" style="width: {{ $percent }}%"></div>
                 </div>
                 <div class="habit-actions">
-                    <button class="btn btn-add-progress" id="addHabitProgressBtn"></button>
+                    <button class="btn btn-remove-progress" id="removeHabitProgressBtn"><i class="fa-solid fa-minus"></i></button>
+                    <button class="btn btn-add-progress" id="addHabitProgressBtn"><i class="fa-solid fa-plus"></i></button>
                 </div>
             </div>
             @if($isDone)

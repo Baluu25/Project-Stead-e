@@ -20,7 +20,27 @@ class HomeController extends Controller
             }])
             ->get();
 
-       return [
+        $start = now()->subDays(6)->startOfDay();
+        $end   = now()->endOfDay();
+        $daysWithCompletion = HabitCompletion::where('user_id', $userId)
+        ->where('is_skipped', false)
+        ->whereBetween('completed_at', [$start, $end])
+        ->selectRaw('DATE(completed_at) as day')
+        ->groupBy('day')
+        ->pluck('day')
+        ->flip()
+        ->all();
+
+        $streakDays = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->startOfDay();
+            $streakDays[] = [
+                'label'     => $date->format('D')[0] . strtolower(substr($date->format('D'), 1, 1)),
+                'completed' => isset($daysWithCompletion[$date->toDateString()]),
+            ];
+        }
+
+        return [
            'current_streak' => $user->current_streak ?? 0,
            'longest_streak' => $user->longest_streak ?? 0,
             'todays_habits' => $todaysHabits,
@@ -29,6 +49,7 @@ class HomeController extends Controller
                 ->whereDate('completed_at', today())
                 ->pluck('habit_id')
                 ->toArray(),
+            'streak_days' => $streakDays
         ];
     }
 
@@ -45,6 +66,7 @@ class HomeController extends Controller
             'todaysHabits' => $data['todays_habits'],
             'dailyProgressPercent' => $dailyProgressPercent,
             'completedTodayIds' => $data['completed_today_ids'],
+            'streakDays' => $data['streak_days']
         ]);
     }
 
