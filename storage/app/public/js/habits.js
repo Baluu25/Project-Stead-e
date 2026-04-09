@@ -88,9 +88,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             elements.habitsList.innerHTML = habits.map(h => {
-                const isCompleted = (h.completed_today ?? 0) >= (h.target_count ?? 1);
-                const statusClass = isCompleted ? 'completed' : (h.is_active ? 'active' : 'paused');
-                const statusText  = isCompleted ? 'Completed' : (h.is_active ? 'Active' : 'Paused');
+                const statusClass = h.is_active ? 'active' : 'paused';
+                const statusText  = h.is_active ? 'Active' : 'Paused';
     
                 return `
                     <div class="habit-item" data-id="${h.id}">

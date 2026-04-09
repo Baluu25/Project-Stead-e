@@ -235,7 +235,6 @@
     margin: 0;
 }
 
-/* Chrome, Safari, Edge, Opera */
 .stepper-value input::-webkit-inner-spin-button,
 .stepper-value input::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -243,7 +242,6 @@
     margin: 0;
 }
 
-/* Firefox */
 .stepper-value input[type="number"] {
     appearance: textfield;
     -moz-appearance: textfield;

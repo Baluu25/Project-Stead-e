@@ -97,6 +97,7 @@
                 data-habit-id="{{ $habit->id }}">
                     <i class="fa-solid fa-minus"></i>
                 </button>
+                <input type="number" value="1">
                 <button class="btn btn-add-progress"
                 data-habit-id="{{ $habit->id }}">
                     <i class="fa-solid fa-plus"></i>
