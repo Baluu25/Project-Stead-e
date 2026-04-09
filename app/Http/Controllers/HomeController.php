@@ -58,7 +58,7 @@ class HomeController extends Controller
         $data = $this->getDashboardData();
         $todaysHabits = $data['todays_habits'];
         $totalHabits = $todaysHabits->count();
-        $completedHabits = $todaysHabits->filter(fn($h) => $h->completions->count() >= ($h->target_count ?? 1))->count();
+        $completedHabits = $todaysHabits->filter(fn($h) => $h->completions->sum('quantity') >= ($h->target_count ?? 1))->count();
         $dailyProgressPercent = $totalHabits > 0 ? round(($completedHabits / $totalHabits) * 100) : 0;
         return view('home', [
             'currentStreak' => $data['current_streak'],
