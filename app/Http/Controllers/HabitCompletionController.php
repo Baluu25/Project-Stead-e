@@ -25,6 +25,38 @@ class HabitCompletionController extends Controller
             'is_skipped'   => $request->boolean('is_skipped', false),
         ]);
 
-        return response()->json($completion, 201);
+        $newCount = HabitCompletion::where('habit_id', $habit->id)
+        ->where('user_id', Auth::id())
+        ->whereDate('completed_at', today())
+        ->count();
+
+        return response()->json([
+            'completed' => $newCount,
+            'target'    => $habit->target_count
+        ], 201);
+    }
+
+    public function destroyLast($habitId)
+    {
+        $habit = Habit::where('id', $habitId)
+        ->where('user_id', Auth::id())
+        ->firstOrFail();
+
+        $completion = HabitCompletion::where('habit_id', $habit->id)
+        ->where('user_id', Auth::id())
+        ->whereDate('completed_at', today())
+        ->latest()
+        ->first();
+
+        if (!$completion) {
+            return response()->json(['message' => 'No completion to remove'], 404);
+        }
+        $completion->delete();
+        $newCount = HabitCompletion::where('habit_id', $habit->id)
+        ->where('user_id', Auth::id())
+        ->whereDate('completed_at', today())
+        ->count();
+
+        return response()->json(['completed' => $newCount, 'target' => $habit->target_count]);
     }
 }
