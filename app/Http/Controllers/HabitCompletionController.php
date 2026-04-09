@@ -34,10 +34,10 @@ class HabitCompletionController extends Controller
         ->whereDate('completed_at', today())
         ->sum('quantity');
 
-        return response()->json([
+        return response()->json(array_merge([
             'completed' => $completed,
-            'target'    => $habit->target_count ?? 1
-        ], 201);
+            'target'    => $habit->target_count ?? 1,
+        ], $this->getDailyStats()), 201);
     }
 
     public function destroyLast(Request $request, $habitId)
@@ -74,9 +74,34 @@ class HabitCompletionController extends Controller
         ->whereDate('completed_at', today())
         ->sum('quantity');
 
-        return response()->json([
-        'completed' => $completed,
-        'target'    => $habit->target_count ?? 1
-        ]);
+        return response()->json(array_merge([
+            'completed' => $completed,
+            'target'    => $habit->target_count ?? 1,
+        ], $this->getDailyStats()));
+    }
+
+    private function getDailyStats(): array
+    {
+        $userId = Auth::id();
+
+        $todaysHabits = Habit::where('user_id', $userId)
+        ->where('is_active', true)
+        ->with(['completions' => function ($q) {
+            $q->whereDate('completed_at', today());
+        }])
+        ->get();
+
+        $total = $todaysHabits->count();
+        $completedCount = $todaysHabits->filter(
+            fn($h) => $h->completions->sum('quantity') >= ($h->target_count ?? 1)
+        )->count();
+
+        return [
+            'daily_progress_percent' => $total > 0 ? round(($completedCount / $total) * 100) : 0,
+            'has_completion_today'   => HabitCompletion::where('user_id', $userId)
+            ->where('is_skipped', false)
+            ->whereDate('completed_at', today())
+            ->exists(),
+        ];
     }
 }
