@@ -60,7 +60,7 @@
     <h3>Today's Habits</h3>
     @forelse($todaysHabits as $habit)
         @php
-            $completed  = $habit->completions->count();
+            $completed  = $habit->completions->sum('quantity');
             $target     = $habit->target_count ?? 1;
             $percent    = $target > 0 ? min(100, round(($completed / $target) * 100)) : 0;
             $isDone     = $percent >= 100;
@@ -97,7 +97,7 @@
                 data-habit-id="{{ $habit->id }}">
                     <i class="fa-solid fa-minus"></i>
                 </button>
-                <input type="number" value="1">
+                <input type="number" value="1" min="1">
                 <button class="btn btn-add-progress"
                 data-habit-id="{{ $habit->id }}">
                     <i class="fa-solid fa-plus"></i>
