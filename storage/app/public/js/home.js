@@ -119,7 +119,6 @@ function updateHabitCard(habitId, completed, target) {
     if (countEl) countEl.textContent = completed;
     if (fillEl)  fillEl.style.width = percent + '%';
 
-
     card.classList.toggle('completed', isDone);
 
     if (isDone) {
@@ -130,6 +129,48 @@ function updateHabitCard(habitId, completed, target) {
             badge.innerHTML = '<i class="fa-solid fa-check"></i>';
             card.appendChild(badge);
         }
+    } else {
+        const badge = card.querySelector('.habit-done-badge');
+        if (badge) badge.remove();
+        if (!actionsEl) {
+            const newActions = document.createElement('div');
+            newActions.className = 'habit-actions';
+            newActions.innerHTML = `
+                <button class="btn btn-remove-progress" data-habit-id="${habitId}">
+                    <i class="fa-solid fa-minus"></i>
+                </button>
+                <input type="number" value="1" min="1">
+                <button class="btn btn-add-progress" data-habit-id="${habitId}">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            `;
+            card.appendChild(newActions);
+        }
+    }
+}
+
+function updateProgressRing(percent) {
+    const fill = document.querySelector('.progress-ring-fill');
+    const text = document.querySelector('.progress-percentage');
+    if (!fill || !text) return;
+    const circumference = 2 * Math.PI * 54;
+    const offset = circumference - (percent / 100) * circumference;
+    fill.style.strokeDashoffset = offset;
+    text.textContent = percent + '%';
+}
+
+function updateTodayStreakCircle(hasCompletion) {
+    const circles = document.querySelectorAll('.day-circle');
+    if (!circles.length) return;
+    const todayCircle = circles[circles.length - 1];
+    if (hasCompletion) {
+        todayCircle.classList.add('active');
+        if (!todayCircle.querySelector('i')) {
+            todayCircle.innerHTML = '<i class="fa-solid fa-check"></i>';
+        }
+    } else {
+        todayCircle.classList.remove('active');
+        todayCircle.innerHTML = '';
     }
 }
 
@@ -153,7 +194,11 @@ document.addEventListener('click', function(e) {
         body: JSON.stringify({ habit_id: habitId, quantity: quantity })
     })
     .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-    .then(data => updateHabitCard(habitId, data.completed, data.target))
+    .then(data => {
+        updateHabitCard(habitId, data.completed, data.target);
+        updateProgressRing(data.daily_progress_percent);
+        updateTodayStreakCircle(data.has_completion_today);
+    })
     .catch(() => alert('Could not record progress. Please try again.'));
 });
 
@@ -177,7 +222,11 @@ document.addEventListener('click', function(e) {
         body: JSON.stringify({ amount: amount })
     })
     .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-    .then(data => updateHabitCard(habitId, data.completed, data.target))
+    .then(data => {
+        updateHabitCard(habitId, data.completed, data.target);
+        updateProgressRing(data.daily_progress_percent);
+        updateTodayStreakCircle(data.has_completion_today);
+    })
     .catch(() => alert('Could not remove progress. Please try again.'));
 });
 
