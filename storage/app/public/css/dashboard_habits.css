@@ -75,35 +75,8 @@
     color: rgba(255, 255, 255, 0.9);
 }
 
+
 .status-active {
-    background-color: rgba(62, 62, 241, 0.2);
-    color: #a5abd6;
-    padding: 5px 12px;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 0.85rem;
-    display: inline-block;
-    text-align: center;
-    width: fit-content;
-    min-width: 75px;
-    border: 1px solid rgba(40, 40, 234, 0.3);
-}
-
-.status-in-progress {
-    background-color: rgba(255, 230, 0, 0.2);
-    color: #ef9a9a;
-    padding: 5px 12px;
-    border-radius: 30px;
-    font-weight: 600;
-    font-size: 0.85rem;
-    display: inline-block;
-    text-align: center;
-    width: fit-content;
-    min-width: 75px;
-    border: 1px solid rgba(244, 67, 54, 0.3);
-}
-
-.status-completed {
     background-color: rgba(76, 175, 80, 0.2);
     color: #a5d6a5;
     padding: 5px 12px;
@@ -115,6 +88,20 @@
     width: fit-content;
     min-width: 75px;
     border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.status-paused {
+    background-color: rgba(255, 0, 0, 0.2);
+    color: #ff2929;
+    padding: 5px 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    display: inline-block;
+    text-align: center;
+    width: fit-content;
+    min-width: 75px;
+    border: 1px solid rgba(255, 0, 0, 0.3);
 }
 
 .habit-actions {
