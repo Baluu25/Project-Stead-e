@@ -22,7 +22,8 @@ class StoreHabitCompletionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'habit_id' => 'required|integer',
+            'quantity' => 'sometimes|integer|min:1',
         ];
     }
 }

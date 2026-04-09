@@ -137,9 +137,11 @@ document.addEventListener('click', function(e) {
     const addBtn = e.target.closest('.btn-add-progress');
     if (!addBtn) return;
 
-    const habitId = addBtn.dataset.habitId;
-    const card    = document.querySelector(`.habit-item[data-habit-id="${habitId}"]`);
-    const target  = card ? parseInt(card.dataset.target, 10) : 1;
+    const habitId   = addBtn.dataset.habitId;
+    const card      = document.querySelector(`.habit-item[data-habit-id="${habitId}"]`);
+    const actionsEl = card ? card.querySelector('.habit-actions') : null;
+    const input     = actionsEl ? actionsEl.querySelector('input[type="number"]') : null;
+    const quantity  = input ? (parseInt(input.value, 10) || 1) : 1;
 
     fetch('/api/habit-completions', {
         method: 'POST',
@@ -148,7 +150,7 @@ document.addEventListener('click', function(e) {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
         },
-        body: JSON.stringify({ habit_id: habitId })
+        body: JSON.stringify({ habit_id: habitId, quantity: quantity })
     })
     .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .then(data => updateHabitCard(habitId, data.completed, data.target))
@@ -159,18 +161,35 @@ document.addEventListener('click', function(e) {
     const removeBtn = e.target.closest('.btn-remove-progress');
     if (!removeBtn) return;
 
-    const habitId = removeBtn.dataset.habitId;
-    const card    = document.querySelector(`.habit-item[data-habit-id="${habitId}"]`);
-    const target  = card ? parseInt(card.dataset.target, 10) : 1;
+    const habitId   = removeBtn.dataset.habitId;
+    const card      = document.querySelector(`.habit-item[data-habit-id="${habitId}"]`);
+    const actionsEl = card ? card.querySelector('.habit-actions') : null;
+    const input     = actionsEl ? actionsEl.querySelector('input[type="number"]') : null;
+    const amount    = input ? (parseInt(input.value, 10) || 1) : 1;
 
     fetch(`/api/habit-completions/${habitId}/today/last`, {
         method: 'DELETE',
         headers: {
             'Accept': 'application/json',
+            'Content-Type': 'application/json',
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        }
+        },
+        body: JSON.stringify({ amount: amount })
     })
     .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .then(data => updateHabitCard(habitId, data.completed, data.target))
     .catch(() => alert('Could not remove progress. Please try again.'));
+});
+
+document.addEventListener('input', function(e) {
+    const input = e.target.closest('.habit-actions input[type="number"]');
+    if (!input) return;
+    const val = parseInt(input.value, 10);
+    if (!val || val < 1) input.value = 1;
+});
+
+document.addEventListener('click', function(e) {
+    const input = e.target.closest('.habit-actions input[type="number"]');
+    if (!input) return;
+    input.select();
 });
