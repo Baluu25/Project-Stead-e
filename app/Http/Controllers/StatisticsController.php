@@ -27,12 +27,12 @@ class StatisticsController extends Controller
             ->count();
 
         $dailyCompletions = HabitCompletion::where('user_id', $userId)
-            ->where('is_skipped', false)
-            ->where('completed_at', '>=', now()->subDays(29))
-            ->selectRaw('DATE(completed_at) as date, COUNT(*) as count')
-            ->groupBy('date')
-            ->orderBy('date')
-            ->pluck('count', 'date');
+        ->where('is_skipped', false)
+        ->where('completed_at', '>=', now()->subDays(6)->startOfDay())
+        ->selectRaw('DATE(completed_at) as date, COUNT(DISTINCT habit_id) as count')
+        ->groupBy('date')
+        ->orderBy('date')
+        ->pluck('count', 'date');
 
         $categoryBreakdown = HabitCompletion::where('habit_completions.user_id', $userId)
             ->join('habits', 'habits.id', '=', 'habit_completions.habit_id')
@@ -58,7 +58,7 @@ class StatisticsController extends Controller
         $runLength = 1;
         for ($i = 1; $i < count($completionDates); $i++) {
             $diff = $completionDates[$i - 1]->diffInDays($completionDates[$i]);
-            if ($diff === 1) {
+            if ((int) $diff === 1) {
                 $runLength++;
             } else {
                 $longestStreak = max($longestStreak, $runLength);
@@ -77,14 +77,15 @@ class StatisticsController extends Controller
         }
     }
 
-        return view('statistics', [
-            'total_habits'          => $totalHabits,
-            'active_habits'         => $activeHabits,
-            'current_streak' => $currentStreak,
-            'longest_streak' => $longestStreak,
-            'completions_this_week' => $completionsThisWeek,
-            'daily_completions'     => $dailyCompletions,
-            'category_breakdown'    => $categoryBreakdown,
-]);
+    return view('statistics', [
+        'total_habits' => $totalHabits,
+        'active_habits' => $activeHabits,
+        'current_streak' => $currentStreak,
+        'longest_streak' => $longestStreak,
+        'completions_this_week' => $completionsThisWeek,
+        'daily_completions' => $dailyCompletions,
+        'category_breakdown' => $categoryBreakdown,
+        'total_category_completions' => $categoryBreakdown->sum(),
+    ]);
     }
 }
