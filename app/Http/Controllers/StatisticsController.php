@@ -85,6 +85,7 @@ class StatisticsController extends Controller
         'completions_this_week' => $completionsThisWeek,
         'daily_completions' => $dailyCompletions,
         'category_breakdown' => $categoryBreakdown,
+        'total_daily_completions' => $dailyCompletions->sum(),
         'total_category_completions' => $categoryBreakdown->sum(),
     ]);
     }
