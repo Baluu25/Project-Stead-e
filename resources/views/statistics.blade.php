@@ -54,48 +54,25 @@
     <div class="main-stats">
         <div class="daily-completions-section">
             <h2>Daily Completion Rates (Last 7 days)</h2>
+        @if($total_daily_completions > 0)
         <div id="line-chart-container">
             <canvas id="daily-completions-chart"
             width="400" height="200"
             data-completions="{{ json_encode($daily_completions) }}"></canvas>
         </div>
+        @else
+            <div id="placeholder-container"><img src="images/placeholder-img.png" alt="placeholder" id="placeholder-img"><p id="placeholder-msg">No habits completed yet</p></div>
+        @endif
         </div>
         <div class="habit-performance-section">
             <h2>Completions by Category</h2>
-                @php
-                $categoryConfig = [
-                    'Nutrition'    => 'fa-apple-whole',
-                    'Fitness'      => 'fa-dumbbell',
-                    'Mindfulness'  => 'fa-brain',
-                    'Study'        => 'fa-book',
-                    'Work'         => 'fa-briefcase',
-                ];
-                @endphp
-
-            <ul class="category-list">
-            @forelse($category_breakdown as $category => $count)
-                @php
-                    $icon    = $categoryConfig[$category] ?? 'fa-circle';
-                    $percent = $total_category_completions > 0
-                        ? round($count / $total_category_completions * 100)
-                        : 0;
-                @endphp
-                <li class="category-item">
-                    <div class="category-bar">
-                        <i class="fa-solid {{ $icon }}"></i>
-                        <p>{{ $category }}</p>
-                        <div class="progress">
-                            <div class="category-progress" style="width:{{ $percent }}%"></div>
-                        </div>
-                        <p>{{ $count }}</p>
-                    </div>
-                </li>
-            @empty
-                <li class="category-item" style="grid-column:1/-1;">
-                    <p style="color:white;text-align:center;margin-top:1rem;">No completions yet.</p>
-                </li>
-        @endforelse
-            </ul>
+            @if($total_category_completions > 0)
+                <canvas id="category-doughnut-chart"
+                    data-categories="{{ json_encode($category_breakdown) }}">
+                </canvas>
+            @else
+                <div id="placeholder-container"><img src="images/placeholder-img.png" alt="placeholder" id="placeholder-img"><p id="placeholder-msg">No completions yet</p></div>
+            @endif
         </div>
     </div>
 

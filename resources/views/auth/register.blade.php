@@ -16,7 +16,7 @@
 
 <div class="back-to-home-container">
   <a href="{{ url('/') }}" class="back-to-home">
-    <span class="back-arrow">←</span> Back to Home
+    <span><i class="fa-solid fa-arrow-left"></i> <span class="back-text">Back to Home</span></span>
   </a>
 </div>
 
