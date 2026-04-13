@@ -66,10 +66,15 @@ class GoalController extends Controller
 
     public function progress(Request $request, Goal $goal)
     {
-        $goal->increment('current_value', $request->input('amount', 1));
+        $amount   = (float) $request->input('amount', 1);
+        $newValue = max(0, min($goal->current_value + $amount, $goal->target_value));
 
-        if ($goal->current_value >= $goal->target_value) {
-            $goal->update(['status' => 'completed']);
+        if ($newValue >= $goal->target_value) {
+            $goal->update(['current_value' => $newValue, 'status' => 'completed']);
+        } elseif ($newValue > 0) {
+            $goal->update(['current_value' => $newValue, 'status' => 'in-progress']);
+        } else {
+            $goal->update(['current_value' => $newValue, 'status' => 'not-started']);
         }
 
         return back()->with('success', 'Progress logged!');

@@ -16,7 +16,7 @@
     </div>
 
     <div class="input-section">
-        <input type="text" id="habit-name" placeholder="Enter habit name..." class="habit-input">
+        <input type="text" id="habit-name" placeholder="Search habits..." class="habit-input">
         <button class="btn btn-add" id="addHabitBtn">Add habit</button>
     </div>
 
@@ -129,6 +129,7 @@
             <span></span>
             <span>Name</span>
             <span>Frequency</span>
+            <span>Target</span>
             <span>Status</span>
             <span>Actions</span>
         </div>
