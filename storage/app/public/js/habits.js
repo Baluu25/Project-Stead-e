@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
         formTitle:    document.getElementById('habitFormTitle'),
         submitBtn:    document.getElementById('habitFormSubmitBtn'),
         habitIdInput: document.getElementById('habit-id'),
+        searchInput: document.getElementById('habit-name'),
     };
 
     let editMode = false;
@@ -98,37 +99,51 @@ document.addEventListener('DOMContentLoaded', function() {
         elements.iconGrid.style.display = 'grid';
     };
 
+    const renderHabits = (habits) => {
+        if (!habits || habits.length === 0) {
+            elements.habitsList.innerHTML = `<div id="placeholder-container"><img src="images/placeholder-img.png" alt="placeholder" id="placeholder-img"><p id="placeholder-msg">No habits found</p></div>`;
+            return;
+        }
+        elements.habitsList.innerHTML = habits.map(h => {
+            const statusClass = h.is_active ? 'active' : 'paused';
+            const statusText  = h.is_active ? 'Active' : 'Paused';
+            return `
+                <div class="habit-item" data-id="${h.id}">
+                    <div class="habit-icon"><i class="${h.icon || 'fa-solid fa-smile'}"></i></div>
+                    <div class="habit-name">${escapeHtml(h.name)}</div>
+                    <div class="habit-frequency">${h.frequency}</div>
+                    <div class="habit-target">${h.target_count ?? 1}</div>
+                    <div class="habit-status"><span class="status-${statusClass}">${statusText}</span></div>
+                    <div class="habit-actions">
+                        <button class="edit-btn" data-id="${h.id}"><i class="fa-solid fa-edit"></i></button>
+                        <button class="delete-btn" data-id="${h.id}"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        document.querySelectorAll('.delete-btn').forEach(btn => btn.onclick = () => deleteHabit(btn.dataset.id));
+        document.querySelectorAll('.edit-btn').forEach(btn => btn.onclick = () => {
+            const habitId = parseInt(btn.dataset.id, 10);
+            const habit = habitsCache.find(h => h.id === habitId);
+            if (habit) showPopup(habit);
+        });
+    };
+
+    const filterHabits = () => {
+        const query = elements.searchInput.value.trim().toLowerCase();
+        if (!query) {
+            renderHabits(habitsCache);
+            return;
+        }
+        const filtered = habitsCache.filter(h => h.name.toLowerCase().includes(query));
+        renderHabits(filtered);
+    };
+
     const loadHabits = () => {
         api.get('/api/habits').then(habits => {
             habitsCache = habits;
-            if (!habits || habits.length === 0) {
-                elements.habitsList.innerHTML = `<div id="placeholder-container"><img src="images/placeholder-img.png" alt="placeholder" id="placeholder-img"><p id="placeholder-msg">No habits added</p></div>`;
-                return;
-            }
-            elements.habitsList.innerHTML = habits.map(h => {
-                const statusClass = h.is_active ? 'active' : 'paused';
-                const statusText  = h.is_active ? 'Active' : 'Paused';
-    
-                return `
-                    <div class="habit-item" data-id="${h.id}">
-                        <div class="habit-icon"><i class="${h.icon || 'fa-solid fa-smile'}"></i></div>
-                        <div class="habit-name">${escapeHtml(h.name)}</div>
-                        <div class="habit-frequency">${h.frequency}</div>
-                        <div class="habit-status"><span class="status-${statusClass}">${statusText}</span></div>
-                        <div class="habit-actions">
-                            <button class="edit-btn" data-id="${h.id}"><i class="fa-solid fa-edit"></i></button>
-                            <button class="delete-btn" data-id="${h.id}"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    </div>
-                    `;
-        }).join('');
-            
-            document.querySelectorAll('.delete-btn').forEach(btn => btn.onclick = () => deleteHabit(btn.dataset.id));
-            document.querySelectorAll('.edit-btn').forEach(btn => btn.onclick = () => {
-                const habitId = parseInt(btn.dataset.id, 10);
-                const habit = habitsCache.find(h => h.id === habitId);
-                if (habit) showPopup(habit);
-            });
+            renderHabits(habits);
         }).catch(() => {
             if (elements.habitsList) elements.habitsList.innerHTML = `<div id="placeholder-container"><p id="placeholder-msg">Could not load habits. Please refresh the page.</p></div>`;
         });
@@ -263,6 +278,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (elements.iconInput.value && elements.iconInput.value !== 'fa-solid fa-smile') {
         elements.iconDisplay.className = elements.iconInput.value;
+    }
+
+    if (elements.searchInput) {
+        elements.searchInput.addEventListener('input', filterHabits);
     }
 
     loadHabits();

@@ -119,76 +119,80 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     }
 
-    document.querySelectorAll('.stepper').forEach(stepper => {
-        const decreaseBtn = stepper.querySelector('[aria-label="Decrease"]');
-        const increaseBtn = stepper.querySelector('[aria-label="Increase"]');
-        const numberInput = stepper.querySelector('input');
-        const form = stepper.closest('form');
-        const card = stepper.closest('.goal-card');
-        const progressBar = card.querySelector('.progress-bar');
+    document.querySelectorAll('.goal-progress-actions').forEach(actions => {
+        const removeBtn    = actions.querySelector('.btn-remove-progress');
+        const addBtn       = actions.querySelector('.btn-add-progress');
+        const numberInput  = actions.querySelector('input');
+        const actionUrl    = actions.dataset.action;
+        const card         = actions.closest('.goal-card');
+        const progressBar  = card.querySelector('.progress-bar');
         const valueDisplay = card.querySelector('.goal-data span');
-        
+
         const getValues = () => {
             const match = valueDisplay.textContent.match(/(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)/);
             return match ? { current: parseFloat(match[1]), target: parseFloat(match[2]) } : { current: 0, target: 1 };
         };
-        
+
         const updateDisplay = (newCurrent, target) => {
             progressBar.style.width = Math.min((newCurrent / target) * 100, 100) + '%';
-            const unit = valueDisplay.textContent.split(' ').pop();
+            const parts = valueDisplay.textContent.trim().split(' ');
+            const unit  = parts[parts.length - 1];
             valueDisplay.textContent = newCurrent + ' / ' + target + ' ' + unit;
-            
+
             if (newCurrent >= target) {
                 card.classList.remove('in-progress', 'not-started');
                 card.classList.add('completed');
                 card.querySelector('.status').textContent = 'Completed';
-                card.querySelector('.status').className = 'status status-completed';
-                stepper.style.display = 'none';
+                card.querySelector('.status').className   = 'status status-completed';
+                actions.style.display = 'none';
             } else if (newCurrent > 0) {
                 card.classList.remove('completed', 'not-started');
                 card.classList.add('in-progress');
                 card.querySelector('.status').textContent = 'In Progress';
-                card.querySelector('.status').className = 'status status-in-progress';
+                card.querySelector('.status').className   = 'status status-in-progress';
+            } else {
+                card.classList.remove('completed', 'in-progress');
+                card.classList.add('not-started');
+                card.querySelector('.status').textContent = 'Not Started';
+                card.querySelector('.status').className   = 'status status-not-started';
             }
             window.updateStats();
         };
-        
-        const updateProgress = amount => {
+
+        const sendProgress = (amount) => {
             const { current, target } = getValues();
             const newCurrent = Math.max(0, Math.min(current + amount, target));
-            
-            fetch(form.action, {
+
+            const formData = new FormData();
+            formData.append('_token', csrf.content);
+            formData.append('amount', amount);
+
+            fetch(actionUrl, {
                 method: 'POST',
                 headers: { 'X-CSRF-TOKEN': csrf.content },
-                body: new FormData(form)
+                body: formData
             }).then(() => updateDisplay(newCurrent, target));
         };
-        
-        decreaseBtn.onclick = e => {
-            e.preventDefault();
-            updateProgress(-(parseFloat(numberInput.value) || 1));
-        };
-        
-        increaseBtn.onclick = e => {
-            e.preventDefault();
-            updateProgress(parseFloat(numberInput.value) || 1);
-        };
-        
-        numberInput.oninput = function() { if (this.value < 0.1) this.value = 0.1; };
-        numberInput.onclick = function() { this.select(); };
+
+        removeBtn.onclick = e => { e.preventDefault(); sendProgress(-(parseFloat(numberInput.value) || 1)); };
+        addBtn.onclick    = e => { e.preventDefault(); sendProgress( parseFloat(numberInput.value) || 1);  };
+
+        numberInput.oninput = function () { if (this.value < 0.1) this.value = 0.1; };
+        numberInput.onclick = function () { this.select(); };
     });
 
     filterBtns.forEach(btn => {
         btn.onclick = () => {
             filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            
+
             const filter = btn.textContent.trim();
             document.querySelectorAll('.goal-card').forEach(card => {
-                if (filter === 'All') card.style.display = 'block';
-                else if (filter === 'Completed' && card.classList.contains('completed')) card.style.display = 'block';
-                else if (filter === 'In Progress' && (card.classList.contains('in-progress') || card.classList.contains('not-started'))) card.style.display = 'block';
-                else card.style.display = 'none';
+                if      (filter === 'All')                                              card.style.display = 'block';
+                else if (filter === 'Completed'   && card.classList.contains('completed'))   card.style.display = 'block';
+                else if (filter === 'In Progress' && card.classList.contains('in-progress')) card.style.display = 'block';
+                else if (filter === 'Not Started' && card.classList.contains('not-started')) card.style.display = 'block';
+                else    card.style.display = 'none';
             });
         };
     });

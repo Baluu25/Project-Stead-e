@@ -20,6 +20,7 @@
             <button class="filter-btn active">All</button>
             <button class="filter-btn">Completed</button>
             <button class="filter-btn">In Progress</button>
+            <button class="filter-btn">Not Started</button>
         </div>
     </div>
 </div>
@@ -53,16 +54,17 @@
             
             <div class="goal-actions">
                 @if($goal->status !== 'completed')
-                <form action="{{ route('goals.progress', $goal) }}" method="POST">
-                    @csrf
-                    <div class="stepper">
-                        <button class="stepper-btn" aria-label="Decrease">−</button>
-                        <span class="stepper-value" id="stepValue">
-                            <input type="number" value="1">
-                        </span>
-                    <button class="stepper-btn" aria-label="Increase">+</button>
+                    <div class="goal-progress-actions"
+                    data-goal-id="{{ $goal->id }}"
+                    data-action="{{ route('goals.progress', $goal) }}">
+                        <button class="btn btn-remove-progress" data-goal-id="{{ $goal->id }}">
+                            <i class="fa-solid fa-minus"></i>
+                        </button>
+                        <input type="number" value="1" min="1">
+                        <button class="btn btn-add-progress" data-goal-id="{{ $goal->id }}">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
                     </div>
-                </form>
                 @endif
                 <form action="{{ route('goals.destroy', $goal) }}" method="POST" onsubmit="return confirm('Delete this goal?')">
                     @csrf
