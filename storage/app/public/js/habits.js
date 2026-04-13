@@ -19,8 +19,15 @@ document.addEventListener('DOMContentLoaded', function() {
         popup: document.getElementById('habitFormPopup'),
         closeBtn: document.getElementById('closePopupBtn'),
         form: document.getElementById('habit-form'),
-        habitsList: document.getElementById('habits-list')
+        habitsList: document.getElementById('habits-list'),
+        formTitle:    document.getElementById('habitFormTitle'),
+        submitBtn:    document.getElementById('habitFormSubmitBtn'),
+        habitIdInput: document.getElementById('habit-id'),
     };
+
+    let editMode = false;
+    let currentEditId = null;
+    let habitsCache = [];
 
     // Helper functions
     const api = {
@@ -40,6 +47,16 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             body: JSON.stringify(data)
         }).then(res => res.json()),
+
+        put: (url, data) => fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify(data)
+        }).then(res => res.json()),
         
         delete: (url) => fetch(url, {
             method: 'DELETE',
@@ -47,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Accept': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             }
-        }).then(res => res.status === 204 ? null : res.json())
+        }).then(res => res.status === 204 ? null : res.json()),
     };
 
     const escapeHtml = (text) => {
@@ -83,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const loadHabits = () => {
         api.get('/api/habits').then(habits => {
+            habitsCache = habits;
             if (!habits || habits.length === 0) {
                 elements.habitsList.innerHTML = `<div id="placeholder-container"><img src="images/placeholder-img.png" alt="placeholder" id="placeholder-img"><p id="placeholder-msg">No habits added</p></div>`;
                 return;
@@ -106,7 +124,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }).join('');
             
             document.querySelectorAll('.delete-btn').forEach(btn => btn.onclick = () => deleteHabit(btn.dataset.id));
-            document.querySelectorAll('.edit-btn').forEach(btn => btn.onclick = () => console.log('Edit habit:', btn.dataset.id));
+            document.querySelectorAll('.edit-btn').forEach(btn => btn.onclick = () => {
+                const habitId = parseInt(btn.dataset.id, 10);
+                const habit = habitsCache.find(h => h.id === habitId);
+                if (habit) showPopup(habit);
+            });
         }).catch(() => {
             if (elements.habitsList) elements.habitsList.innerHTML = `<div id="placeholder-container"><p id="placeholder-msg">Could not load habits. Please refresh the page.</p></div>`;
         });
@@ -118,17 +140,49 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    const showPopup = () => {
-        elements.popup.style.display = 'block';
+    const showPopup = (habit = null) => {
+        editMode = habit !== null;
+        currentEditId = habit ? habit.id : null;
+
         if (elements.form) elements.form.reset();
         elements.iconDisplay.className = 'fa-solid fa-smile';
         elements.iconInput.value = 'fa-solid fa-smile';
         elements.category.value = '';
         elements.iconGrid.innerHTML = '';
         elements.iconGrid.style.display = 'none';
+        elements.habitIdInput.value = '';
+
+        if (habit) {
+            document.getElementById('name').value         = habit.name        || '';
+            document.getElementById('description').value  = habit.description || '';
+            document.getElementById('frequency').value    = habit.frequency   || '';
+            document.getElementById('target_count').value = habit.target_count ?? 1;
+
+            elements.category.value = habit.category || '';
+            if (habit.category && categoryIcons[habit.category]) {
+                populateIcons(categoryIcons[habit.category]);
+            }
+            selectIcon(habit.icon || 'fa-solid fa-smile');
+
+            elements.habitIdInput.value    = habit.id;
+            elements.formTitle.textContent = 'Edit habit';
+            elements.submitBtn.textContent = 'Save Changes';
+        } else {
+            elements.formTitle.textContent = 'Add habit';
+            elements.submitBtn.textContent = 'Add Habit';
+        }
+
+        elements.popup.style.display = 'block';
     };
 
-    const hidePopup = () => elements.popup.style.display = 'none';
+    const hidePopup = () => {
+        elements.popup.style.display = 'none';
+        editMode = false;
+        currentEditId = null;
+        elements.habitIdInput.value    = '';
+        elements.formTitle.textContent = 'Add habit';
+        elements.submitBtn.textContent = 'Add Habit';
+    };
 
     // Event listeners
     if (elements.selectedIcon) {
@@ -170,21 +224,40 @@ document.addEventListener('DOMContentLoaded', function() {
         elements.form.onsubmit = (e) => {
             e.preventDefault();
             const data = {
-                name: document.getElementById('name').value,
-                description: document.getElementById('description').value,
-                category: document.getElementById('category').value,
-                frequency: document.getElementById('frequency').value,
-                target_count: document.getElementById('target_count').value,
-                icon: document.getElementById('icon').value,
+                name:         document.getElementById('name').value,
+                description:  document.getElementById('description').value,
+                category:     document.getElementById('category').value,
+                frequency:    document.getElementById('frequency').value,
+                target_count: document.getElementById('target_count').value || null,
+                icon:         document.getElementById('icon').value,
             };
-            api.post('/api/habits', data).then(habit => {
-                if (habit.id || habit.success) {
-                    hidePopup();
-                    loadHabits();
-                    alert('Habit added successfully!');
-                    elements.form.reset();
-                } else if (habit.errors) alert('Please check the form for errors');
-            }).catch(() => alert('Error adding habit'));
+
+            if (editMode && currentEditId) {
+                api.put('/api/habits/' + currentEditId, data)
+                    .then(habit => {
+                        if (habit.id) {
+                            hidePopup();
+                            loadHabits();
+                            alert('Habit updated successfully!');
+                        } else if (habit.errors) {
+                            alert('Validation error. Please check your inputs.');
+                        }
+                    })
+                    .catch(() => alert('Error updating habit'));
+            } else {
+                api.post('/api/habits', data)
+                    .then(habit => {
+                        if (habit.id || habit.success) {
+                            hidePopup();
+                            loadHabits();
+                            alert('Habit added successfully!');
+                            elements.form.reset();
+                        } else if (habit.errors) {
+                            alert('Please check the form for errors');
+                        }
+                    })
+                    .catch(() => alert('Error adding habit'));
+            }
         };
     }
 

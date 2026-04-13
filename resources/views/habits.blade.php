@@ -22,13 +22,14 @@
 
     <div class="habit-form-card" id="habitFormPopup" style="display: none;"> 
         <div class="habit-form-header">
-            <h1 class="habit-form-title">Add habit</h1>
+            <h1 class="habit-form-title" id="habitFormTitle">Add habit</h1>
             <button type="button" class="close-habit-form" id="closePopupBtn">&times;</button>
         </div>
         <p class="habit-form-subtitle">Add a habit to your profile</p>
 
         <form method="POST" action="loadHabits()" id="habit-form">
             @csrf
+            <input type="hidden" id="habit-id" name="habit_id" value="">
         
             <div class="form-group">
                 <label for="name" class="form-label">Habit Name</label>
@@ -119,7 +120,7 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-            <button type="submit" class="btn btn-add">Add Habit</button>
+            <button type="submit" class="btn btn-add" id="habitFormSubmitBtn">Add Habit</button>
         </form>
     </div>
 
