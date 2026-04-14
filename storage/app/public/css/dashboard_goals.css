@@ -55,6 +55,7 @@
     margin-bottom: 2rem;
 }
 
+
 .goal-card {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 16px;
@@ -263,7 +264,8 @@
     color: rgba(255, 255, 255, 0.8);
     font-size: 0.85rem;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
+    border-radius: 12px;
+    padding: 0.5rem;
 }
 
 .status {
@@ -505,4 +507,24 @@
 textarea.form-control {
     resize: vertical;
     min-height: 80px;
+}
+
+#placeholder-msg {
+    font-size: 1.2rem;
+    margin-bottom: 0.4rem;
+    color: rgb(255, 255, 255);
+    font-weight: 700;
+}
+
+#placeholder-img {
+    height: auto;
+    width: 100px;
+    margin: auto;
+}
+
+#placeholder-container {
+    margin: auto;
+    text-align: center;
+    opacity: 0.5;
+    width: 100%;
 }

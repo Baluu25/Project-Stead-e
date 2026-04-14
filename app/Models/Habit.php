@@ -30,10 +30,15 @@ class Habit extends Model
         'target_count',
         'icon',
         'is_active',
+        'goal_id'
     ];
 
     public function completions() {
     return $this->hasMany(HabitCompletion::class);
+    }
+
+    public function goal() { 
+        return $this->belongsTo(Goal::class); 
     }
 
 }

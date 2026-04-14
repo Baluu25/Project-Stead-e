@@ -29,6 +29,17 @@ class HabitCompletionController extends Controller
             'is_skipped'   => $request->boolean('is_skipped', false),
         ]);
 
+        if ($habit->goal_id) {
+            $goal = \App\Models\Goal::where('id', $habit->goal_id)
+            ->where('user_id', Auth::id())->first();
+            if ($goal) {
+                $newValue = min($goal->current_value + $quantity, $goal->target_value);
+                $status = $newValue >= $goal->target_value ? 'completed'
+                : ($newValue > 0 ? 'in-progress' : 'not-started');
+                $goal->update(['current_value' => $newValue, 'status' => $status]);
+            }
+        }
+
         $completed = (int) HabitCompletion::where('habit_id', $habit->id)
         ->where('user_id', Auth::id())
         ->whereDate('completed_at', today())
@@ -53,6 +64,11 @@ class HabitCompletionController extends Controller
             ->whereDate('completed_at', today())
             ->latest()
             ->first();
+        
+        $completedBefore = (int) HabitCompletion::where('habit_id', $habit->id)
+        ->where('user_id', Auth::id())
+        ->whereDate('completed_at', today())
+        ->sum('quantity');
 
         while ($toRemove > 0 && $completion) {
             if ($completion->quantity <= $toRemove) {
@@ -73,6 +89,18 @@ class HabitCompletionController extends Controller
         ->where('user_id', Auth::id())
         ->whereDate('completed_at', today())
         ->sum('quantity');
+
+        if ($habit->goal_id) {
+            $removedAmount = $completedBefore - $completed;
+            $goal = \App\Models\Goal::where('id', $habit->goal_id)
+            ->where('user_id', Auth::id())->first();
+            if ($goal && $removedAmount > 0) {
+                $newValue = max(0, $goal->current_value - $removedAmount);
+                $status = $newValue >= $goal->target_value ? 'completed'
+                : ($newValue > 0 ? 'in-progress' : 'not-started');
+                $goal->update(['current_value' => $newValue, 'status' => $status]);
+            }
+        }
 
         return response()->json(array_merge([
             'completed' => $completed,

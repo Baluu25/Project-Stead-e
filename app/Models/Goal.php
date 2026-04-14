@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Goal extends Model {
     protected $fillable = [
         'user_id', 'title', 'description', 'icon',
-        'category', 'target_value',
-        'unit', 'deadline',
+        'category', 'target_value', 'current_value',
+        'unit', 'deadline', 'status',
     ];
 
     protected $casts = ['deadline' => 'date'];
@@ -22,5 +22,9 @@ class Goal extends Model {
     public function getProgressAttribute(): int {
         if ($this->target_value == 0) return 0;
         return min(100, (int)(($this->current_value / $this->target_value) * 100));
+    }
+
+    public function habits() { 
+        return $this->hasMany(Habit::class); 
     }
 }
