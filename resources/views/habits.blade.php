@@ -3,6 +3,9 @@
 @section('dashboard-styles')
     <link rel="stylesheet" href="{{ asset('storage/css/dashboard_habits.css') }}">
     <script src="{{ asset('storage/js/habits.js') }}" defer></script>
+    <script>
+      window.userGoals = @json($goals->map(fn($g) => ['id' => $g->id, 'title' => $g->title]));
+    </script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 
@@ -120,6 +123,12 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+            <div class="form-group">
+                <label for="goal_id" class="form-label">Add to a Goal</label>
+                <select id="goal_id" name="goal_id" class="form-control">
+                    <option value="">No Goal</option>
+                </select>
+            </div>
             <button type="submit" class="btn btn-add" id="habitFormSubmitBtn">Add Habit</button>
         </form>
     </div>
@@ -128,6 +137,7 @@
         <div class="habits-header">
             <span></span>
             <span>Name</span>
+            <span>Goal</span>
             <span>Frequency</span>
             <span>Target</span>
             <span>Status</span>

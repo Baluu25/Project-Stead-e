@@ -28,6 +28,7 @@ class StoreHabitRequest extends FormRequest
             'frequency'   => ['required', 'in:daily,weekly,monthly,custom'],
             'target_count'=> ['nullable', 'integer', 'min:1'],
             'icon'        => ['nullable', 'string', 'max:50'],
+            'goal_id' => ['nullable', 'integer', 'exists:goals,id']
         ];
     }
 }

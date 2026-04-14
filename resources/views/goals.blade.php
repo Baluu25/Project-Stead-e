@@ -75,7 +75,7 @@
 
         </div>
         @empty
-        <p class="no-goals">No goals yet. Click "Add Goal" to get started!</p>
+        <div id="placeholder-container"><img src="images/placeholder-img.png" alt="placeholder" id="placeholder-img"><p id="placeholder-msg">No goals yet</p></div>
         @endforelse
     </div>
 </div>

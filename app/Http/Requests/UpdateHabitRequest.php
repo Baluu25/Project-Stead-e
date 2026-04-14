@@ -29,6 +29,7 @@ class UpdateHabitRequest extends FormRequest
             'target_count'  => ['nullable', 'integer', 'min:1'],
             'icon'  => ['nullable', 'string', 'max:50'],
             'is_active' => ['nullable', 'boolean'],
+            'goal_id' => ['nullable', 'integer', 'exists:goals,id']
         ];
     }
 }
