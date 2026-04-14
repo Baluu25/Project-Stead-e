@@ -24,11 +24,22 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn:    document.getElementById('habitFormSubmitBtn'),
         habitIdInput: document.getElementById('habit-id'),
         searchInput: document.getElementById('habit-name'),
+        goalSelect: document.getElementById('goal_id')  // ← ADDED
     };
 
     let editMode = false;
     let currentEditId = null;
     let habitsCache = [];
+
+    // Populate goal dropdown from window.userGoals
+    if (elements.goalSelect && window.userGoals && window.userGoals.length > 0) {
+        window.userGoals.forEach(goal => {
+            const option = document.createElement('option');
+            option.value = goal.id;
+            option.textContent = goal.title;
+            elements.goalSelect.appendChild(option);
+        });
+    }
 
     // Helper functions
     const api = {
@@ -107,10 +118,12 @@ document.addEventListener('DOMContentLoaded', function() {
         elements.habitsList.innerHTML = habits.map(h => {
             const statusClass = h.is_active ? 'active' : 'paused';
             const statusText  = h.is_active ? 'Active' : 'Paused';
+            const goalName    = h.goal_name ? escapeHtml(h.goal_name) : '—';  // ← ADDED
             return `
                 <div class="habit-item" data-id="${h.id}">
                     <div class="habit-icon"><i class="${h.icon || 'fa-solid fa-smile'}"></i></div>
                     <div class="habit-name">${escapeHtml(h.name)}</div>
+                    <div class="habit-goal">${goalName}</div>
                     <div class="habit-frequency">${h.frequency}</div>
                     <div class="habit-target">${h.target_count ?? 1}</div>
                     <div class="habit-status"><span class="status-${statusClass}">${statusText}</span></div>
@@ -166,6 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
         elements.iconGrid.innerHTML = '';
         elements.iconGrid.style.display = 'none';
         elements.habitIdInput.value = '';
+        elements.goalSelect.value = '';  // ← ADDED
 
         if (habit) {
             document.getElementById('name').value         = habit.name        || '';
@@ -179,6 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             selectIcon(habit.icon || 'fa-solid fa-smile');
 
+            elements.goalSelect.value      = habit.goal_id || '';  // ← ADDED
             elements.habitIdInput.value    = habit.id;
             elements.formTitle.textContent = 'Edit habit';
             elements.submitBtn.textContent = 'Save Changes';
@@ -195,6 +210,7 @@ document.addEventListener('DOMContentLoaded', function() {
         editMode = false;
         currentEditId = null;
         elements.habitIdInput.value    = '';
+        elements.goalSelect.value      = '';  // ← ADDED
         elements.formTitle.textContent = 'Add habit';
         elements.submitBtn.textContent = 'Add Habit';
     };
@@ -245,6 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 frequency:    document.getElementById('frequency').value,
                 target_count: document.getElementById('target_count').value || null,
                 icon:         document.getElementById('icon').value,
+                goal_id:      elements.goalSelect.value || null,  // ← ADDED
             };
 
             if (editMode && currentEditId) {
