@@ -70,12 +70,14 @@ class GoalController extends Controller
         $newValue = max(0, min($goal->current_value + $amount, $goal->target_value));
 
         if ($newValue >= $goal->target_value) {
-            $goal->update(['current_value' => $newValue, 'status' => 'completed']);
+            $status = 'completed';
         } elseif ($newValue > 0) {
-            $goal->update(['current_value' => $newValue, 'status' => 'in-progress']);
+            $status = 'in-progress';
         } else {
-            $goal->update(['current_value' => $newValue, 'status' => 'not-started']);
+            $status = 'not-started';
         }
+
+        $goal->update(['current_value' => $newValue, 'status' => $status]);
 
         return back()->with('success', 'Progress logged!');
     }
