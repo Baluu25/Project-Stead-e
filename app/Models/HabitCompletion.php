@@ -11,7 +11,7 @@ class HabitCompletion extends Model
     use HasFactory;
 
     protected $table = 'habit_completions';
-    protected $fillable = ['completed_at', 'quantity', 'notes', 'mood', 'is_skipped', 'habit_id', 'user_id'];
+    protected $fillable = ['completed_at', 'quantity', 'is_skipped', 'habit_id', 'user_id'];
 
     public function habit() {
     return $this->belongsTo(Habit::class);
