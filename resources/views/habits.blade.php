@@ -108,6 +108,24 @@
             </div>
 
             <div class="form-group">
+                <label for="unit" class="form-label">Unit</label>
+                <select id="unit"
+                        name="unit"
+                        class="form-control @error('unit') is-invalid @enderror"
+                        required>
+                    <option value="times"   {{ old('unit') == 'times'   ? 'selected' : '' }}>Times</option>
+                    <option value="days"    {{ old('unit') == 'days'    ? 'selected' : '' }}>Days</option>
+                    <option value="km"      {{ old('unit') == 'km'      ? 'selected' : '' }}>Kilometers (km)</option>
+                    <option value="books"   {{ old('unit') == 'books'   ? 'selected' : '' }}>Books</option>
+                    <option value="minutes" {{ old('unit') == 'minutes' ? 'selected' : '' }}>Minutes</option>
+                    <option value="custom"  {{ old('unit') == 'custom'  ? 'selected' : '' }}>Custom</option>
+                </select>
+                @error('unit')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group">
                 <label for="icon" class="form-label">Icon</label>
                 <div class="icon-selector" id="icon-selector">
                     <div class="selected-icon" id="selected-icon">

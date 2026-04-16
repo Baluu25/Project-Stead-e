@@ -42,6 +42,7 @@ class HabitController extends Controller
             'category'     => $request->category,
             'frequency'    => $request->frequency,
             'target_count' => $request->target_count ?? 1,
+            'unit'         => $request->unit,
             'icon'         => $request->icon ?? 'star',
             'is_active'    => true,
             'goal_id'      => $request->goal_id,

@@ -24,7 +24,8 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn:    document.getElementById('habitFormSubmitBtn'),
         habitIdInput: document.getElementById('habit-id'),
         searchInput: document.getElementById('habit-name'),
-        goalSelect: document.getElementById('goal_id')  // ← ADDED
+        goalSelect: document.getElementById('goal_id'),
+        unitInput: document.getElementById('unit'),
     };
 
     let editMode = false;
@@ -125,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="habit-name">${escapeHtml(h.name)}</div>
                     <div class="habit-goal">${goalName}</div>
                     <div class="habit-frequency">${h.frequency}</div>
-                    <div class="habit-target">${h.target_count ?? 1}</div>
+                    <div class="habit-target">${h.target_count ?? 1}${h.unit ? ' ' + escapeHtml(h.unit) : ''}</div>
                     <div class="habit-status"><span class="status-${statusClass}">${statusText}</span></div>
                     <div class="habit-actions">
                         <button class="edit-btn" data-id="${h.id}"><i class="fa-solid fa-edit"></i></button>
@@ -179,13 +180,15 @@ document.addEventListener('DOMContentLoaded', function() {
         elements.iconGrid.innerHTML = '';
         elements.iconGrid.style.display = 'none';
         elements.habitIdInput.value = '';
-        elements.goalSelect.value = '';  // ← ADDED
+        elements.unitInput.value = '';
+        elements.goalSelect.value = '';
 
         if (habit) {
             document.getElementById('name').value         = habit.name        || '';
             document.getElementById('description').value  = habit.description || '';
             document.getElementById('frequency').value    = habit.frequency   || '';
             document.getElementById('target_count').value = habit.target_count ?? 1;
+            document.getElementById('unit').value = habit.unit || '';
 
             elements.category.value = habit.category || '';
             if (habit.category && categoryIcons[habit.category]) {
@@ -193,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             selectIcon(habit.icon || 'fa-solid fa-smile');
 
-            elements.goalSelect.value      = habit.goal_id || '';  // ← ADDED
+            elements.goalSelect.value      = habit.goal_id || '';
             elements.habitIdInput.value    = habit.id;
             elements.formTitle.textContent = 'Edit habit';
             elements.submitBtn.textContent = 'Save Changes';
@@ -210,7 +213,8 @@ document.addEventListener('DOMContentLoaded', function() {
         editMode = false;
         currentEditId = null;
         elements.habitIdInput.value    = '';
-        elements.goalSelect.value      = '';  // ← ADDED
+        elements.goalSelect.value      = '';
+        elements.unitInput.value = '';
         elements.formTitle.textContent = 'Add habit';
         elements.submitBtn.textContent = 'Add Habit';
     };
@@ -261,7 +265,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 frequency:    document.getElementById('frequency').value,
                 target_count: document.getElementById('target_count').value || null,
                 icon:         document.getElementById('icon').value,
-                goal_id:      elements.goalSelect.value || null,  // ← ADDED
+                goal_id:      elements.goalSelect.value || null,
+                unit: document.getElementById('unit').value || null
             };
 
             if (editMode && currentEditId) {
