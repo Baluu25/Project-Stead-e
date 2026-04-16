@@ -24,8 +24,6 @@ class HabitCompletionController extends Controller
             'user_id'      => Auth::id(),
             'completed_at' => now(),
             'quantity'     => $quantity,
-            'mood'         => $request->mood,
-            'notes'        => $request->notes,
             'is_skipped'   => $request->boolean('is_skipped', false),
         ]);
 

@@ -28,6 +28,7 @@ class Habit extends Model
         'category',
         'frequency',
         'target_count',
+        'unit',
         'icon',
         'is_active',
         'goal_id'
