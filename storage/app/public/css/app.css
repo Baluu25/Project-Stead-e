@@ -1,3 +1,12 @@
+/* Root */
+:root {
+  --color-red: #FF2A00;
+  --color-blue: #2B51FE;
+  --color-btn-red: #BF3C3C;
+  --color-btn-blue: #25408F;
+}
+
+/* Body */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -16,6 +25,7 @@ body {
   background: linear-gradient(135deg, var(--color-red), var(--color-blue)) fixed;
 }
 
+/* Navbar */
 nav.navbar {
   background: white;
   border-radius: 20px;
@@ -25,7 +35,7 @@ nav.navbar {
   left: 0;
   right: 0;
   z-index: 1000;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .navbar-brand {
@@ -56,10 +66,11 @@ nav.navbar {
   -webkit-text-fill-color: transparent;
 }
 
+/* dropdown */
 .dropdown-menu {
-  background: rgba(255,255,255,0.95);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .dropdown-item {
@@ -67,7 +78,7 @@ nav.navbar {
 }
 
 .dropdown-item:hover {
-  background: rgba(0,0,0,0.05);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .dropdown-item button {
@@ -77,6 +88,7 @@ nav.navbar {
   text-align: left;
 }
 
+/* buttons */
 .btn {
   font-weight: 600;
   padding: 0.7rem 1.2rem;
@@ -91,19 +103,21 @@ nav.navbar {
   background: var(--color-btn-blue);
   color: white;
   font-size: 0.95rem;
-  box-shadow: 0 3px 8px rgba(37,64,143,0.3);
+  box-shadow: 0 3px 8px rgba(37, 64, 143, 0.3);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(37,64,143,0.4);
+  box-shadow: 0 6px 20px rgba(37, 64, 143, 0.4);
 }
 
+/* main */
 main {
   min-height: calc(100vh - 140px);
   padding: 6rem 3rem 2rem;
 }
 
+/* footer */
 .footer {
   background: white;
   color: black;
@@ -149,7 +163,7 @@ main {
 }
 
 .social-link:hover {
-  color: #25408f;
+  color: var(--color-btn-blue);
 }
 
 .footer-heading {
@@ -175,7 +189,7 @@ main {
 }
 
 .footer-links a:hover {
-  color: #25408f;
+  color: var(--color-btn-blue);
 }
 
 .play-store-badge {
@@ -189,7 +203,7 @@ main {
 }
 
 .footer-bottom {
-  border-top: 1px solid rgba(0,0,0,0.1);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .footer-copyright {
@@ -211,10 +225,10 @@ main {
 }
 
 .footer-legal-links a:hover {
-  color: #25408f;
+  color: var(--color-btn-blue);
 }
 
-/* Small phones */
+/* small phone */
 @media (max-width: 480px) {
   nav.navbar {
     margin: 0.5rem;
@@ -260,7 +274,7 @@ main {
   }
 }
 
-/* Phones */
+/* phone */
 @media (min-width: 481px) and (max-width: 767px) {
   nav.navbar {
     margin: 0.75rem 1rem;
@@ -285,7 +299,7 @@ main {
   }
 }
 
-/* Tablets */
+/* tablet */
 @media (min-width: 768px) and (max-width: 1023px) {
   nav.navbar {
     margin: 1rem 1.5rem;
@@ -313,7 +327,7 @@ main {
   }
 }
 
-/* Small desktops */
+/* small desktop */
 @media (min-width: 1024px) and (max-width: 1199px) {
   .nav-link {
     font-size: 1.05rem;
@@ -325,7 +339,7 @@ main {
   }
 }
 
-/* Large desktops */
+/* large desktop */
 @media (min-width: 1200px) {
   .nav-link {
     font-size: 1.2rem;
@@ -338,7 +352,7 @@ main {
   }
 }
 
-/* Very large screens */
+/* very large desktop */
 @media (min-width: 1600px) {
   nav.navbar {
     margin: 1rem 4rem;

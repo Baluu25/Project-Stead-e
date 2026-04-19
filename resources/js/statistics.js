@@ -14,6 +14,8 @@ for (let i = 6; i >= 0; i--) {
     data.push(rawData[key] ?? 0);
 }
 
+
+// daily completions chart
 new Chart(canvas.getContext('2d'), {
     type: 'line',
     data: {
@@ -61,6 +63,8 @@ new Chart(canvas.getContext('2d'), {
     },
 });
 
+
+//completions by category chart
 const doughnutCanvas = document.getElementById('category-doughnut-chart');
 if (doughnutCanvas) {
     const categoryData = JSON.parse(doughnutCanvas.dataset.categories || '{}');

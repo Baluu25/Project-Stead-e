@@ -1,125 +1,163 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Category icons data
+document.addEventListener('DOMContentLoaded', function () {
+
+    // icons by category
     const categoryIcons = {
-        'Nutrition': ['fa-solid fa-apple-whole', 'fa-solid fa-carrot', 'fa-solid fa-lemon', 'fa-solid fa-bowl-food', 'fa-solid fa-mug-saucer', 'fa-solid fa-burger', 'fa-solid fa-fish', 'fa-solid fa-egg', 'fa-solid fa-droplet', 'fa-solid fa-wine-bottle'],
-        'Fitness': ['fa-solid fa-dumbbell', 'fa-solid fa-person-running', 'fa-solid fa-person-walking', 'fa-solid fa-bicycle', 'fa-solid fa-heart-pulse', 'fa-solid fa-fire', 'fa-solid fa-stopwatch', 'fa-solid fa-shoe-prints', 'fa-solid fa-weight-scale', 'fa-solid fa-person-swimming'],
-        'Mindfulness': ['fa-solid fa-brain', 'fa-solid fa-heart', 'fa-solid fa-spa', 'fa-regular fa-face-smile', 'fa-solid fa-feather', 'fa-solid fa-leaf', 'fa-solid fa-om', 'fa-solid fa-cloud', 'fa-solid fa-wind', 'fa-regular fa-moon'],
-        'Study': ['fa-solid fa-book', 'fa-solid fa-book-open', 'fa-solid fa-graduation-cap', 'fa-solid fa-pencil', 'fa-solid fa-pen', 'fa-solid fa-brain', 'fa-solid fa-lightbulb', 'fa-solid fa-microscope', 'fa-solid fa-flask', 'fa-solid fa-language'],
-        'Work': ['fa-solid fa-briefcase', 'fa-solid fa-laptop', 'fa-solid fa-computer', 'fa-solid fa-clock', 'fa-solid fa-calendar-check', 'fa-solid fa-chart-line', 'fa-solid fa-chart-simple', 'fa-solid fa-envelope', 'fa-solid fa-users', 'fa-solid fa-mug-hot']
+        'Nutrition':    ['fa-solid fa-apple-whole','fa-solid fa-carrot','fa-solid fa-lemon','fa-solid fa-bowl-food','fa-solid fa-mug-saucer','fa-solid fa-burger','fa-solid fa-fish','fa-solid fa-egg','fa-solid fa-droplet','fa-solid fa-wine-bottle'],
+        'Fitness':      ['fa-solid fa-dumbbell','fa-solid fa-person-running','fa-solid fa-person-walking','fa-solid fa-bicycle','fa-solid fa-heart-pulse','fa-solid fa-fire','fa-solid fa-stopwatch','fa-solid fa-shoe-prints','fa-solid fa-weight-scale','fa-solid fa-person-swimming'],
+        'Mindfulness':  ['fa-solid fa-brain','fa-solid fa-heart','fa-solid fa-spa','fa-regular fa-face-smile','fa-solid fa-feather','fa-solid fa-leaf','fa-solid fa-om','fa-solid fa-cloud','fa-solid fa-wind','fa-regular fa-moon'],
+        'Study':        ['fa-solid fa-book','fa-solid fa-book-open','fa-solid fa-graduation-cap','fa-solid fa-pencil','fa-solid fa-pen','fa-solid fa-brain','fa-solid fa-lightbulb','fa-solid fa-microscope','fa-solid fa-flask','fa-solid fa-language'],
+        'Work':         ['fa-solid fa-briefcase','fa-solid fa-laptop','fa-solid fa-computer','fa-solid fa-clock','fa-solid fa-calendar-check','fa-solid fa-chart-line','fa-solid fa-chart-simple','fa-solid fa-envelope','fa-solid fa-users','fa-solid fa-mug-hot']
     };
 
-    // DOM elements
-    const elements = {
-        category: document.getElementById('category'),
-        iconGrid: document.getElementById('icon-grid'),
+    // DOM
+    const el = {
+        category:     document.getElementById('category'),
+        iconGrid:     document.getElementById('icon-grid'),
         selectedIcon: document.getElementById('selected-icon'),
-        iconInput: document.getElementById('icon'),
-        iconDisplay: document.getElementById('selected-icon-display'),
-        addBtn: document.getElementById('addHabitBtn'),
-        popup: document.getElementById('habitFormPopup'),
-        closeBtn: document.getElementById('closePopupBtn'),
-        form: document.getElementById('habit-form'),
-        habitsList: document.getElementById('habits-list'),
+        iconInput:    document.getElementById('icon'),
+        iconDisplay:  document.getElementById('selected-icon-display'),
+        addBtn:       document.getElementById('addHabitBtn'),
+        popup:        document.getElementById('habitFormPopup'),
+        closeBtn:     document.getElementById('closePopupBtn'),
+        form:         document.getElementById('habit-form'),
+        habitsList:   document.getElementById('habits-list'),
         formTitle:    document.getElementById('habitFormTitle'),
         submitBtn:    document.getElementById('habitFormSubmitBtn'),
         habitIdInput: document.getElementById('habit-id'),
-        searchInput: document.getElementById('habit-name'),
-        goalSelect: document.getElementById('goal_id'),
-        unitInput: document.getElementById('unit'),
+        searchInput:  document.getElementById('habit-name'),
+        goalSelect:   document.getElementById('goal_id'),
+        unitInput:    document.getElementById('unit'),
     };
 
-    let editMode = false;
+    let editMode      = false;
     let currentEditId = null;
-    let habitsCache = [];
+    let habitsCache   = [];
 
-    // Populate goal dropdown from window.userGoals
-    if (elements.goalSelect && window.userGoals && window.userGoals.length > 0) {
-        window.userGoals.forEach(goal => {
-            const option = document.createElement('option');
-            option.value = goal.id;
+    // setup
+    if (el.goalSelect && window.userGoals && window.userGoals.length > 0) {
+        window.userGoals.forEach(function (goal) {
+            const option       = document.createElement('option');
+            option.value       = goal.id;
             option.textContent = goal.title;
-            elements.goalSelect.appendChild(option);
+            el.goalSelect.appendChild(option);
         });
     }
 
-    // Helper functions
-    const api = {
-        get: (url) => fetch(url, {
-            headers: {
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            }
-        }).then(res => res.ok ? res.json() : Promise.reject('HTTP ' + res.status)),
-        
-        post: (url, data) => fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
-            body: JSON.stringify(data)
-        }).then(res => res.json()),
+    // api helpers
+    function getCsrf() {
+        return document.querySelector('meta[name="csrf-token"]').content;
+    }
 
-        put: (url, data) => fetch(url, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
-            body: JSON.stringify(data)
-        }).then(res => res.json()),
-        
-        delete: (url) => fetch(url, {
-            method: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            }
-        }).then(res => res.status === 204 ? null : res.json()),
+    const api = {
+        get: function (url) {
+            return fetch(url, {
+                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': getCsrf() }
+            }).then(function (res) {
+                return res.ok ? res.json() : Promise.reject('HTTP ' + res.status);
+            });
+        },
+
+        post: function (url, data) {
+            return fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': getCsrf() },
+                body: JSON.stringify(data)
+            }).then(res => res.json());
+        },
+
+        put: function (url, data) {
+            return fetch(url, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': getCsrf() },
+                body: JSON.stringify(data)
+            }).then(res => res.json());
+        },
+
+        delete: function (url) {
+            return fetch(url, {
+                method: 'DELETE',
+                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': getCsrf() }
+            }).then(function (res) { return res.status === 204 ? null : res.json(); });
+        }
     };
 
-    const escapeHtml = (text) => {
+    // for safe habit naming
+    function escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
-    };
+    }
 
-    const selectIcon = (iconClass) => {
-        elements.iconDisplay.className = iconClass;
-        elements.iconInput.value = iconClass;
-        elements.iconGrid.style.display = 'none';
-        elements.selectedIcon.style.borderColor = '#4CAF50';
-        setTimeout(() => elements.selectedIcon.style.borderColor = '#ddd', 500);
-    };
+    // icon selector
+    function selectIcon(iconClass) {
+        el.iconDisplay.className  = iconClass;
+        el.iconInput.value        = iconClass;
+        el.iconGrid.style.display = 'none';
 
-    const populateIcons = (icons) => {
-        elements.iconGrid.innerHTML = '';
-        icons.forEach(iconClass => {
-            const wrapper = document.createElement('div');
-            wrapper.style.cssText = 'cursor:pointer;padding:10px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:all 0.2s';
-            const icon = document.createElement('i');
+        el.selectedIcon.style.borderColor = '#25408F';
+        setTimeout(function () { el.selectedIcon.style.borderColor = '#ddd'; }, 500);
+    }
+
+    // build icon grid by category
+    function populateIcons(icons) {
+        el.iconGrid.innerHTML = '';
+        icons.forEach(function (iconClass) {
+            const wrapper  = document.createElement('div');
+            const icon     = document.createElement('i');
             icon.className = iconClass;
-            icon.style.fontSize = '24px';
             wrapper.appendChild(icon);
-            wrapper.onmouseenter = () => wrapper.style.backgroundColor = '#f0f0f0';
-            wrapper.onmouseleave = () => wrapper.style.backgroundColor = 'transparent';
-            wrapper.onclick = () => selectIcon(iconClass);
-            elements.iconGrid.appendChild(wrapper);
+            wrapper.addEventListener('click', function () { selectIcon(iconClass); });
+            el.iconGrid.appendChild(wrapper);
         });
-        elements.iconGrid.style.display = 'grid';
-    };
+        el.iconGrid.style.display = 'grid';
+    }
 
-    const renderHabits = (habits) => {
+    if (el.selectedIcon) {
+        el.selectedIcon.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (!el.category.value) return alert('Please select a category first');
+            if (!categoryIcons[el.category.value]) return alert('Please select a valid category');
+            el.iconGrid.style.display = el.iconGrid.style.display === 'grid' ? 'none' : 'grid';
+        });
+    }
+
+    if (el.category) {
+        el.category.addEventListener('change', function () {
+            if (el.category.value && categoryIcons[el.category.value]) {
+                populateIcons(categoryIcons[el.category.value]);
+                el.iconDisplay.className = 'fa-solid fa-smile';
+                el.iconInput.value       = 'fa-solid fa-smile';
+            } else {
+                el.iconGrid.innerHTML    = '';
+                el.iconGrid.style.display = 'none';
+            }
+        });
+    }
+
+    // close icon grid when clicked off
+    document.addEventListener('click', function (e) {
+        const selector = document.getElementById('icon-selector');
+        if (selector && !selector.contains(e.target)) {
+            el.iconGrid.style.display = 'none';
+        }
+    });
+
+    // render habits list
+    function renderHabits(habits) {
         if (!habits || habits.length === 0) {
-            elements.habitsList.innerHTML = `<div id="placeholder-container"><img src="images/placeholder-img.png" alt="placeholder" id="placeholder-img"><p id="placeholder-msg">No habits found</p></div>`;
+            el.habitsList.innerHTML = `
+                <div id="placeholder-container">
+                    <img src="images/placeholder-img.png" alt="placeholder" id="placeholder-img">
+                    <p id="placeholder-msg">No habits found</p>
+                </div>`;
             return;
         }
-        elements.habitsList.innerHTML = habits.map(h => {
-            const statusClass = h.is_active ? 'active' : 'paused';
-            const statusText  = h.is_active ? 'Active' : 'Paused';
-            const goalName    = h.goal_name ? escapeHtml(h.goal_name) : '—';  // ← ADDED
+
+        el.habitsList.innerHTML = habits.map(function (h) {
+            const statusClass = h.is_active ? 'active'  : 'paused';
+            const statusText  = h.is_active ? 'Active'  : 'Paused';
+            const goalName    = h.goal_name ? escapeHtml(h.goal_name) : '—';
+
             return `
                 <div class="habit-item" data-id="${h.id}">
                     <div class="habit-icon"><i class="${h.icon || 'fa-solid fa-smile'}"></i></div>
@@ -129,135 +167,122 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="habit-target">${h.target_count ?? 1}${h.unit ? ' ' + escapeHtml(h.unit) : ''}</div>
                     <div class="habit-status"><span class="status-${statusClass}">${statusText}</span></div>
                     <div class="habit-actions">
-                        <button class="edit-btn" data-id="${h.id}"><i class="fa-solid fa-edit"></i></button>
+                        <button class="edit-btn"   data-id="${h.id}"><i class="fa-solid fa-edit"></i></button>
                         <button class="delete-btn" data-id="${h.id}"><i class="fa-solid fa-trash"></i></button>
                     </div>
-                </div>
-            `;
+                </div>`;
         }).join('');
 
-        document.querySelectorAll('.delete-btn').forEach(btn => btn.onclick = () => deleteHabit(btn.dataset.id));
-        document.querySelectorAll('.edit-btn').forEach(btn => btn.onclick = () => {
-            const habitId = parseInt(btn.dataset.id, 10);
-            const habit = habitsCache.find(h => h.id === habitId);
-            if (habit) showPopup(habit);
+        // edit and delete buttons
+        document.querySelectorAll('.delete-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () { deleteHabit(btn.dataset.id); });
         });
-    };
+        document.querySelectorAll('.edit-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const habit = habitsCache.find(h => h.id === parseInt(btn.dataset.id, 10));
+                if (habit) showPopup(habit);
+            });
+        });
+    }
 
-    const filterHabits = () => {
-        const query = elements.searchInput.value.trim().toLowerCase();
+    // load/delete habits
+    function loadHabits() {
+        api.get('/api/habits')
+            .then(function (habits) {
+                habitsCache = habits;
+                renderHabits(habits);
+            })
+            .catch(function () {
+                if (el.habitsList) {
+                    el.habitsList.innerHTML = `
+                        <div id="placeholder-container">
+                            <p id="placeholder-msg">Could not load habits. Please refresh the page.</p>
+                        </div>`;
+                }
+            });
+    }
+
+    function deleteHabit(id) {
+        if (!confirm('Are you sure you want to delete this habit?')) return;
+        api.delete('/api/habits/' + id)
+            .then(loadHabits)
+            .catch(function () { alert('Error deleting habit'); });
+    }
+
+    // filter habits by name
+    function filterHabits() {
+        const query = el.searchInput.value.trim().toLowerCase();
         if (!query) {
             renderHabits(habitsCache);
             return;
         }
         const filtered = habitsCache.filter(h => h.name.toLowerCase().includes(query));
         renderHabits(filtered);
-    };
+    }
 
-    const loadHabits = () => {
-        api.get('/api/habits').then(habits => {
-            habitsCache = habits;
-            renderHabits(habits);
-        }).catch(() => {
-            if (elements.habitsList) elements.habitsList.innerHTML = `<div id="placeholder-container"><p id="placeholder-msg">Could not load habits. Please refresh the page.</p></div>`;
-        });
-    };
-
-    const deleteHabit = (id) => {
-        if (confirm('Are you sure you want to delete this habit?')) {
-            api.delete('/api/habits/' + id).then(() => loadHabits()).catch(() => alert('Error deleting habit'));
-        }
-    };
-
-    const showPopup = (habit = null) => {
-        editMode = habit !== null;
+    // popup form
+    function showPopup(habit) {
+        editMode      = habit != null;
         currentEditId = habit ? habit.id : null;
 
-        if (elements.form) elements.form.reset();
-        elements.iconDisplay.className = 'fa-solid fa-smile';
-        elements.iconInput.value = 'fa-solid fa-smile';
-        elements.category.value = '';
-        elements.iconGrid.innerHTML = '';
-        elements.iconGrid.style.display = 'none';
-        elements.habitIdInput.value = '';
-        elements.unitInput.value = '';
-        elements.goalSelect.value = '';
+        if (el.form) el.form.reset();
+        el.iconDisplay.className  = 'fa-solid fa-smile';
+        el.iconInput.value        = 'fa-solid fa-smile';
+        el.category.value         = '';
+        el.iconGrid.innerHTML     = '';
+        el.iconGrid.style.display = 'none';
+        el.habitIdInput.value     = '';
+        el.unitInput.value        = '';
+        el.goalSelect.value       = '';
 
         if (habit) {
-            document.getElementById('name').value         = habit.name        || '';
-            document.getElementById('description').value  = habit.description || '';
-            document.getElementById('frequency').value    = habit.frequency   || '';
-            document.getElementById('target_count').value = habit.target_count ?? 1;
-            document.getElementById('unit').value = habit.unit || '';
+            document.getElementById('name').value          = habit.name         || '';
+            document.getElementById('description').value   = habit.description  || '';
+            document.getElementById('frequency').value     = habit.frequency    || '';
+            document.getElementById('target_count').value  = habit.target_count ?? 1;
+            document.getElementById('unit').value          = habit.unit         || '';
 
-            elements.category.value = habit.category || '';
+            el.category.value  = habit.category || '';
             if (habit.category && categoryIcons[habit.category]) {
                 populateIcons(categoryIcons[habit.category]);
             }
             selectIcon(habit.icon || 'fa-solid fa-smile');
 
-            elements.goalSelect.value      = habit.goal_id || '';
-            elements.habitIdInput.value    = habit.id;
-            elements.formTitle.textContent = 'Edit habit';
-            elements.submitBtn.textContent = 'Save Changes';
+            el.goalSelect.value       = habit.goal_id || '';
+            el.habitIdInput.value     = habit.id;
+            el.formTitle.textContent  = 'Edit habit';
+            el.submitBtn.textContent  = 'Save Changes';
         } else {
-            elements.formTitle.textContent = 'Add habit';
-            elements.submitBtn.textContent = 'Add Habit';
+            el.formTitle.textContent  = 'Add habit';
+            el.submitBtn.textContent  = 'Add Habit';
         }
 
-        elements.popup.style.display = 'block';
-    };
+        el.popup.style.display = 'block';
+    }
 
-    const hidePopup = () => {
-        elements.popup.style.display = 'none';
-        editMode = false;
-        currentEditId = null;
-        elements.habitIdInput.value    = '';
-        elements.goalSelect.value      = '';
-        elements.unitInput.value = '';
-        elements.formTitle.textContent = 'Add habit';
-        elements.submitBtn.textContent = 'Add Habit';
-    };
+    function hidePopup() {
+        el.popup.style.display    = 'none';
+        editMode                  = false;
+        currentEditId             = null;
+        el.habitIdInput.value     = '';
+        el.goalSelect.value       = '';
+        el.unitInput.value        = '';
+        el.formTitle.textContent  = 'Add habit';
+        el.submitBtn.textContent  = 'Add Habit';
+    }
 
-    // Event listeners
-    if (elements.selectedIcon) {
-        elements.selectedIcon.onclick = (e) => {
+    if (el.addBtn && el.popup && el.closeBtn) {
+        el.addBtn.addEventListener('click',   function (e) { e.preventDefault(); showPopup(); });
+        el.closeBtn.addEventListener('click', function (e) { e.preventDefault(); hidePopup(); });
+        el.popup.addEventListener('click',    function (e) { if (e.target === el.popup) hidePopup(); });
+        document.addEventListener('keydown',  function (e) { if (e.key === 'Escape' && el.popup.style.display === 'block') hidePopup(); });
+    }
+
+    // form submit
+    if (el.form) {
+        el.form.addEventListener('submit', function (e) {
             e.preventDefault();
-            if (!elements.category.value) return alert('Please select a category first');
-            if (!categoryIcons[elements.category.value]) return alert('Please select a valid category');
-            elements.iconGrid.style.display = elements.iconGrid.style.display === 'grid' ? 'none' : 'grid';
-        };
-    }
 
-    if (elements.category) {
-        elements.category.onchange = () => {
-            const category = elements.category.value;
-            if (category && categoryIcons[category]) {
-                populateIcons(categoryIcons[category]);
-                elements.iconDisplay.className = 'fa-solid fa-smile';
-                elements.iconInput.value = 'fa-solid fa-smile';
-            } else {
-                elements.iconGrid.innerHTML = '';
-                elements.iconGrid.style.display = 'none';
-            }
-        };
-    }
-
-    document.onclick = (e) => {
-        const selector = document.getElementById('icon-selector');
-        if (selector && !selector.contains(e.target)) elements.iconGrid.style.display = 'none';
-    };
-
-    if (elements.addBtn && elements.popup && elements.closeBtn) {
-        elements.addBtn.onclick = (e) => { e.preventDefault(); showPopup(); };
-        elements.closeBtn.onclick = (e) => { e.preventDefault(); hidePopup(); };
-        elements.popup.onclick = (e) => { if (e.target === elements.popup) hidePopup(); };
-        document.onkeydown = (e) => { if (e.key === 'Escape' && elements.popup.style.display === 'block') hidePopup(); };
-    }
-
-    if (elements.form) {
-        elements.form.onsubmit = (e) => {
-            e.preventDefault();
             const data = {
                 name:         document.getElementById('name').value,
                 description:  document.getElementById('description').value,
@@ -265,13 +290,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 frequency:    document.getElementById('frequency').value,
                 target_count: document.getElementById('target_count').value || null,
                 icon:         document.getElementById('icon').value,
-                goal_id:      elements.goalSelect.value || null,
-                unit: document.getElementById('unit').value || null
+                goal_id:      el.goalSelect.value || null,
+                unit:         document.getElementById('unit').value || null
             };
 
             if (editMode && currentEditId) {
                 api.put('/api/habits/' + currentEditId, data)
-                    .then(habit => {
+                    .then(function (habit) {
                         if (habit.id) {
                             hidePopup();
                             loadHabits();
@@ -280,31 +305,34 @@ document.addEventListener('DOMContentLoaded', function() {
                             alert('Validation error. Please check your inputs.');
                         }
                     })
-                    .catch(() => alert('Error updating habit'));
+                    .catch(function () { alert('Error updating habit'); });
             } else {
                 api.post('/api/habits', data)
-                    .then(habit => {
+                    .then(function (habit) {
                         if (habit.id || habit.success) {
                             hidePopup();
                             loadHabits();
                             alert('Habit added successfully!');
-                            elements.form.reset();
+                            el.form.reset();
                         } else if (habit.errors) {
                             alert('Please check the form for errors');
                         }
                     })
-                    .catch(() => alert('Error adding habit'));
+                    .catch(function () { alert('Error adding habit'); });
             }
-        };
+        });
     }
 
-    if (elements.iconInput.value && elements.iconInput.value !== 'fa-solid fa-smile') {
-        elements.iconDisplay.className = elements.iconInput.value;
+    // restore icon display
+    if (el.iconInput.value && el.iconInput.value !== 'fa-solid fa-smile') {
+        el.iconDisplay.className = el.iconInput.value;
     }
 
-    if (elements.searchInput) {
-        elements.searchInput.addEventListener('input', filterHabits);
+    // search input
+    if (el.searchInput) {
+        el.searchInput.addEventListener('input', filterHabits);
     }
 
+    // Load habits on page
     loadHabits();
 });
