@@ -1,119 +1,181 @@
-.counters-row {
-    display: flex;
-    flex-flow: row nowrap;
-    gap: 1rem;
-    margin-top: 0.5rem;
-    justify-content: center;
+/* root */
+:root {
+  --color-red: #FF2A00;
+  --color-blue: #2B51FE;
+  --color-btn-red: #BF3C3C;
+  --color-btn-blue: #25408F;
 }
 
-.counter-section{
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    height: 15vh;
-    width: 20vw;
-    padding: 0.7rem;
+/* counters */
+.counters-row {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  justify-content: center;
+}
+
+.counter-section {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  height: 15vh;
+  width: 20vw;
+  padding: 0.7rem;
 }
 
 .counter-section h2 {
-    margin: 0;
-    color: white;
-    font-size: 1.2rem;
-    font-weight: 550;
+  margin: 0;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 550;
 }
 
 .counter-section i {
-    margin: 0;
-    color: white;
-    font-size: 1.2rem;
-    font-weight: 550;
+  margin: 0;
+  color: white;
+  font-size: 1.2rem;
 }
 
 .top-row {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 .counter-value {
-    margin-top: 1rem;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: 550;
+  margin-top: 1rem;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 550;
 }
 
+/* chart sections */
 .main-stats {
-    display: flex;
-    flex-flow: row nowrap;
-    gap: 1rem;
-    margin-top: 1rem;
-    justify-content: center;
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: center;
 }
 
-.main-stats h2{
-    margin: 0;
-    color: white;
-    font-size: 1.2rem;
-    font-weight: 550;
+.main-stats h2 {
+  margin: 0;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 550;
 }
 
-.daily-completions-section{
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    height: 50vh;
-    width: 50vw;
-    padding: 0.7rem;
+.daily-completions-section {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  height: 50vh;
+  width: 50vw;
+  padding: 0.7rem;
 }
 
-.habit-performance-section{
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    height: 50vh;
-    width: 50vw;
-    padding: 0.7rem;
+.habit-performance-section {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  height: 50vh;
+  width: 50vw;
+  padding: 0.7rem;
 }
 
+/* chart containers */
 #line-chart-container {
-    width: 100%;
-    margin: auto;
+  width: 100%;
+  margin: auto;
 }
 
 #category-doughnut-chart {
-    width: 300px;
-    margin: 20 auto;
-    display: block;
+  width: 300px;
+  margin: 20px auto;
+  display: block;
 }
 
+/* placeholders */
 #placeholder-msg {
-    font-size: 1.2rem;
-    margin-bottom: 0.4rem;
-    color: rgb(255, 255, 255);
-    font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 0.4rem;
+  color: white;
+  font-weight: 700;
 }
 
 #placeholder-img {
-    height: auto;
-    width: 100px;
+  height: auto;
+  width: 100px;
 }
 
 #placeholder-container {
-    text-align: center;
-    margin: 4rem;
-    opacity: 0.5;
+  text-align: center;
+  margin: 4rem;
+  opacity: 0.5;
+}
+
+/* responsiveness */
+@media (max-width: 991px) {
+  .counters-row {
+    flex-wrap: wrap;
+  }
+
+  .counter-section {
+    width: 45%;
+    height: auto;
+    min-height: 100px;
+  }
+}
+
+@media (max-width: 768px) {
+  .counters-row {
+    flex-direction: column;
+  }
+
+  .counter-section {
+    width: 100%;
+    height: auto;
+    min-height: 80px;
+  }
+
+  .main-stats {
+    flex-direction: column;
+  }
+
+  .daily-completions-section,
+  .habit-performance-section {
+    width: 100%;
+    height: 40vh;
+  }
+
+  #category-doughnut-chart {
+    width: 220px;
+  }
+}
+
+@media (max-width: 576px) {
+  .daily-completions-section,
+  .habit-performance-section {
+    height: 35vh;
+  }
+
+  .counter-section h2 {
+    font-size: 1rem;
+  }
+
+  .counter-value {
+    font-size: 1.2rem;
+  }
 }

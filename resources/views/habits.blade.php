@@ -111,8 +111,7 @@
                 <label for="unit" class="form-label">Unit</label>
                 <select id="unit"
                         name="unit"
-                        class="form-control @error('unit') is-invalid @enderror"
-                        required>
+                        class="form-control @error('unit') is-invalid @enderror">
                     <option value="times"   {{ old('unit') == 'times'   ? 'selected' : '' }}>Times</option>
                     <option value="days"    {{ old('unit') == 'days'    ? 'selected' : '' }}>Days</option>
                     <option value="km"      {{ old('unit') == 'km'      ? 'selected' : '' }}>Kilometers (km)</option>
@@ -123,6 +122,17 @@
                 @error('unit')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
+            </div>
+
+            
+            <div class="form-group" id="custom-unit-group" style="display: none;">
+                <label for="custom_unit" class="form-label">Custom Unit Name</label>
+                <input type="text"
+                id="custom_unit"
+                name="custom_unit"
+                class="form-control"
+                placeholder="e.g. pages, glasses, push-ups"
+                maxlength="50">
             </div>
 
             <div class="form-group">

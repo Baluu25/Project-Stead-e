@@ -1,3 +1,4 @@
+/* root */
 :root {
   --color-red: #FF2A00;
   --color-blue: #2B51FE;
@@ -5,6 +6,7 @@
   --color-btn-blue: #25408F;
 }
 
+/* contact card */
 .contact-container {
   display: flex;
   align-items: center;
@@ -17,10 +19,10 @@
   background: white;
   border-radius: 15px;
   padding: 2rem;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   color: #333;
   width: 50vw;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   margin: 0 auto;
 }
 
@@ -52,6 +54,7 @@
   max-width: 380px;
 }
 
+/* form */
 .form-group {
   margin-bottom: 1.2rem;
   width: 100%;
@@ -79,7 +82,7 @@
 
 .form-control:focus {
   border-color: var(--color-btn-blue);
-  box-shadow: 0 0 0 2px rgba(37,64,143,0.1);
+  box-shadow: 0 0 0 2px rgba(37, 64, 143, 0.1);
   outline: none;
   background: white;
 }
@@ -95,6 +98,7 @@ textarea.form-control {
   font-size: 0.9rem;
 }
 
+/* buttons */
 .btn {
   font-weight: 600;
   padding: 0.8rem 1.5rem;
@@ -112,21 +116,21 @@ textarea.form-control {
 .btn-primary {
   background: var(--color-btn-blue);
   color: white;
-  box-shadow: 0 3px 8px rgba(37,64,143,0.3);
+  box-shadow: 0 3px 8px rgba(37, 64, 143, 0.3);
   font-size: 1rem;
   padding: 0.8rem;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(37,64,143,0.4);
-  background: #2e4fa8;
+  box-shadow: 0 6px 20px rgba(37, 64, 143, 0.4);
 }
 
 .btn-primary:active {
   transform: translateY(0) scale(0.98);
 }
 
+/* alerts */
 .alert {
   border-radius: 6px;
   padding: 0.7rem 1rem;
@@ -148,6 +152,7 @@ textarea.form-control {
   border-left: 4px solid #28a745;
 }
 
+/* responsiveness */
 @media (max-width: 480px) {
   .contact-card {
     width: 100%;
