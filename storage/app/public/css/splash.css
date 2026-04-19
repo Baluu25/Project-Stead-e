@@ -1,3 +1,12 @@
+/* root */
+:root {
+  --color-red: #FF2A00;
+  --color-blue: #2B51FE;
+  --color-btn-red: #BF3C3C;
+  --color-btn-blue: #25408F;
+}
+
+/* body */
 * {
   margin: 0;
   padding: 0;
@@ -14,6 +23,7 @@ body {
   color: white;
 }
 
+/* splash content */
 .splash-container {
   text-align: center;
 }
@@ -37,10 +47,11 @@ h1 {
   margin-bottom: 3rem;
 }
 
+/* loading bar*/
 .loading-bar {
   width: 200px;
   height: 4px;
-  background: rgba(255,255,255,0.3);
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 2px;
   margin: 0 auto;
   overflow: hidden;
@@ -56,4 +67,35 @@ h1 {
 
 @keyframes loading {
   to { width: 100%; }
+}
+
+/* responsiveness */
+@media (max-width: 480px) {
+  .logo img {
+    width: 120px;
+    margin-bottom: 1.5rem;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+  }
+
+  .tagline {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .loading-bar {
+    width: 160px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+  .logo img {
+    width: 150px;
+  }
+
+  h1 {
+    font-size: 2.8rem;
+  }
 }

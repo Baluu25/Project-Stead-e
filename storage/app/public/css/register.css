@@ -1,9 +1,12 @@
+/* root */
 :root {
   --color-red: #FF2A00;
   --color-blue: #2B51FE;
+  --color-btn-red: #BF3C3C;
   --color-btn-blue: #25408F;
 }
 
+/* body */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -21,6 +24,7 @@ body {
   background: linear-gradient(135deg, var(--color-red), var(--color-blue)) fixed;
 }
 
+/* back to home button */
 .back-to-home-container {
   position: fixed;
   top: 1rem;
@@ -37,19 +41,20 @@ body {
   align-items: center;
   gap: 0.5rem;
   padding: 0.6rem 1.2rem;
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.25);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
 }
 
 .back-to-home:hover {
   color: white;
-  background: rgba(255,255,255,0.25);
+  background: rgba(255, 255, 255, 0.25);
   transform: translateX(-4px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
+/* progress bar */
 .progress-container {
   position: fixed;
   top: 1rem;
@@ -61,7 +66,7 @@ body {
 
 .progress {
   height: 6px;
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 3px;
   overflow: hidden;
   margin-bottom: 0.5rem;
@@ -84,7 +89,7 @@ body {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.3);
+  background: rgba(255, 255, 255, 0.3);
   color: white;
   display: flex;
   align-items: center;
@@ -100,6 +105,7 @@ body {
   transform: scale(1.1);
 }
 
+/* registration card */
 .registration-container {
   height: 100vh;
   display: flex;
@@ -112,11 +118,11 @@ body {
   background: white;
   border-radius: 15px;
   padding: 1.5rem;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   color: #333;
   width: calc(100% - 1rem);
   max-width: 600px;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   opacity: 0;
   transform: translateX(60px);
   transition: opacity 0.3s, transform 0.3s;
@@ -166,6 +172,7 @@ body {
   line-height: 1.3;
 }
 
+/* form */
 .form-group {
   margin-bottom: 1.5rem;
   position: relative;
@@ -191,7 +198,7 @@ body {
 
 .form-control:focus {
   border-color: var(--color-btn-blue);
-  box-shadow: 0 0 0 2px rgba(37,64,143,0.1);
+  box-shadow: 0 0 0 2px rgba(37, 64, 143, 0.1);
   outline: none;
   background: white;
 }
@@ -207,7 +214,7 @@ body {
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  border: 1px solid rgba(37,64,143,0.1);
+  border: 1px solid rgba(37, 64, 143, 0.1);
   background: none;
   cursor: pointer;
   padding: 0.2rem;
@@ -221,13 +228,14 @@ body {
 }
 
 .btn-toggle-password:hover {
-  background: rgba(37,64,143,0.15);
+  background: rgba(37, 64, 143, 0.15);
 }
 
 .eye-icon {
   font-size: 1rem;
 }
 
+/* buttons */
 .btn {
   font-weight: 600;
   padding: 0.7rem 1.2rem;
@@ -243,13 +251,13 @@ body {
 .btn-primary {
   background: var(--color-btn-blue);
   color: white;
-  box-shadow: 0 3px 8px rgba(37,64,143,0.3);
+  box-shadow: 0 3px 8px rgba(37, 64, 143, 0.3);
   font-size: 0.95rem;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(37,64,143,0.4);
+  box-shadow: 0 6px 20px rgba(37, 64, 143, 0.4);
 }
 
 .btn-primary:active {
@@ -274,6 +282,7 @@ body {
   justify-content: center;
 }
 
+/* option cards */
 .options-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -301,7 +310,7 @@ body {
 .option-card:hover {
   transform: translateY(-2px);
   border-color: var(--color-btn-blue);
-  box-shadow: 0 4px 10px rgba(37,64,143,0.1);
+  box-shadow: 0 4px 10px rgba(37, 64, 143, 0.1);
 }
 
 .option-card input {
@@ -339,6 +348,7 @@ body {
   color: #666;
 }
 
+/* redirect */
 .login-redirect {
   text-align: center;
   color: #555;
@@ -355,10 +365,11 @@ body {
 }
 
 .login-redirect a:hover {
-  color: #3c5bbf;
-  border-bottom-color: #3c5bbf;
+  color: var(--color-btn-blue);
+  border-bottom-color: var(--color-btn-blue);
 }
 
+/* responsiveness */
 @media (max-width: 991px) {
   .progress-container {
     width: 350px;
@@ -420,7 +431,8 @@ body {
     padding: 0.5rem 0.7rem;
   }
 
-  .btn-primary, .btn-secondary {
+  .btn-primary,
+  .btn-secondary {
     padding: 0.6rem 1rem;
     font-size: 0.9rem;
   }
@@ -458,7 +470,8 @@ body {
     gap: 0.8rem;
   }
 
-  .btn-secondary, .btn-primary {
+  .btn-secondary,
+  .btn-primary {
     width: 100%;
   }
 

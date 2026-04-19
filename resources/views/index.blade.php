@@ -24,23 +24,23 @@
       <div class="col-lg-6">
         <div class="slideshow-container">
           <div class="slide active">
-            <div class="slide-text">Create Good Habits</div>
+            <div class="slide-text">Build Lasting Habits</div>
             <p class="lead">
-            Change your life by slowly adding new healthy habits and sticking to them.
+            Small daily actions shape who you are. Build routines that stick with you.
             </p>
             <img src="images/slide1.png" alt="Good Habits" class="slide-image">
           </div>
           <div class="slide">
-            <div class="slide-text">Stay Together and Strong</div>
+            <div class="slide-text">Set and Reach Your Goals</div>
             <p class="lead">
-            Find friends to discuss common topics. Complete challenges together.
+            Define what matters most to you. Break big goals into simple daily steps.
             </p>
             <img src="images/slide2.png" alt="Stay Together" class="slide-image">
           </div>
           <div class="slide">
-            <div class="slide-text">Track your progress</div>
+            <div class="slide-text">See Your Progress</div>
             <p class="lead">
-            Everyday you become one step closer to your goals.
+            View detailed stats and charts that show how far you have come each day.
             </p>
             <img src="images/slide3.png" alt="Eredmények" class="slide-image">
           </div>
@@ -60,44 +60,44 @@
       <div class="row g-4">
         <div class="col-lg-4 col-md-6">
           <div class="function-card">
-            <div class="card-icon">🏃‍♂️</div>
+            <div class="card-icon"><i class="fa-solid fa-person-running"></i></div>
             <h5 class="card-title">Habit Creation</h5>
-            <p class="card-text">Easily create and customize your daily habits with reminders and goals.</p>
+            <p class="card-text">Easily create and customize your daily habits with categories and icons</p>
           </div>
         </div>
         <div class="col-lg-4 col-md-6">
           <div class="function-card">
-            <div class="card-icon">📊</div>
+            <div class="card-icon"><i class="fa-solid fa-fire"></i></div>
             <h5 class="card-title">Progress Tracking</h5>
-            <p class="card-text">Monitor your streaks, achievements, and overall progress with detailed stats.</p>
+            <p class="card-text">Monitor your streaks and daily completion rates with detailed progress stats.</p>
           </div>
         </div>
         <div class="col-lg-4 col-md-6">
           <div class="function-card">
-            <div class="card-icon">👥</div>
-            <h5 class="card-title">Community Challenges</h5>
-            <p class="card-text">Join groups and challenges to stay motivated with friends and like-minded people.</p>
+            <div class="card-icon"><i class="fa-solid fa-bullseye"></i></div>
+            <h5 class="card-title">Goal Management</h5>
+            <p class="card-text">Define personal goals with custom targets and deadlines, and track your progress.</p>
           </div>
         </div>
         <div class="col-lg-4 col-md-6">
           <div class="function-card">
-            <div class="card-icon">💧</div>
-            <h5 class="card-title">Hydration Tracker</h5>
-            <p class="card-text">Track your daily water intake and set personalized hydration goals.</p>
+            <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
+            <h5 class="card-title">Statistics & Analytics</h5>
+            <p class="card-text">View your habit stats with weekly breakdowns and category analytics.</p>
           </div>
         </div>
         <div class="col-lg-4 col-md-6">
           <div class="function-card">
-            <div class="card-icon">🏋️‍♀️</div>
-            <h5 class="card-title">Workout Logging</h5>
-            <p class="card-text">Log your exercises, sets, and reps to build a comprehensive fitness history.</p>
+            <div class="card-icon"><i class="fa-solid fa-trophy"></i></div>
+            <h5 class="card-title">Achievements</h5>
+            <p class="card-text">Unlock achievement badges as you hit milestones and build consistent habits.</p>
           </div>
         </div>
         <div class="col-lg-4 col-md-6">
           <div class="function-card">
-            <div class="card-icon">📅</div>
-            <h5 class="card-title">Calendar Integration</h5>
-            <p class="card-text">Sync with your calendar for reminders and habit scheduling.</p>
+            <div class="card-icon"><i class="fa-solid fa-circle-user"></i></div>
+            <h5 class="card-title">Profile Management</h5>
+            <p class="card-text">Keep your profile up to date and manage personal settings.</p>
           </div>
         </div>
       </div>
