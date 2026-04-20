@@ -93,7 +93,7 @@ class Achievement extends Model
     {
         return (int) HabitCompletion::where('user_id', $userId)
             ->where('is_skipped', false)
-            ->sum('quantity');
+            ->count();
     }
     private static function calculateCategoryCompletions(int $userId): array
     {
@@ -109,7 +109,7 @@ class Achievement extends Model
 
             $completionCount = HabitCompletion::where('habit_id', $habit->id)
                 ->where('is_skipped', false)
-                ->sum('quantity');
+                ->count();
 
             if (!isset($counts[$category])) {
                 $counts[$category] = 0;

@@ -1,13 +1,8 @@
-// tracking current step
 let currentStep = 1;
-const totalSteps = 6;
+const totalSteps = 3;
 
-// navigation
-
-// validate current step, go to next step
 function nextStep() {
     if (!validateStep(currentStep)) return;
-
     slideOut(currentStep, 'left', function () {
         currentStep++;
         slideIn(currentStep);
@@ -15,10 +10,8 @@ function nextStep() {
     });
 }
 
-// back to previous step
 function prevStep() {
     if (currentStep <= 1) return;
-
     slideOut(currentStep, 'right', function () {
         currentStep--;
         slideIn(currentStep);
@@ -26,12 +19,10 @@ function prevStep() {
     });
 }
 
-// slide animation when out
 function slideOut(step, direction, callback) {
     const card = document.getElementById('step' + step);
     card.style.opacity   = '0';
     card.style.transform = direction === 'left' ? 'translateX(-100%)' : 'translateX(100%)';
-
     setTimeout(function () {
         card.classList.remove('active');
         card.style.display = 'none';
@@ -39,86 +30,79 @@ function slideOut(step, direction, callback) {
     }, 300);
 }
 
-// slide animation when in
 function slideIn(step) {
     const card = document.getElementById('step' + step);
     if (!card) return;
-
     card.style.display = 'block';
     card.classList.add('active');
-
     setTimeout(function () {
         card.style.opacity   = '1';
         card.style.transform = 'translateX(0)';
     }, 10);
 }
 
-// step validation
 function validateStep(step) {
     if (step === 1) {
         const name     = document.getElementById('name').value.trim();
         const username = document.getElementById('username').value.trim();
         const email    = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
-
-        if (!name)                        return alert('Please enter your name'),     false;
-        if (!username)                    return alert('Please enter a username'),     false;
-        if (!email || !email.includes('@')) return alert('Please enter a valid email'), false;
-        if (password.length < 6)          return alert('Password must be at least 6 characters'), false;
+        if (!name)                          return alert('Please enter your name'),                  false;
+        if (!username)                      return alert('Please enter a username'),                 false;
+        if (!email || !email.includes('@')) return alert('Please enter a valid email'),              false;
+        if (password.length < 8)            return alert('Password must be at least 8 characters'), false;
         return true;
     }
-
     if (step === 2) {
-        const selected = document.querySelector('input[name="gender"]:checked');
-        if (!selected) return alert('Please select a gender'), false;
-        return true;
-    }
-
-    if (step === 3) {
-        const weight = document.getElementById('weight').value;
-        if (!weight || weight < 30 || weight > 300)
-            return alert('Please enter a valid weight (30–300 kg)'), false;
-        return true;
-    }
-
-    if (step === 4) {
-        const height = document.getElementById('height').value;
-        if (!height || height < 100 || height > 250)
-            return alert('Please enter a valid height (100–250 cm)'), false;
-        return true;
-    }
-
-    if (step === 5) {
-        const sleepTime = document.getElementById('sleep_time').value;
-        const wakeTime  = document.getElementById('wake_time').value;
-        if (!sleepTime || !wakeTime)
-            return alert('Please enter both sleep and wake times'), false;
-        return true;
-    }
-
-    if (step === 6) {
         const selected = document.querySelector('input[name="user_goal"]:checked');
         if (!selected) return alert('Please select a goal'), false;
         return true;
     }
-
+    if (step === 3) {
+        const selected = document.querySelectorAll('input[name="preferred_categories[]"]:checked');
+        if (selected.length === 0) return alert('Please select at least one focus area'), false;
+        return true;
+    }
     return true;
 }
 
-// progress bar
 function updateProgress() {
     const progressBar = document.getElementById('progressBar');
     if (progressBar) {
         const percent = ((currentStep - 1) / (totalSteps - 1)) * 100;
         progressBar.style.width = percent + '%';
     }
-
     document.querySelectorAll('.step').forEach(function (dot, index) {
         dot.classList.toggle('active', index + 1 <= currentStep);
     });
 }
 
-// page setup
+function submitFinalForm() {
+    if (!validateStep(3)) return;
+    document.getElementById('final_name').value     = document.getElementById('name').value;
+    document.getElementById('final_username').value = document.getElementById('username').value;
+    document.getElementById('final_email').value    = document.getElementById('email').value;
+    document.getElementById('final_password').value = document.getElementById('password').value;
+    const goalRadio = document.querySelector('input[name="user_goal"]:checked');
+    if (goalRadio) {
+        document.getElementById('final_user_goal').value = goalRadio.value;
+    }
+    document.getElementById('finalForm').submit();
+}
+
+function showStepDirect(step) {
+    for (let i = 1; i <= totalSteps; i++) {
+        const card = document.getElementById('step' + i);
+        if (!card) continue;
+        card.style.display   = i === step ? 'block' : 'none';
+        card.style.opacity   = '1';
+        card.style.transform = 'translateX(0)';
+        card.classList.toggle('active', i === step);
+    }
+    currentStep = step;
+    updateProgress();
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 
     for (let i = 2; i <= totalSteps; i++) {
@@ -129,40 +113,51 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // selects option
-    document.querySelectorAll('.option-card').forEach(function (card) {
-        card.addEventListener('click', function () {
+    // Radio option-cards (user_goal)
+    // When a <label> wraps a <radio>, clicking the label fires twice:
+    // once for the label click, then again when the browser activates the radio
+    // and its click bubbles back up. We skip the second fire by checking e.target.
+    document.querySelectorAll('.option-card:not(.category-card)').forEach(function (card) {
+        card.addEventListener('click', function (e) {
+            if (e.target.type === 'radio') return;
             const radio = this.querySelector('input[type="radio"]');
             if (!radio) return;
-
             document.querySelectorAll(`input[name="${radio.name}"]`).forEach(function (other) {
-                if (other !== radio) {
-                    other.checked = false;
-                    other.closest('.option-card').classList.remove('checked');
-                }
+                other.checked = false;
+                other.closest('.option-card').classList.remove('checked');
             });
-
             radio.checked = true;
             this.classList.add('checked');
         });
     });
 
-    // Password toggle
+    // Checkbox option-cards (preferred_categories) — same fix, toggle independently
+    document.querySelectorAll('.category-card').forEach(function (card) {
+        card.addEventListener('click', function (e) {
+            if (e.target.type === 'checkbox') return;
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            if (!checkbox) return;
+            checkbox.checked = !checkbox.checked;
+            this.classList.toggle('checked', checkbox.checked);
+        });
+    });
+
+    // Password show/hide toggle
     const toggleBtn = document.getElementById('togglePassword');
     if (toggleBtn) {
         toggleBtn.addEventListener('click', function () {
-            const passwordInput = document.getElementById('password');
-            if (!passwordInput) return;
-
-            const isHidden = passwordInput.type === 'password';
-            passwordInput.type = isHidden ? 'text' : 'password';
-            this.innerHTML = isHidden
+            const input = document.getElementById('password');
+            if (!input) return;
+            const hidden = input.type === 'password';
+            input.type = hidden ? 'text' : 'password';
+            this.innerHTML = hidden
                 ? '<i class="fa-solid fa-eye-slash" style="color:#000"></i>'
                 : '<i class="fa-solid fa-eye" style="color:#000"></i>';
         });
     }
 });
 
-// HTML onclick attributes
-window.nextStep = nextStep;
-window.prevStep = prevStep;
+window.nextStep        = nextStep;
+window.prevStep        = prevStep;
+window.submitFinalForm = submitFinalForm;
+window.showStepDirect  = showStepDirect;
