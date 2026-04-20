@@ -45,10 +45,14 @@ class HabitCompletionController extends Controller
             ->whereDate('completed_at', today())
             ->sum('quantity');
 
+       $newlyUnlocked = \App\Models\Achievement::syncForUser(Auth::id());
+
         return response()->json(array_merge([
-            'completed' => $completed,
-            'target'    => $habit->target_count ?? 1,
+            'completed'      => $completed,
+            'target'         => $habit->target_count ?? 1,
+            'newly_unlocked' => $newlyUnlocked,
         ], $this->getDailyStats()), 201);
+
     }
 
     public function destroyLast(Request $request, $habitId)
@@ -102,6 +106,9 @@ class HabitCompletionController extends Controller
             }
         }
 
+
+        \App\Models\Achievement::syncForUser(Auth::id());
+        
         return response()->json(array_merge([
             'completed' => $completed,
             'target'    => $habit->target_count ?? 1,
