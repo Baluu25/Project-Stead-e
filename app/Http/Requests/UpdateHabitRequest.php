@@ -26,6 +26,8 @@ class UpdateHabitRequest extends FormRequest
             'description'   => ['nullable', 'string'],
             'category'  => ['sometimes', 'required', 'in:Nutrition,Fitness,Mindfulness,Study,Work'],
             'frequency' => ['sometimes', 'required', 'in:daily,weekly,monthly,custom'],
+            'scheduled_days'   => ['nullable', 'array'],
+            'scheduled_days.*' => ['integer', 'min:0', 'max:31'],
             'target_count'  => ['nullable', 'integer', 'min:1'],
             'unit'        => ['nullable', 'string', 'max:50'],
             'icon'  => ['nullable', 'string', 'max:50'],

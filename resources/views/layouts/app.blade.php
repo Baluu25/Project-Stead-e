@@ -16,64 +16,48 @@
     @yield('styles')
 </head>
 <body>
-   <nav class="navbar navbar-expand-lg navbar-dark px-4 glass-card">
+   <nav class="navbar navbar-expand-lg navbar-light px-4 glass-card">
     <div class="container-fluid px-0 px-lg-3">
-        <div class="d-flex justify-content-between w-100 align-items-center">
-            <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}" aria-label="Home">
-                <img src="{{ asset('images/stead-e_logo.png') }}" alt="logo" width="40" height="40" />
-                <span>Stead-E</span>
-            </a>
-            
-            <div class="d-flex align-items-center">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                        aria-controls="navbarContent" aria-expanded="false" aria-label="Navigáció váltása">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+        <a class="navbar-brand align-items-center" href="{{ url('/') }}" aria-label="Home">
+            <img src="{{ asset('images/stead-e_logo.png') }}" alt="logo" width="40" height="40" />
+            <span>Stead-E</span>
+        </a>
 
-                <div class="collapse navbar-collapse" id="navbarContent">
-                    <ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
-                        <li class="nav-item"><a class="nav-link" onclick="window.location.hash='functions'">Functions</a></li>
-                        <li class="nav-item"><a class="nav-link" onclick="window.location.hash='download'">Download</a></li>
-                        <li class="nav-item"><a class="nav-link" onclick="window.location.hash='reviews'">Reviews</a></li>
-                        
-                        @guest
-                            {{-- Show Login button only for guests --}}
-                            <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                                <a href="{{ route('login') }}" class="btn btn-primary btn-start">Login</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Navigáció váltása">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                <li class="nav-item"><a class="nav-link" onclick="window.location.hash='functions'">Functions</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="window.location.hash='download'">Download</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="window.location.hash='reviews'">Reviews</a></li>
+
+                @guest
+                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                        <a href="{{ route('login') }}" class="btn btn-primary btn-start">Login</a>
+                    </li>
+                @else
+                    <li class="nav-item dropdown ms-lg-3 mt-2 mt-lg-0">
+                        <a class="nav-link dropdown-toggle align-items-center" href="#" role="button" 
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ Auth::user()->name }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{{ route('home') }}">Dashboard</a></li>
+                            <li><a class="dropdown-item" href="{{ route('profile') }}">Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item btn-primary">Logout</button>
+                                </form>
                             </li>
-                        @else
-                            {{-- Show user menu for authenticated users --}}
-                            <li class="nav-item dropdown ms-lg-3 mt-2 mt-lg-0">
-                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" 
-                                   data-bs-toggle="dropdown" aria-expanded="false">
-                                    {{ Auth::user()->name }}
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('home') }}">
-                                            Dashboard
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('profile') }}">
-                                            Profile
-                                        </a>
-                                    </li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <form method="POST" action="{{ route('logout') }}">
-                                            @csrf
-                                            <button type="submit" class="dropdown-item btn-primary">
-                                                Logout
-                                            </button>
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
+                        </ul>
+                    </li>
+                @endguest
+            </ul>
         </div>
     </div>
 </nav>

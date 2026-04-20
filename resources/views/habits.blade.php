@@ -84,14 +84,38 @@
                     class="form-control @error('frequency') is-invalid @enderror" 
                     required>
                     <option value="">Select frequency</option>
-                    <option value="daily" {{ old('frequency') == 'daily' ? 'selected' : '' }}>Daily</option>
-                    <option value="weekly" {{ old('frequency') == 'weekly' ? 'selected' : '' }}>Weekly</option>
+                    <option value="daily"   {{ old('frequency') == 'daily'   ? 'selected' : '' }}>Daily</option>
+                    <option value="weekly"  {{ old('frequency') == 'weekly'  ? 'selected' : '' }}>Weekly</option>
                     <option value="monthly" {{ old('frequency') == 'monthly' ? 'selected' : '' }}>Monthly</option>
                 </select>
                 @error('frequency')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+
+            <div class="form-group" id="scheduled-days-group" style="display: none;">
+                <div id="weekly-picker" style="display: none;">
+                    <label class="form-label">Repeat on</label>
+                    <div class="day-toggle-row">
+                        <button type="button" class="day-toggle-btn" data-day="0">Su</button>
+                        <button type="button" class="day-toggle-btn" data-day="1">Mo</button>
+                        <button type="button" class="day-toggle-btn" data-day="2">Tu</button>
+                        <button type="button" class="day-toggle-btn" data-day="3">We</button>
+                        <button type="button" class="day-toggle-btn" data-day="4">Th</button>
+                        <button type="button" class="day-toggle-btn" data-day="5">Fr</button>
+                        <button type="button" class="day-toggle-btn" data-day="6">Sa</button>
+                    </div>
+                </div>
+                <div id="monthly-picker" style="display: none;">
+                    <label class="form-label">Repeat on day of month</label>
+                    <div class="day-toggle-row monthly-grid">
+                        @for ($d = 1; $d <= 31; $d++)
+                            <button type="button" class="day-toggle-btn" data-day="{{ $d }}">{{ $d }}</button>
+                        @endfor
+                    </div>
+                </div>
+            </div>
+
 
             <div class="form-group">
                 <label for="target_count" class="form-label">Target Count</label>

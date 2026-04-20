@@ -56,8 +56,9 @@
 
 <!-- Main row -->
 <div class="main-row">
-    <div class="daily-habits-section">
-    <h3>Today's Habits</h3>
+   <div class="daily-habits-section">
+    <h3 id="habits-section-heading">Today's Habits</h3>
+    <div id="daily-habits-list">
     @forelse($todaysHabits as $habit)
         @php
             $completed  = $habit->completions->sum('quantity');
@@ -116,6 +117,7 @@
             <a href="{{ route('habits') }}">Add your first habit</a>
         </div>
     @endforelse
+    </div>
 </div>
 
 

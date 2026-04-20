@@ -27,12 +27,18 @@ class Habit extends Model
         'description',
         'category',
         'frequency',
+        'scheduled_days',
         'target_count',
         'unit',
         'icon',
         'is_active',
         'goal_id'
     ];
+
+    protected $casts = [
+        'scheduled_days' => 'array'
+    ];
+
 
     public function completions() {
     return $this->hasMany(HabitCompletion::class);

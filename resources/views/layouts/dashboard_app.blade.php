@@ -19,29 +19,29 @@
     @yield('dashboard-styles')
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark px-4 glass-card">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}" aria-label="Home">
-                <img src="{{ asset('images/stead-e_logo.png') }}" alt="logo" width="40" height="40" />
-                <span>Stead-E</span>
-            </a>    
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                    aria-controls="navbarContent" aria-expanded="false" aria-label="Navigáció váltása">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <nav class="navbar navbar-expand-lg navbar-light px-4 glass-card">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}" aria-label="Home">
+            <img src="{{ asset('images/stead-e_logo.png') }}" alt="logo" width="40" height="40" />
+            <span>Stead-E</span>
+        </a>    
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Navigáció váltása">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
-                <ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route("profile") }}">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn btn-logout" href="{{ route("logout") }}">Logout</a>
-                    </li>
-                </ul>
-            </div>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('profile') }}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-logout" href="{{ route('logout') }}">Logout</a>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 <div class="dashboard-container">
     <div class="dashboard-layout">
         <aside class="dashboard-sidebar">

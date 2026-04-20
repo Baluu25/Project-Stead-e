@@ -35,12 +35,15 @@ class HabitController extends Controller
 
     public function store(StoreHabitRequest $request)
     {
+        $scheduledDays = $request->frequency === 'daily' ? null : $request->input('scheduled_days');
+
         $habit = Habit::create([
             'user_id'      => Auth::id(),
             'name'         => $request->name,
             'description'  => $request->description,
             'category'     => $request->category,
             'frequency'    => $request->frequency,
+            'scheduled_days' => $scheduledDays,
             'target_count' => $request->target_count ?? 1,
             'unit'         => $request->unit,
             'icon'         => $request->icon ?? 'star',
@@ -59,6 +62,10 @@ class HabitController extends Controller
 
         $validated = $request->validated();
         $validated['goal_id'] = $request->goal_id;
+
+        if (isset($validated['frequency']) && $validated['frequency'] === 'daily') {
+            $validated['scheduled_days'] = null;
+        }
 
         $habit->update($validated);
 
