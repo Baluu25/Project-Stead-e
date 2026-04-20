@@ -24,6 +24,15 @@
     </div>
 </div>
 
+<div class="achievement-summary">
+    <span>{{ $completedCount }} / {{ $totalCount }} Achievements Unlocked</span>
+    <div class="summary-bar">
+        <div class="summary-fill" style="width: {{ $totalCount > 0 ? round(($completedCount / $totalCount) * 100) : 0 }}%"></div>
+    </div>
+</div>
+
+
+
 @forelse($achievements as $category => $categoryAchievements)
     <div class="category-section" data-category="{{ $category }}">
         <h2 class="title">{{ $category }}</h2>
@@ -57,7 +66,11 @@
                                  style="width:{{ $progress }}%"></div>
                         </div>
                         
-                        <p>{{ $progress }}% complete</p>
+                        @if($isCompleted)
+                            <p class="unlocked-label">Unlocked!</p>
+                        @else
+                            <p>{{ $achievement->progress }} / {{ $achievement->threshold_value }}</p>
+                        @endif
                     </div>
                 </div>
             @endforeach

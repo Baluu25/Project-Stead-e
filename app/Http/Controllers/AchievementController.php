@@ -19,7 +19,12 @@ class AchievementController extends Controller
             ->orderBy('threshold_value')
             ->get()
             ->groupBy('achievement_type');
-        return view('achievements', compact('achievements'));
+        $flat           = $achievements->flatten();
+        $totalCount     = $flat->count();
+        $completedCount = $flat->whereNotNull('unlocked_at')->count();
+
+        return view('achievements', compact('achievements', 'totalCount', 'completedCount'));
+
     }
     /**
      * Show the form for creating a new resource.
