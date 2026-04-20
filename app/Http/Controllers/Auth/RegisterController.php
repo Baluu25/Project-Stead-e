@@ -54,15 +54,12 @@ class RegisterController extends Controller
             'username' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
-            'gender' => ['required', 'in:male,female,other'],
-            'birthdate' => ['required', 'date', 'before:today'],
-            'weight' => ['required', 'numeric', 'min:30', 'max:300'],
-            'height' => ['required', 'integer', 'min:100', 'max:250'],
-            'sleep_time' => ['required', 'date_format:H:i'],
-            'wake_time' => ['required', 'date_format:H:i'],
             'user_goal' => ['required', 'in:weight_loss,consistency,quit_habit,explore'],
+            'preferred_categories'  => ['required', 'array', 'min:1'],
+            'preferred_categories.*'=> ['in:Fitness,Nutrition,Mindfulness,Study,Work'],
         ]);
     }
+
 
     /**
      * Create a new user instance after a valid registration.
@@ -75,15 +72,10 @@ class RegisterController extends Controller
         $user = User::create([
             'name' => $data['name'],
             'username' => $data['username'],
-            'email' => $data['email'],
+            'email'  => $data['email'],
             'password' => Hash::make($data['password']),
-            'gender' => $data['gender'],
-            'birthdate' => $data['birthdate'],
-            'weight' => $data['weight'],
-            'height' => $data['height'],
-            'sleep_time' => $data['sleep_time'],
-            'wake_time' => $data['wake_time'],
-            'user_goal' => $data['user_goal'],
+            'user_goal'  => $data['user_goal'],
+            'preferred_categories' => $data['preferred_categories'],
         ]);
 
         $achievements = [
