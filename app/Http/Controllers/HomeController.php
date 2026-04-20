@@ -10,16 +10,28 @@ use Carbon\Carbon;
 
 class HomeController extends Controller
 {
+     private function habitOccursOnDate(Habit $habit, Carbon $date): bool
+    {
+        return match ($habit->frequency) {
+            'daily'   => true,
+            'weekly'  => in_array($date->dayOfWeek, $habit->scheduled_days ?? [0,1,2,3,4,5,6]),
+            'monthly' => in_array($date->day,       $habit->scheduled_days ?? range(1, 31)),
+            default   => true,
+        };
+    }
+
     private function getDashboardData(): array
     {
         $userId = Auth::id();
+        $today  = Carbon::today();
 
         $todaysHabits = Auth::user()->habits()
             ->where('is_active', true)
             ->with(['completions' => function ($q) {
                 $q->whereDate('completed_at', today());
             }])
-            ->get();
+            ->get()
+            ->filter(fn($habit) => $this->habitOccursOnDate($habit, $today));
 
         $start = now()->subDays(6)->startOfDay();
         $end   = now()->endOfDay();
@@ -104,9 +116,64 @@ class HomeController extends Controller
             'streakDays'           => $data['streak_days'],
         ]);
     }
-
-    public function apiIndex()
+    
+    private function getHabitsForDate(Carbon $date): array
     {
+        $userId = Auth::id();
+
+         $habits = Habit::where('user_id', $userId)
+            ->where('is_active', true)
+            ->with(['completions' => function ($q) use ($date) {
+                $q->whereDate('completed_at', $date->toDateString());
+            }])
+            ->get()
+            ->filter(fn($habit) => $this->habitOccursOnDate($habit, $date));
+
+        $total = $habits->count();
+        $completedCount = 0;
+
+        $habitData = $habits->map(function ($habit) use (&$completedCount) {
+            $completed = (int) $habit->completions->sum('quantity');
+            $target    = (int) ($habit->target_count ?? 1);
+            $percent   = $target > 0 ? min(100, round(($completed / $target) * 100)) : 0;
+            $isDone    = $percent >= 100;
+
+            if ($isDone) $completedCount++;
+
+            return [
+                'id'           => $habit->id,
+                'name'         => $habit->name,
+                'icon'         => $habit->icon ?? 'circle-check',
+                'category'     => $habit->category,
+                'unit'         => $habit->unit ?? '',
+                'target_count' => $target,
+                'completed'    => $completed,
+                'percent'      => $percent,
+                'is_done'      => $isDone,
+            ];
+        })->values()->toArray();
+
+        $dailyProgressPercent = $total > 0 ? round(($completedCount / $total) * 100) : 0;
+
+        return [
+            'habits'                 => $habitData,
+            'daily_progress_percent' => $dailyProgressPercent,
+            'is_today'               => $date->isToday(),
+        ];
+    }
+
+    public function apiIndex(Request $request)
+    {
+        if ($request->filled('date')) {
+            try {
+                $date = Carbon::createFromFormat('Y-m-d', $request->date)->startOfDay();
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'Invalid date format. Use YYYY-MM-DD.'], 422);
+            }
+
+            return response()->json($this->getHabitsForDate($date));
+        }
+
         return response()->json($this->getDashboardData());
     }
 }

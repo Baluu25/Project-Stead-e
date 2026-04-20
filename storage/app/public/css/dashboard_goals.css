@@ -99,6 +99,17 @@
   flex: 1;
 }
 
+.goal-icon {
+  border: 3px solid var(--color-btn-blue);
+  background-color: #25408f3a;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.goal-icon i{
+  font-size: 2rem;
+}
+
 .goal-percentage {
   background: rgba(255, 255, 255, 0.2);
   padding: 0.25rem 0.75rem;
@@ -220,7 +231,7 @@
   background-color: var(--color-btn-blue);
   color: white;
   border: none;
-  border-radius: 50%;
+  border-radius: 6px;
   box-shadow: 0 3px 8px rgba(37, 64, 143, 0.3);
   font-size: 0.8rem;
   padding: 0;
