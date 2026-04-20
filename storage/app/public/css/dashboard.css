@@ -542,6 +542,12 @@ main {
   .user-sidebar {
     width: 180px;
   }
+
+  .navbar-collapse .navbar-nav {
+    align-items: center;
+    width: 100%;
+    gap: 0.5rem;
+  }
 }
 
 @media (max-width: 768px) {

@@ -131,11 +131,11 @@
                     class="form-control @error('category') is-invalid @enderror"
                     required>
                 <option value="">Select a category</option>
-                <option value="general"  {{ old('category') == 'general'  ? 'selected' : '' }}>Nutrition</option>
-                <option value="fitness"  {{ old('category') == 'fitness'  ? 'selected' : '' }}>Fitness</option>
-                <option value="health"   {{ old('category') == 'health'   ? 'selected' : '' }}>Mindfulness</option>
-                <option value="career"   {{ old('category') == 'career'   ? 'selected' : '' }}>Study</option>
-                <option value="learning" {{ old('category') == 'learning' ? 'selected' : '' }}>Work</option>
+                <option value="Nutrition"  {{ old('category') == 'Nutrition'  ? 'selected' : '' }}>Nutrition</option>
+                <option value="Fitness"  {{ old('category') == 'Fitness'  ? 'selected' : '' }}>Fitness</option>
+                <option value="Mindfulness"   {{ old('category') == 'Mindfulness'   ? 'selected' : '' }}>Mindfulness</option>
+                <option value="Study"   {{ old('category') == 'Study'   ? 'selected' : '' }}>Study</option>
+                <option value="Work" {{ old('category') == 'Work' ? 'selected' : '' }}>Work</option>
             </select>
             @error('category')
                 <div class="invalid-feedback">{{ $message }}</div>

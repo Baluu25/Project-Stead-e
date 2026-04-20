@@ -235,6 +235,12 @@ main {
     border-radius: 14px;
     padding: 0.4rem 1rem;
   }
+  
+  .navbar-collapse .navbar-nav {
+    align-items: center;
+    width: 100%;
+    gap: 0.5rem;
+  }
 
   .navbar-brand {
     font-size: 1rem;

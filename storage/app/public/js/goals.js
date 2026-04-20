@@ -1,12 +1,17 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    // icons of categories
+    // icons by category
     const categoryIcons = {
-        'general':  ['fa-solid fa-apple-whole','fa-solid fa-carrot','fa-solid fa-lemon','fa-solid fa-bowl-food','fa-solid fa-mug-saucer','fa-solid fa-burger','fa-solid fa-fish','fa-solid fa-egg','fa-solid fa-droplet','fa-solid fa-wine-bottle'],
-        'fitness':  ['fa-solid fa-dumbbell','fa-solid fa-person-running','fa-solid fa-person-walking','fa-solid fa-bicycle','fa-solid fa-heart-pulse','fa-solid fa-fire','fa-solid fa-stopwatch','fa-solid fa-shoe-prints','fa-solid fa-weight-scale','fa-solid fa-person-swimming'],
-        'health':   ['fa-solid fa-brain','fa-solid fa-heart','fa-solid fa-spa','fa-regular fa-face-smile','fa-solid fa-feather','fa-solid fa-leaf','fa-solid fa-om','fa-solid fa-cloud','fa-solid fa-wind','fa-regular fa-moon'],
-        'career':   ['fa-solid fa-book','fa-solid fa-book-open','fa-solid fa-graduation-cap','fa-solid fa-pencil','fa-solid fa-pen','fa-solid fa-brain','fa-solid fa-lightbulb','fa-solid fa-microscope','fa-solid fa-flask','fa-solid fa-language'],
-        'learning': ['fa-solid fa-briefcase','fa-solid fa-laptop','fa-solid fa-computer','fa-solid fa-clock','fa-solid fa-calendar-check','fa-solid fa-chart-line','fa-solid fa-chart-simple','fa-solid fa-envelope','fa-solid fa-users','fa-solid fa-mug-hot']
+        'Nutrition': 
+        ['fa-solid fa-apple-whole','fa-solid fa-carrot','fa-solid fa-lemon','fa-solid fa-bowl-food','fa-solid fa-mug-saucer','fa-solid fa-burger','fa-solid fa-fish','fa-solid fa-egg','fa-solid fa-droplet','fa-solid fa-wine-bottle','fa-solid fa-utensils','fa-solid fa-plate-wheat','fa-solid fa-cookie','fa-solid fa-cake-candles','fa-solid fa-mug-hot'],
+        'Fitness': 
+        ['fa-solid fa-dumbbell','fa-solid fa-person-running','fa-solid fa-person-walking','fa-solid fa-bicycle','fa-solid fa-heart-pulse','fa-solid fa-fire','fa-solid fa-stopwatch','fa-solid fa-shoe-prints','fa-solid fa-weight-scale','fa-solid fa-person-swimming','fa-solid fa-person-biking','fa-solid fa-person-hiking','fa-solid fa-futbol','fa-solid fa-basketball','fa-solid fa-dog','fa-solid fa-heartbeat'],
+        'Mindfulness': 
+        ['fa-solid fa-brain','fa-solid fa-heart','fa-solid fa-spa','fa-regular fa-face-smile','fa-solid fa-feather','fa-solid fa-leaf','fa-solid fa-om','fa-solid fa-cloud','fa-solid fa-wind','fa-regular fa-moon','fa-solid fa-dog','fa-solid fa-cat','fa-solid fa-dove','fa-regular fa-sun','fa-solid fa-tree'],
+        'Study': 
+        ['fa-solid fa-book','fa-solid fa-book-open','fa-solid fa-graduation-cap','fa-solid fa-pencil','fa-solid fa-pen','fa-solid fa-brain','fa-solid fa-lightbulb','fa-solid fa-microscope','fa-solid fa-flask','fa-solid fa-language','fa-solid fa-calculator','fa-solid fa-glasses','fa-solid fa-ruler','fa-solid fa-chalkboard','fa-solid fa-school'],
+        'Work': 
+        ['fa-solid fa-briefcase','fa-solid fa-laptop','fa-solid fa-computer','fa-solid fa-clock','fa-solid fa-calendar-check','fa-solid fa-chart-line','fa-solid fa-chart-simple','fa-solid fa-envelope','fa-solid fa-users','fa-solid fa-mug-hot','fa-solid fa-building','fa-solid fa-phone','fa-solid fa-file-lines','fa-solid fa-folder','fa-solid fa-print']
     };
 
     // DOM

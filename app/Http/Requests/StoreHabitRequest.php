@@ -27,6 +27,8 @@ class StoreHabitRequest extends FormRequest
             'category'    => ['required', 'in:Nutrition,Fitness,Mindfulness,Study,Work'],
             'frequency'   => ['required', 'in:daily,weekly,monthly,custom'],
             'target_count'=> ['nullable', 'integer', 'min:1'],
+            'scheduled_days'   => ['nullable', 'array'],
+            'scheduled_days.*' => ['integer', 'min:0', 'max:31'],
             'unit'        => ['nullable', 'string', 'max:50'],
             'icon'        => ['nullable', 'string', 'max:50'],
             'goal_id' => ['nullable', 'integer', 'exists:goals,id']
