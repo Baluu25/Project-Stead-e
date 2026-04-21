@@ -197,6 +197,7 @@ nav.navbar {
 
 .user-sidebar img {
   width: 5rem;
+  border-radius: 100%;
 }
 
 .user-section {
