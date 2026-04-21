@@ -47,7 +47,7 @@
         <aside class="dashboard-sidebar">
             <div class="user-sidebar">
                 <div class="user-section">
-                <img src="images/default_profile.png" alt="profile-pic">
+                <img src="{{ Auth::user()->profile_picture ? asset('storage/' . Auth::user()->profile_picture) : asset('images/default_profile.png') }}" alt="profile-pic">
                 <h1>Welcome, {{ Auth::user()->username ?? 'User' }}!</h1>
                 <p class="motivation-text">Every step counts. Stay consistent!</p>
             </div>

@@ -3,7 +3,6 @@ document.getElementById('profile_picture').addEventListener('change', function (
     const file = e.target.files[0];
     if (!file) return;
 
-    // FileReader
     const reader = new FileReader();
     reader.onload = function (event) {
         document.getElementById('profilePicturePreview').src = event.target.result;
@@ -21,6 +20,8 @@ document.getElementById('removePicture')?.addEventListener('click', function () 
     removeInput.value   = '1';
     document.querySelector('.profile-form').appendChild(removeInput);
 
-    document.getElementById('profilePicturePreview').src = "{{ asset('images/default-avatar.png') }}";
+    document.getElementById('profilePicturePreview').src =
+        document.getElementById('profilePicturePreview').dataset.default;
+
     document.getElementById('profile_picture').value = '';
 });

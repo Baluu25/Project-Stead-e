@@ -113,16 +113,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Radio option-cards (user_goal)
-    // When a <label> wraps a <radio>, clicking the label fires twice:
-    // once for the label click, then again when the browser activates the radio
-    // and its click bubbles back up. We skip the second fire by checking e.target.
+    // radio option cards
     document.querySelectorAll('.option-card:not(.category-card)').forEach(function (card) {
         card.addEventListener('click', function (e) {
             if (e.target.type === 'radio') return;
             const radio = this.querySelector('input[type="radio"]');
             if (!radio) return;
-            document.querySelectorAll(`input[name="${radio.name}"]`).forEach(function (other) {
+            document.querySelectorAll(`input[type="radio"][name="${radio.name}"]`).forEach(function (other) {
                 other.checked = false;
                 other.closest('.option-card').classList.remove('checked');
             });
@@ -131,10 +128,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Checkbox option-cards (preferred_categories) — same fix, toggle independently
+    // Checkbox option-cards
     document.querySelectorAll('.category-card').forEach(function (card) {
         card.addEventListener('click', function (e) {
-            if (e.target.type === 'checkbox') return;
+            e.preventDefault();
             const checkbox = this.querySelector('input[type="checkbox"]');
             if (!checkbox) return;
             checkbox.checked = !checkbox.checked;
