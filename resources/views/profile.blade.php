@@ -24,10 +24,12 @@
         <div class="profile-header">
             <div class="profile-picture-section">
                 <div class="profile-picture-container">
-                    <img src="{{ Auth::user()->profile_picture ? asset('storage/' . Auth::user()->profile_picture) : asset('images/default-avatar.png') }}" 
-                         alt="Profile Picture" 
-                         class="profile-picture"
-                         id="profilePicturePreview">
+                    <img src="{{ Auth::user()->profile_picture ? asset('storage/' . Auth::user()->profile_picture) : asset('images/default_profile.png') }}" 
+                    alt="Profile Picture" 
+                    class="profile-picture"
+                    id="profilePicturePreview"
+                    data-default="{{ asset('images/default-avatar.png') }}">
+
                     <div class="profile-picture-overlay">
                         <i class="fas fa-camera"></i>
                     </div>
