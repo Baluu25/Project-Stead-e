@@ -20,16 +20,14 @@
         @csrf
         @method('PUT')
         
-        <!-- Profile Header with Picture and Basic Info -->
         <div class="profile-header">
             <div class="profile-picture-section">
                 <div class="profile-picture-container">
                     <img src="{{ Auth::user()->profile_picture ? asset('storage/' . Auth::user()->profile_picture) : asset('images/default_profile.png') }}" 
-                    alt="Profile Picture" 
-                    class="profile-picture"
-                    id="profilePicturePreview"
-                    data-default="{{ asset('images/default-avatar.png') }}">
-
+                        alt="Profile Picture" 
+                        class="profile-picture"
+                        id="profilePicturePreview"
+                        data-default="{{ asset('images/default-avatar.png') }}">
                     <div class="profile-picture-overlay">
                         <i class="fas fa-camera"></i>
                     </div>
@@ -52,10 +50,10 @@
                 <div class="basic-info-field">
                     <label>Name</label>
                     <input type="text" 
-                           class="form-control @error('name') is-invalid @enderror" 
-                           name="name" 
-                           value="{{ old('name', Auth::user()->name) }}" 
-                           required>
+                        class="form-control @error('name') is-invalid @enderror" 
+                        name="name" 
+                        value="{{ old('name', Auth::user()->name) }}" 
+                        required>
                     @error('name')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -63,10 +61,10 @@
                 <div class="basic-info-field">
                     <label>Username</label>
                     <input type="text" 
-                           class="form-control @error('username') is-invalid @enderror" 
-                           name="username" 
-                           value="{{ old('username', Auth::user()->username) }}" 
-                           required>
+                        class="form-control @error('username') is-invalid @enderror" 
+                        name="username" 
+                        value="{{ old('username', Auth::user()->username) }}" 
+                        required>
                     @error('username')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -74,10 +72,10 @@
                 <div class="basic-info-field">
                     <label>Email</label>
                     <input type="email" 
-                           class="form-control @error('email') is-invalid @enderror" 
-                           name="email" 
-                           value="{{ old('email', Auth::user()->email) }}" 
-                           required>
+                        class="form-control @error('email') is-invalid @enderror" 
+                        name="email" 
+                        value="{{ old('email', Auth::user()->email) }}" 
+                        required>
                     @error('email')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -85,12 +83,9 @@
             </div>
         </div>
 
-        <!-- Personal Information Section -->
         <div class="form-section">
             <h2 class="section-title">Personal Information</h2>
-            
             <div class="form-grid">
-                <!-- Gender -->
                 <div class="form-group">
                     <label for="gender">Gender</label>
                     <select class="form-control @error('gender') is-invalid @enderror" id="gender" name="gender">
@@ -105,108 +100,57 @@
                     @enderror
                 </div>
 
-                <!-- Birthdate -->
                 <div class="form-group">
                     <label for="birthdate">Birthdate</label>
                     <input type="date" 
-                           class="form-control @error('birthdate') is-invalid @enderror" 
-                           id="birthdate" 
-                           name="birthdate" 
-                           value="{{ old('birthdate', Auth::user()->birthdate) }}">
+                        class="form-control @error('birthdate') is-invalid @enderror" 
+                        id="birthdate" 
+                        name="birthdate" 
+                        value="{{ old('birthdate', Auth::user()->birthdate) }}">
                     @error('birthdate')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
-                <!-- Weight -->
-                <div class="form-group">
-                    <label for="weight">Weight (kg)</label>
-                    <input type="number" 
-                           step="0.1" 
-                           class="form-control @error('weight') is-invalid @enderror" 
-                           id="weight" 
-                           name="weight" 
-                           value="{{ old('weight', Auth::user()->weight) }}"
-                           placeholder="70.5">
-                    @error('weight')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <!-- Height -->
-                <div class="form-group">
-                    <label for="height">Height (cm)</label>
-                    <input type="number" 
-                           step="0.1" 
-                           class="form-control @error('height') is-invalid @enderror" 
-                           id="height" 
-                           name="height" 
-                           value="{{ old('height', Auth::user()->height) }}"
-                           placeholder="175">
-                    @error('height')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
             </div>
         </div>
 
-        <!-- Preferences Section -->
-        <div class="form-section">
-            <h2 class="section-title">Preferences</h2>
-            
-            <div class="form-grid">
-                <!-- Sleep Time -->
-                <div class="form-group">
-                    <label for="sleep_time">Sleep Time</label>
-                    <input type="time" 
-                           class="form-control @error('sleep_time') is-invalid @enderror" 
-                           id="sleep_time" 
-                           name="sleep_time" 
-                           value="{{ old('sleep_time', Auth::user()->sleep_time) }}">
-                    @error('sleep_time')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+    <div class="form-section">
+        <h2 class="section-title">Preferences</h2>
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="user_goal">Personal Goal</label>
+                <select class="form-control @error('user_goal') is-invalid @enderror" id="user_goal" name="user_goal">
+                    <option value="">Select Your Goal</option>
+                    <option value="weight_loss" {{ old('user_goal', Auth::user()->user_goal) == 'weight_loss' ? 'selected' : '' }}>Weight Loss</option>
+                    <option value="consistency" {{ old('user_goal', Auth::user()->user_goal) == 'consistency' ? 'selected' : '' }}>Consistency</option>
+                    <option value="quit_habit" {{ old('user_goal', Auth::user()->user_goal) == 'quit_habit' ? 'selected' : '' }}>Quit Habit</option>
+                    <option value="explore" {{ old('user_goal', Auth::user()->user_goal) == 'explore' ? 'selected' : '' }}>Explore</option>
+                </select>
+                @error('user_goal')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
-                <!-- Wake Time -->
-                <div class="form-group">
-                    <label for="wake_time">Wake Time</label>
-                    <input type="time" 
-                           class="form-control @error('wake_time') is-invalid @enderror" 
-                           id="wake_time" 
-                           name="wake_time" 
-                           value="{{ old('wake_time', Auth::user()->wake_time) }}">
-                    @error('wake_time')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <!-- User Goal -->
-                <div class="form-group full-width">
-                    <label for="user_goal">Fitness Goal</label>
-                    <select class="form-control @error('user_goal') is-invalid @enderror" id="user_goal" name="user_goal">
-                        <option value="">Select Your Goal</option>
-                        <option value="weight_loss" {{ old('user_goal', Auth::user()->user_goal) == 'weight_loss' ? 'selected' : '' }}>
-                            Weight Loss
+            <div class="form-group">
+                <label for="preferred_categories">Preferred Category</label>
+                <select class="form-control @error('preferred_categories') is-invalid @enderror"
+                    id="preferred_categories"
+                    name="preferred_categories[]">
+                    @foreach(['Nutrition', 'Fitness', 'Mindfulness', 'Study', 'Work'] as $cat)
+                        <option value="{{ $cat }}"
+                            {{ in_array($cat, old('preferred_categories', Auth::user()->preferred_categories ?? [])) ? 'selected' : '' }}>
+                            {{ $cat }}
                         </option>
-                        <option value="consistency" {{ old('user_goal', Auth::user()->user_goal) == 'consistency' ? 'selected' : '' }}>
-                            Consistency
-                        </option>
-                        <option value="quit_habit" {{ old('user_goal', Auth::user()->user_goal) == 'quit_habit' ? 'selected' : '' }}>
-                            Quit Habit
-                        </option>
-                        <option value="explore" {{ old('user_goal', Auth::user()->user_goal) == 'explore' ? 'selected' : '' }}>
-                            Explore
-                        </option>
-                    </select>
-                    @error('user_goal')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                    @endforeach
+                </select>
+                @error('preferred_categories')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
         </div>
+    </div>
 
-        <!-- Action Buttons -->
+
         <div class="form-actions">
             <button type="submit" class="btn-save-profile">
                 <i class="fas fa-save"></i> Save Changes
