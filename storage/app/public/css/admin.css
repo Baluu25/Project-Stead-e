@@ -1,0 +1,225 @@
+/* root */
+:root {
+  --color-red: #FF2A00;
+  --color-blue: #2B51FE;
+}
+
+/* flash messages */
+.admin-alert {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.admin-alert-success {
+  background: rgba(34, 197, 94, 0.2);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  color: #bbf7d0;
+}
+
+.admin-alert-error {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fecaca;
+}
+
+/* counters — mirrors dashboard_statistics.css exactly */
+.counters-row {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  justify-content: center;
+}
+
+.counter-section {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  height: 15vh;
+  width: 20vw;
+  padding: 0.7rem;
+}
+
+.counter-section h2 {
+  margin: 0;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 550;
+}
+
+.counter-section i {
+  margin: 0;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.top-row {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.counter-value {
+  margin-top: 1rem;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 550;
+}
+
+/* users section */
+.users-section {
+  margin-top: 1.5rem;
+}
+
+.users-section-title {
+  color: white;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+/* users table */
+
+.users-table-wrapper {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: transparent;
+  border-radius: 0;
+  border: none;
+}
+
+.users-table thead th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.users-table tbody td {
+  padding: 0.65rem 1rem;
+  color: white;
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  vertical-align: middle;
+}
+
+.users-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.users-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* user cell with avatar */
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+/* role badges */
+.role-badge {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.role-admin {
+  background: rgba(250, 204, 21, 0.25);
+  border: 1px solid rgba(250, 204, 21, 0.5);
+  color: #fef08a;
+}
+
+.role-user {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: white;
+}
+
+.you-badge {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+}
+
+/* delete button — same class used in goals.blade.php */
+.btn-delete {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  border-radius: 8px;
+  padding: 4px 12px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-delete:hover {
+  background: rgba(239, 68, 68, 0.4);
+  color: white;
+}
+
+/* responsiveness */
+@media (max-width: 991px) {
+  .counters-row {
+    flex-wrap: wrap;
+  }
+  .counter-section {
+    width: 45%;
+    height: auto;
+    min-height: 100px;
+  }
+}
+
+@media (max-width: 768px) {
+  .counters-row {
+    flex-direction: column;
+  }
+  .counter-section {
+    width: 100%;
+    height: auto;
+    min-height: 80px;
+  }
+  .users-table thead {
+    display: none;
+  }
+  .users-table tbody td {
+    display: block;
+    padding: 0.4rem 0.8rem;
+  }
+  .users-table tbody tr {
+    display: block;
+    margin-bottom: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+  }
+}
