@@ -82,6 +82,13 @@
                             <span class="nav-text">Achievements</span>
                         </a>
                     </li>
+                    @if(Auth::user()->is_admin)
+                    <li class="nav-item {{ request()->routeIs('admin') ? 'active' : '' }}">
+                        <a href="{{ request()->routeIs('admin') ? '#' : route('admin') }}">
+                        <span class="nav-text">Admin</span>
+                        </a>
+                    </li>
+                    @endif
                 </ul>
             </nav>
         </aside>
