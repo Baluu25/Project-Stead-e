@@ -27,17 +27,17 @@ class AchievementSeeder extends Seeder
 
             // Nutrition
             ['Nutrition', 'First Bite', 'Log your first nutrition habit', 1, 'first_bite.png'],
-            ['Nutrition', 'Hydration Hero', 'Log water intake 7 days in a row', 7, 'hydration_hero.png'],
-            ['Nutrition', 'Clean Plate',           'Track all meals for 5 full days',          5,   'clean_plate.png'],
+            ['Nutrition', 'Clean Plate', 'Track all meals for 5 full days', 5, 'clean_plate.png'],
+            ['Nutrition', 'Fuel Up', 'Complete 7 nutrition habits', 7, 'fuel_up.png'],
 
             // Fitness
             ['Fitness', 'First Sweat', 'Complete your first workout habit', 1, 'first_sweat.png'],
             ['Fitness', 'Weekly Warrior', 'Work out 3 times in one week', 3, 'weekly_warrior.png'],
             ['Fitness', 'Iron Will', 'Complete 30 fitness habits', 30, 'iron_will.png'],
             // Mindfulness
-            ['Mindfulness', 'First Breath', 'Complete your first mindfulness session', 1, 'first_breath.png'],
-            ['Mindfulness', 'Finding Peace', 'Complete 3 mindfulness sessions', 3, 'finding_peace.png'],
-            ['Mindfulness', 'Zen Master', 'Complete 7 mindfulness sessions', 7, 'zen_master.png'],
+            ['Mindfulness', 'Calm Start', 'Complete your first mindfulness habit', 1, 'calm_start.png'],
+            ['Mindfulness', 'Mind & Body', 'Complete 3 mindfulness habits', 3, 'mind_and_body.png'],
+            ['Mindfulness', 'Well-Being', 'Complete 7 mindfulness habits', 7, 'well_being.png'],
 
             // Study
             ['Study', 'First Focus', 'Log your first study session', 1, 'first_focus.png'],
@@ -51,16 +51,20 @@ class AchievementSeeder extends Seeder
         ];
 
         foreach ($achievements as [$achievement_type, $name, $description, $threshold, $icon]) {
-            \App\Models\Achievement::create([
-            'user_id'          => $userId,
-            'achievement_type' => $achievement_type,
-            'name'             => $name,
-            'description'      => $description,
-            'threshold_value'  => $threshold,
-            'icon'             => $icon,
-            'progress'         => 0,
-            'unlocked_at'      => null,
-            ]);
-        }   
+            \App\Models\Achievement::updateOrCreate(
+            [
+                'user_id' => $userId,
+                'name'    => $name,
+            ],
+            [
+                'achievement_type' => $achievement_type,
+                'description'      => $description,
+                'threshold_value'  => $threshold,
+                'icon'             => $icon,
+                'progress'         => 0,
+                'unlocked_at'      => null,
+            ]
+            );
+        }
     }
 }

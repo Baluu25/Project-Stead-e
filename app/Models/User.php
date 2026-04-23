@@ -28,7 +28,8 @@ class User extends Authenticatable
         'sleep_time',
         'wake_time',
         'user_goal',
-        'preferred_categories'
+        'preferred_categories',
+        'is_admin'
     ];
 
     protected $hidden = [
@@ -39,6 +40,7 @@ class User extends Authenticatable
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'preferred_categories' => 'array',
+        'is_admin' => 'boolean'
     ];
 
     public function habits(): HasMany

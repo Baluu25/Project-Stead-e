@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AchievementController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GoalController;
 use App\Http\Controllers\HabitCompletionController;
 use App\Http\Controllers\HabitController;
@@ -49,6 +50,11 @@ Route::middleware(['auth'])->group(function () {
     
     // Achievements
     Route::get('/achievements', [AchievementController::class, 'index'])->name('achievements');
+});
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+    Route::delete('/admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.destroy');
 });
 
 Route::get('/logout', function () {

@@ -53,7 +53,7 @@
                      data-status="{{ $isCompleted ? 'completed' : ($progress > 0 ? 'in-progress' : 'locked') }}">
                     
                     <div class="achievement-icon">
-                        <img src="{{ asset('images/achievements/' . ($achievement->icon ?? 'placeholder-icon.png')) }}"
+                        <img src="{{ asset('images/achievements/' . ($achievement->icon ?: 'placeholder-icon.png')) }}"
                         alt="{{ $achievement->name }}">
                     </div>
                     
