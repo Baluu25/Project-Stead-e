@@ -50,7 +50,7 @@
 }
 
 .filter-btn {
-  padding: 5px 24px;
+  padding: 5px;
   border: none;
   background: transparent;
   border-radius: 8px;
@@ -59,6 +59,7 @@
   white-space: nowrap;
   color: white;
   width: 8vw;
+  text-align: center;
 }
 
 .filter-btn.active {
@@ -130,8 +131,8 @@
 }
 
 .achievement-icon img {
-  width: 70px;
-  height: 70px;
+  width: 85px;
+  height: 85px;
 }
 
 .achievement-content {
