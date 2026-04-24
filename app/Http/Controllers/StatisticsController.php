@@ -10,10 +10,9 @@ use Illuminate\Support\Facades\Auth;
 
 class StatisticsController extends Controller
 {
-    public function index()
+    public function apiIndex()
     {
         $userId = Auth::id();
-
         $totalHabits = Habit::where('user_id', $userId)->count();
 
         $activeHabits = Habit::where('user_id', $userId)
@@ -72,17 +71,14 @@ class StatisticsController extends Controller
                 $checkDay->subDay();
             }
         }
-
-        return view('statistics', [
-            'total_habits'               => $totalHabits,
-            'active_habits'              => $activeHabits,
-            'current_streak'             => $currentStreak,
-            'longest_streak'             => $longestStreak,
-            'completions_this_week'      => $completionsThisWeek,
-            'daily_completions'          => $dailyCompletions,
-            'category_breakdown'         => $categoryBreakdown,
-            'total_daily_completions'    => $dailyCompletions->sum(),
-            'total_category_completions' => $categoryBreakdown->sum(),
+        return response()->json([
+            'total_habits'          => $totalHabits,
+            'active_habits'         => $activeHabits,
+            'current_streak'        => $currentStreak,
+            'longest_streak'        => $longestStreak,
+            'completions_this_week' => $completionsThisWeek,
+            'daily_completions'     => $dailyCompletions,
+            'category_breakdown'    => $categoryBreakdown,
         ]);
     }
 }

@@ -17,10 +17,7 @@ A rendszer kliens-szerver architektúrában működik, az alábbi szolgáltatás
 * **📊 Aktivitáskövetés (Habit Tracking):**
     * Szokások felvétele (pl. "Napi 2L víz", "30 perc séta").
     * Napi teljesítések naplózása.
-    * Ciklusnaptár és hangulatkövetés.
 * **📈 Statisztika:** Grafikus visszajelzés a fejlődésről (heti/havi nézet).
-* **🏆 Gamification:** Kihívások (Challenges) és Barátok (Friends) kezelése a motiváció fenntartásához.
-* **🔔 Értesítések:** Emlékeztetők küldése (pl. folyadékbevitel).
 
 ---
 
@@ -55,9 +52,7 @@ A rendszer relációs adatbázist használ. A főbb táblák és kapcsolataik:
 * `users`: Felhasználói adatok, jelszó hash, streak számlálók.
 * `habits`: A felvett szokások definíciói.
 * `habit_completions`: Naplózott tevékenységek (napló).
-* `challenges`: Közösségi kihívások.
-* `friends`: Barátkapcsolatok kezelése.
-
+* `goals` : A felvett célkitúzések amihez adott habiteket lehet felvenni követésre
 ---
 
 ## 🔌 API Dokumentáció (Végpontok)
@@ -65,16 +60,17 @@ A backend és a kliensek közötti kommunikáció legfontosabb végpontjai:
 
 | Metódus | Végpont | Leírás |
 | :--- | :--- | :--- |
-| **Auth** | | |
-| `POST` | `/api/register` | Új felhasználó regisztrációja |
-| `POST` | `/api/login` | Bejelentkezés (Bearer token igénylés) |
 | **Habits** | | |
 | `GET` | `/api/habits` | A felhasználó aktív szokásainak listázása |
 | `POST` | `/api/habits` | Új szokás létrehozása |
-| `POST` | `/api/habits/{id}/log` | Szokás teljesítése (pl. "Ittam egy pohár vizet") |
-| **Social** | | |
-| `GET` | `/api/friends` | Barátok listázása |
-| `GET` | `/api/challenges` | Elérhető kihívások lekérdezése |
+| `PUT` | `/api/habits/{id}` | Meglévő szokás módosítása |
+| `DELETE` | `/api/habits/{id}` | Szokás törlése |
+| **Habit Completions** | | |
+| `POST` | `/api/habit-completions` | Szokás teljesítésének rögzítése |
+| `DELETE` | `/api/habit-completions/{habitId}/today/last` | A mai nap utolsó teljesítésének törlése |
+| **Statistics & Home** | | |
+| `GET` | `/api/statistics` | Statisztikák lekérdezése |
+| `GET` | `/api/home?date=YYYY-MM-DD` | Kezdőoldal adatainak lekérdezése adott napra |
 
 ---
 
@@ -84,9 +80,9 @@ A projektet 3 fős fejlesztői csapat valósította meg agilis módszertannal.
 
 | Tag | Szerepkör | Felelősségi körök |
 | :--- | :--- | :--- |
-| **Tavas Tamara** | **** | UI/UX tervek, Dokumentáció. |
-| **Dudás Balázs** | **** | Laravel API fejlesztés, Adatbázis tervezés, Webes frontend. |
-| **Kaba Nóra Rebeka** | **** | Android (Kotlin) applikáció fejlesztés, API integráció. |
+| **Tavas Tamara** | Frontend fejlesztő | UI/UX tervek, Dokumentáció. |
+| **Dudás Balázs** | Backend fejlesztő | Laravel API fejlesztés, Adatbázis tervezés, Webes frontend. |
+| **Kaba Nóra Rebeka** | Mobil fejlesztő | Android (Kotlin) applikáció fejlesztés, API integráció. |
 
 **Használt eszközök:**
 * GitHub (Verziókezelés)
@@ -95,37 +91,6 @@ A projektet 3 fős fejlesztői csapat valósította meg agilis módszertannal.
 * Postman (API tesztelés)
 
 ---
-
-## 💻 Telepítési Útmutató
-
-### Előfeltételek
-* PHP 8.2, Composer
-* MySQL szerver
-* Android Studio (a mobil apphoz)
-
-### Backend (Laravel) indítása
-1.  Klónozd a repót:
-    ```bash
-    git clone [https://github.com/user/stead-e.git](https://github.com/user/stead-e.git)
-    ```
-2.  Lépj a könyvtárba és telepítsd a függőségeket:
-    ```bash
-    cd stead-e-backend
-    composer install
-    ```
-3.  Környezeti változók beállítása:
-    * Másold át a `.env.example` fájlt `.env` néven.
-    * Állítsd be a `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` értékeket.
-4.  Kulcs generálás és migráció:
-    ```bash
-    php artisan key:generate
-    php artisan migrate
-    ```
-5.  Szerver indítása:
-    ```bash
-    php artisan serve
-    ```
-    *A szerver elérhető: `http://localhost:8000`*
 
 ### Mobil App (Android)
 ---

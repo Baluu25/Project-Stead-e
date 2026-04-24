@@ -57,7 +57,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.destroy');
 });
 
-Route::get('/logout', function () {
+Route::post('/logout', function () {
     Auth::logout();
     request()->session()->invalidate();
     request()->session()->regenerateToken();

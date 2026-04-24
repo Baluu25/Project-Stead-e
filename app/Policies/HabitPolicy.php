@@ -37,7 +37,7 @@ class HabitPolicy
      */
     public function update(User $user, Habit $habit): bool
     {
-        return true;
+        return $user->id === $habit->user_id;
     }
 
     /**
@@ -45,7 +45,7 @@ class HabitPolicy
      */
     public function delete(User $user, Habit $habit): bool
     {
-        return true;
+        return $user->id === $habit->user_id;
     }
 
     /**
