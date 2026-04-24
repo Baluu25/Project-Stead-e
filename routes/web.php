@@ -52,11 +52,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/achievements', [AchievementController::class, 'index'])->name('achievements');
 });
 
+//Admin
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin');
     Route::delete('/admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.destroy');
+    Route::patch('/admin/users/{user}/promote', [AdminController::class, 'promote'])->name('admin.users.promote');
+    Route::patch('/admin/users/{user}/demote',  [AdminController::class, 'demote'])->name('admin.users.demote');
 });
 
+//Logout
 Route::post('/logout', function () {
     Auth::logout();
     request()->session()->invalidate();

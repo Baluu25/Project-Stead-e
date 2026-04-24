@@ -48,12 +48,12 @@ class Achievement extends Model
             }
 
             Achievement::where('id', $achievement->id)->update([
-                'progress' => $newProgress,
-                // unlocked_at-t nem módosítjuk, ha már null és nem éri el a küszöböt
+                'progress'    => $newProgress,
+                'unlocked_at' => $newProgress >= $achievement->threshold_value ? now() : null,
             ]);
             if ($newProgress >= $achievement->threshold_value) {
-                Achievement::where('id', $achievement->id)
-                    ->update(['unlocked_at' => now()]);
+                $achievement->progress    = $newProgress;
+                $achievement->unlocked_at = now();
                 $newlyUnlocked[] = $achievement;
             }
         }
