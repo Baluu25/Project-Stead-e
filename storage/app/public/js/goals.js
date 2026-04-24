@@ -94,6 +94,20 @@ document.addEventListener('DOMContentLoaded', function () {
         const selector = document.getElementById('icon-selector');
         if (selector && !selector.contains(e.target)) {
             iconGrid.style.display = 'none';
+
+            // show/hide custom unit for goals
+            const goalUnitSelect      = document.getElementById('unit');
+            const goalCustomUnitGroup = document.getElementById('goal-custom-unit-group');
+            const goalCustomUnitInput = document.getElementById('goal_custom_unit');
+
+            if (goalUnitSelect && goalCustomUnitGroup) {
+                goalUnitSelect.addEventListener('change', function () {
+                    goalCustomUnitGroup.style.display = goalUnitSelect.value === 'custom' ? 'block' : 'none';
+                    if (goalUnitSelect.value !== 'custom' && goalCustomUnitInput) {
+                        goalCustomUnitInput.value = '';
+                    }
+                });
+            }
         }
     });
 
@@ -106,10 +120,15 @@ document.addEventListener('DOMContentLoaded', function () {
         if (category) category.value = '';
         iconGrid.innerHTML     = '';
         iconGrid.style.display = 'none';
+
+        if (goalCustomUnitGroup) goalCustomUnitGroup.style.display = 'none';
+        if (goalCustomUnitInput) goalCustomUnitInput.value = '';
     }
 
     function hidePopup() {
         popup.style.display = 'none';
+        if (goalCustomUnitGroup) goalCustomUnitGroup.style.display = 'none';
+        if (goalCustomUnitInput) goalCustomUnitInput.value = '';
     }
 
     if (addBtn)   addBtn.addEventListener('click',   function (e) { e.preventDefault(); showPopup(); });
@@ -125,10 +144,22 @@ document.addEventListener('DOMContentLoaded', function () {
     if (form) {
         form.addEventListener('submit', function (e) {
             e.preventDefault();
+
+            const fd = new FormData(form);
+
+            if (goalUnitSelect && goalUnitSelect.value === 'custom' && goalCustomUnitInput) {
+                const customText = goalCustomUnitInput.value.trim();
+                if (!customText) {
+                    alert('Please enter a custom unit name.');
+                return;
+                }
+                fd.set('unit', customText);
+            }
+
             fetch(form.action, {
                 method: 'POST',
                 headers: { 'X-CSRF-TOKEN': csrf ? csrf.content : '' },
-                body: new FormData(form)
+                body: fd
             })
             .then(function (response) {
                 if (response.ok) {
@@ -137,8 +168,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     alert('Could not save goal.');
                 }
-            })
-            .catch(function () { alert('Network error.'); });
+        })
+        .catch(function () { alert('Network error.'); });
         });
     }
 

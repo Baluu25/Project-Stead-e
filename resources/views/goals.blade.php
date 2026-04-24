@@ -176,6 +176,16 @@
             </div>
         </div>
 
+        <div class="form-group" id="goal-custom-unit-group" style="display: none;">
+            <label for="goal_custom_unit" class="form-label">Custom Unit Name</label>
+            <input type="text"
+                id="goal_custom_unit"
+                name="goal_custom_unit"
+                class="form-control"
+                placeholder="e.g. pages, glasses, push-ups"
+                maxlength="50">
+        </div>
+
         <div class="form-group">
             <label for="deadline" class="form-label">Deadline <span style="font-weight:normal">(Optional)</span></label>
             <input type="date"

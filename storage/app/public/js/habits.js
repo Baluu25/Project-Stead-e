@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
         searchInput:  document.getElementById('habit-name'),
         goalSelect:   document.getElementById('goal_id'),
         unitInput:    document.getElementById('unit'),
+        customUnitGroup: document.getElementById('custom-unit-group'),
         frequencySelect:     document.getElementById('frequency'),
         scheduledDaysGroup:  document.getElementById('scheduled-days-group'),
         weeklyPicker:        document.getElementById('weekly-picker'),
@@ -41,6 +42,16 @@ document.addEventListener('DOMContentLoaded', function () {
     let editMode      = false;
     let currentEditId = null;
     let habitsCache   = [];
+
+    // show/hide custom unit text field
+    if (el.unitInput && el.customUnitGroup) {
+        el.unitInput.addEventListener('change', function () {
+            el.customUnitGroup.style.display = el.unitInput.value === 'custom' ? 'block' : 'none';
+            if (el.unitInput.value !== 'custom') {
+                document.getElementById('custom_unit').value = '';
+            }
+        });
+    }
 
     // setup
     if (el.goalSelect && window.userGoals && window.userGoals.length > 0) {
@@ -265,6 +276,8 @@ document.addEventListener('DOMContentLoaded', function () {
         el.iconGrid.style.display = 'none';
         el.habitIdInput.value     = '';
         el.unitInput.value        = '';
+        if (el.customUnitGroup) el.customUnitGroup.style.display = 'none';
+        document.getElementById('custom_unit').value = '';
         el.goalSelect.value       = '';
 
         clearDaySelections();
@@ -276,6 +289,16 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('frequency').value     = habit.frequency    || '';
             document.getElementById('target_count').value  = habit.target_count ?? 1;
             document.getElementById('unit').value          = habit.unit         || '';
+
+            const presetUnits = ['times', 'days', 'km', 'books', 'minutes', 'custom'];
+                if (habit.unit && !presetUnits.includes(habit.unit)) {
+                    document.getElementById('unit').value = 'custom';
+                    document.getElementById('custom_unit').value = habit.unit;
+                    el.customUnitGroup.style.display = 'block';
+                } else {
+                    el.customUnitGroup.style.display = 'none';
+                    document.getElementById('custom_unit').value = '';
+                }
 
             el.category.value  = habit.category || '';
             if (habit.category && categoryIcons[habit.category]) {
@@ -308,6 +331,8 @@ document.addEventListener('DOMContentLoaded', function () {
         el.habitIdInput.value     = '';
         el.goalSelect.value       = '';
         el.unitInput.value        = '';
+        if (el.customUnitGroup) el.customUnitGroup.style.display = 'none';
+        document.getElementById('custom_unit').value = '';
         el.formTitle.textContent  = 'Add habit';
         el.submitBtn.textContent  = 'Add Habit';
     }
@@ -344,8 +369,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 target_count: document.getElementById('target_count').value || null,
                 icon:         document.getElementById('icon').value,
                 goal_id:      el.goalSelect.value || null,
-                unit:         document.getElementById('unit').value || null,
-                scheduled_days: scheduledDays
+                unit: (document.getElementById('unit').value === 'custom'
+                    ? (document.getElementById('custom_unit').value.trim() || null)
+                    : document.getElementById('unit').value) || null,
+                    scheduled_days: scheduledDays
             };
 
             if (editMode && currentEditId) {

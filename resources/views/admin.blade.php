@@ -111,8 +111,24 @@
                 </td>
                 <td>
                     @if($user->id !== auth()->id())
-                        <form action="{{ route('admin.users.destroy', $user) }}" method="POST"
-                              onsubmit="return confirm('Delete user {{ $user->username }}? This cannot be undone.')">
+                        @if($user->is_admin)
+                            <form action="{{ route('admin.users.demote', $user) }}" method="POST"
+                                onsubmit="return confirm('Remove admin role from {{ $user->username }}?')">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="btn btn-demote">Remove Admin</button>
+                            </form>
+                        @else
+                            <form action="{{ route('admin.users.promote', $user) }}" method="POST"
+                                onsubmit="return confirm('Make {{ $user->username }} an admin?')">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="btn btn-promote">Make Admin</button>
+                            </form>
+                        @endif
+
+                        <form class="action-buttons" action="{{ route('admin.users.destroy', $user) }}" method="POST"
+                            onsubmit="return confirm('Delete user {{ $user->username }}? This cannot be undone.')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-delete">Delete</button>
