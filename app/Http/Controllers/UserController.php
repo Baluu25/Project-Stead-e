@@ -55,7 +55,7 @@ class UserController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request)
-{
+    {
         $user = auth()->user();
 
         $validated = $request->validate([
@@ -92,13 +92,5 @@ class UserController extends Controller
         $user->update($validated);
 
         return redirect()->route('profile')->with('success', 'Profile updated successfully!');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(User $user)
-    {
-        //
     }
 }
