@@ -3,6 +3,7 @@
 @section('dashboard-styles')
     <link rel="stylesheet" href="{{ asset('storage/css/dashboard_habits.css') }}">
     <script src="{{ asset('storage/js/habits.js') }}" defer></script>
+    <script src={{ asset('storage/js/api.js') }} defer></script>
     <script>
       window.userGoals = @json($goals->map(fn($g) => ['id' => $g->id, 'title' => $g->title]));
     </script>

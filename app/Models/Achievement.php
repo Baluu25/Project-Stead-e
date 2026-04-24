@@ -47,20 +47,15 @@ class Achievement extends Model
                 $newProgress = isset($categoryCompletions[$type]) ? $categoryCompletions[$type] : 0;
             }
 
-            if ($newProgress >= $achievement->threshold_value) {
-                $unlockedAt    = now();
-                $newlyUnlocked[] = [
-                    'name'        => $achievement->name,
-                    'description' => $achievement->description,
-                ];
-            } else {
-                $unlockedAt = null;
-            }
-
             Achievement::where('id', $achievement->id)->update([
-                'progress'    => $newProgress,
-                'unlocked_at' => $unlockedAt,
+                'progress' => $newProgress,
+                // unlocked_at-t nem módosítjuk, ha már null és nem éri el a küszöböt
             ]);
+            if ($newProgress >= $achievement->threshold_value) {
+                Achievement::where('id', $achievement->id)
+                    ->update(['unlocked_at' => now()]);
+                $newlyUnlocked[] = $achievement;
+            }
         }
 
         return $newlyUnlocked;
@@ -97,27 +92,13 @@ class Achievement extends Model
     }
     private static function calculateCategoryCompletions(int $userId): array
     {
-        $counts = [];
-        $habits = Habit::where('user_id', $userId)->get();
-
-        foreach ($habits as $habit) {
-            $category = strtolower($habit->category ?? '');
-
-            if ($category === '') {
-                continue;
-            }
-
-            $completionCount = HabitCompletion::where('habit_id', $habit->id)
-                ->where('is_skipped', false)
-                ->count();
-
-            if (!isset($counts[$category])) {
-                $counts[$category] = 0;
-            }
-
-            $counts[$category] += (int) $completionCount;
-        }
-
-        return $counts;
-    }
+        return HabitCompletion::where('habit_completions.user_id', $userId)
+            ->where('is_skipped', false)
+            ->join('habits', 'habits.id', '=', 'habit_completions.habit_id')
+            ->whereNotNull('habits.category')
+            ->selectRaw('LOWER(habits.category) as category, COUNT(*) as count')
+            ->groupBy('habits.category')
+            ->pluck('count', 'category')
+            ->toArray();
+    }   
 }

@@ -52,44 +52,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // api helpers
-    function getCsrf() {
-        return document.querySelector('meta[name="csrf-token"]').content;
-    }
-
-    const api = {
-        get: function (url) {
-            return fetch(url, {
-                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': getCsrf() }
-            }).then(function (res) {
-                return res.ok ? res.json() : Promise.reject('HTTP ' + res.status);
-            });
-        },
-
-        post: function (url, data) {
-            return fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': getCsrf() },
-                body: JSON.stringify(data)
-            }).then(res => res.json());
-        },
-
-        put: function (url, data) {
-            return fetch(url, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': getCsrf() },
-                body: JSON.stringify(data)
-            }).then(res => res.json());
-        },
-
-        delete: function (url) {
-            return fetch(url, {
-                method: 'DELETE',
-                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': getCsrf() }
-            }).then(function (res) { return res.status === 204 ? null : res.json(); });
-        }
-    };
-
     // for safe habit naming
     function escapeHtml(text) {
         const div = document.createElement('div');
@@ -257,7 +219,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // load/delete habits
     function loadHabits() {
-        api.get('/api/habits')
+        apiGet('/api/habits')
             .then(function (habits) {
                 habitsCache = habits;
                 renderHabits(habits);
@@ -274,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function deleteHabit(id) {
         if (!confirm('Are you sure you want to delete this habit?')) return;
-        api.delete('/api/habits/' + id)
+        apiDelete('/api/habits/' + id)
             .then(loadHabits)
             .catch(function () { alert('Error deleting habit'); });
     }
@@ -387,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function () {
             };
 
             if (editMode && currentEditId) {
-                api.put('/api/habits/' + currentEditId, data)
+                apiPut('/api/habits/' + currentEditId, data)
                     .then(function (habit) {
                         if (habit.id) {
                             hidePopup();
@@ -399,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     })
                     .catch(function () { alert('Error updating habit'); });
             } else {
-                api.post('/api/habits', data)
+                apiPost('/api/habits', data)
                     .then(function (habit) {
                         if (habit.id || habit.success) {
                             hidePopup();

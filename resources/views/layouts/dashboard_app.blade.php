@@ -36,7 +36,10 @@
                     <a class="nav-link" href="{{ route('profile') }}">Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-logout" href="{{ route('logout') }}">Logout</a>
+                    <form action="{{ route('logout') }}" method="POST" style="display:inline">
+                        @csrf
+                        <button type="submit" class="btn btn-logout">Logout</button>
+                    </form>
                 </li>
             </ul>
         </div>
