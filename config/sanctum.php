@@ -36,6 +36,10 @@ return [
 
     'guard' => ['web'],
 
+    'expiration' => env('SANCTUM_TOKEN_EXPIRATION', null) 
+    ? env('SANCTUM_TOKEN_EXPIRATION') * 1440 
+    : null,
+
     /*
     |--------------------------------------------------------------------------
     | Expiration Minutes
@@ -46,8 +50,6 @@ return [
     | "expires_at" attribute, but first-party sessions are not affected.
     |
     */
-
-    'expiration' => null,
 
     /*
     |--------------------------------------------------------------------------

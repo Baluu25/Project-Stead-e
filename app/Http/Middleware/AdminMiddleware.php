@@ -14,10 +14,15 @@ class AdminMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response {
-        if (!Auth::check() || !Auth::user()->is_admin) {
-            return redirect()->route('home');
+    public function handle(Request $request, Closure $next)
+    {
+        if (!$request->user() || !$request->user()->is_admin) {
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json(['message' => 'Nincs jogosultságod.'], 403);
+            }
+            return redirect('/home');
         }
+
         return $next($request);
     }
 }

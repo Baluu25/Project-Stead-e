@@ -93,4 +93,19 @@ class UserController extends Controller
 
         return redirect()->route('profile')->with('success', 'Profile updated successfully!');
     }
+
+    public function uploadPicture(Request $request)
+    {
+        $request->validate([
+        'picture' => ['required', 'image', 'max:2048'],
+        ]);
+
+        $path = $request->file('picture')->store('profile-pictures', 'public');
+
+        $request->user()->update(['profile_picture' => $path]);
+
+        return response()->json([
+        'profile_picture' => asset('storage/' . $path),
+        ]);
+    }
 }
