@@ -9,10 +9,16 @@ use Illuminate\Support\Facades\Auth;
 
 class GoalController extends Controller
 {
-    public function index()
+
+    public function index(Request $request)
     {
-        $goals = Auth::user()->goals()->orderBy('status')->orderBy('deadline')->get();
-        return view('goals', compact('goals'));
+        $goals = $request->user()
+            ->goals()
+            ->with('habits')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json($goals);
     }
 
     public function store(StoreGoalRequest $request)
