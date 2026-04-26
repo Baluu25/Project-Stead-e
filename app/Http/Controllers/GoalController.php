@@ -26,7 +26,11 @@ class GoalController extends Controller
         $data = $request->validated();
         $data['user_id'] = Auth::id();
 
-        Goal::create($data);
+        $goal = Goal::create($data);
+
+        if ($request->expectsJson()) {
+            return response()->json($goal, 201);
+        }
 
         return redirect()->route('goals')->with('success', 'Goal created!');
     }
@@ -40,6 +44,10 @@ class GoalController extends Controller
         $this->authorize('update', $goal);
 
         $goal->update($request->validated());
+
+        if ($request->expectsJson()) {
+            return response()->json($goal);
+        }
 
         return redirect()->route('goals')->with('success', 'Goal updated!');
     }
@@ -81,6 +89,11 @@ class GoalController extends Controller
         }
 
         $goal->delete();
+
+        if (request()->expectsJson()) {
+            return response()->json(null, 204);
+        }
+
         return redirect()->route('goals');
     }
 }
