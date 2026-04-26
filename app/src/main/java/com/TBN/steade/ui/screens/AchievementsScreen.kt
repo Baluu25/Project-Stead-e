@@ -28,16 +28,6 @@ private val categoryOrder = listOf(
     "Streaks", "Milestones", "Nutrition", "Fitness", "Mindfulness", "Study", "Work"
 )
 
-private val categoryEmoji = mapOf(
-    "Streaks"     to "🔥",
-    "Milestones"  to "🏆",
-    "Nutrition"   to "🍎",
-    "Fitness"     to "🏋️",
-    "Mindfulness" to "🧘",
-    "Study"       to "📚",
-    "Work"        to "💼"
-)
-
 private val fallbackAchievements = listOf(
     ApiAchievement(1,  "First step",            "Complete your first day",                       "first_step.png",         "Streaks",     false, null, 0f,  1),
     ApiAchievement(2,  "Getting Warmed Up",      "Keep your habit alive for 3 days straight.",   "getting_warmed_up.png",  "Streaks",     false, null, 0f,  3),
@@ -100,10 +90,11 @@ fun AchievementsScreen(navController: NavController, viewModel: SteadEViewModel)
                     orderedKeys.forEach { category ->
                         val items = grouped[category] ?: return@forEach
                         item {
-                            val emoji = categoryEmoji[category] ?: "🏅"
-                            Text("$emoji  $category",
+                            Text(
+                                category,
                                 color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(top = 8.dp, bottom = 4.dp))
+                                modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                            )
                         }
                         items(items) { achievement ->
                             AchievementCard(achievement)

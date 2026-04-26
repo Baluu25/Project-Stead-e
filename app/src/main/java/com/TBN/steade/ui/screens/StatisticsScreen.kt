@@ -5,6 +5,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.EmojiEvents
+import androidx.compose.material.icons.filled.LocalFireDepartment
+import androidx.compose.material.icons.filled.Tag
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,7 +21,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -61,14 +69,14 @@ fun StatisticsScreen(navController: NavController, viewModel: SteadEViewModel) {
                     else -> {
                         // Summary cards
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                            StatCard("Total Habits",  "${stats?.totalHabits ?: 0}",         Modifier.weight(1f))
-                            StatCard("Active",        "${stats?.activeHabits ?: 0}",         Modifier.weight(1f))
-                            StatCard("Streak",        "${stats?.currentStreak ?: 0}d",       Modifier.weight(1f))
+                            StatCard("Total Habits", "${stats?.totalHabits ?: 0}",        Icons.Default.Tag,                 Modifier.weight(1f))
+                            StatCard("Active",       "${stats?.activeHabits ?: 0}",        Icons.Default.CheckCircle,         Modifier.weight(1f))
+                            StatCard("Streak",       "${stats?.currentStreak ?: 0} days",  Icons.Default.LocalFireDepartment, Modifier.weight(1f))
                         }
                         Spacer(Modifier.height(10.dp))
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                            StatCard("Best Streak",   "${stats?.longestStreak ?: 0}d",       Modifier.weight(1f))
-                            StatCard("This Week",     "${stats?.completionsThisWeek ?: 0}",  Modifier.weight(1f))
+                            StatCard("Best Streak",  "${stats?.longestStreak ?: 0} days",  Icons.Default.EmojiEvents,        Modifier.weight(1f))
+                            StatCard("This Week",    "${stats?.completionsThisWeek ?: 0}", Icons.Default.CalendarToday,      Modifier.weight(1f))
                         }
 
                         Spacer(Modifier.height(24.dp))
@@ -107,12 +115,35 @@ fun StatisticsScreen(navController: NavController, viewModel: SteadEViewModel) {
 }
 
 @Composable
-fun StatCard(label: String, value: String, modifier: Modifier = Modifier) {
-    Card(modifier = modifier, shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.15f))) {
+fun StatCard(label: String, value: String, icon: ImageVector, modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.15f))
+    ) {
         Column(modifier = Modifier.padding(14.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(value, color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-            Text(label, color = Color.White.copy(alpha = 0.65f), fontSize = 10.sp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(label, color = Color.White.copy(alpha = 0.65f), fontSize = 10.sp)
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = Color.White.copy(alpha = 0.8f),
+                    modifier = Modifier.size(16.dp)
+                )
+            }
+            Spacer(Modifier.height(8.dp))
+            Text(
+                value,
+                color = Color.White,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
