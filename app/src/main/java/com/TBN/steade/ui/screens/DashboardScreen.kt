@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.TBN.steade.ui.components.BottomNavBar
 import com.TBN.steade.ui.components.MainGradientBackground
+import com.TBN.steade.ui.components.habitIconToEmoji
 import com.TBN.steade.ui.navigation.Screen
 import com.TBN.steade.ui.theme.SteadeNavyBlue
 import com.TBN.steade.ui.viewmodel.SteadEViewModel
@@ -149,7 +150,7 @@ fun DashboardScreen(navController: NavController, viewModel: SteadEViewModel) {
                                    else if (selectedDate == today) localCompletions[habit.name] ?: habit.isCompletedToday
                                    else false
                         DashHabitItem(
-                            name     = "${habit.icon ?: "⭐"} ${habit.name}",
+                            name     = "${habitIconToEmoji(habit.icon)} ${habit.name}",
                             isPast   = isPast,
                             isFuture = isFuture,
                             isDone   = done,

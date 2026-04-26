@@ -27,6 +27,7 @@ import androidx.navigation.NavController
 import com.TBN.steade.data.network.ApiHabit
 import com.TBN.steade.ui.components.BottomNavBar
 import com.TBN.steade.ui.components.MainGradientBackground
+import com.TBN.steade.ui.components.habitIconToEmoji
 import com.TBN.steade.ui.theme.SteadeNavyBlue
 import com.TBN.steade.ui.viewmodel.SteadEViewModel
 
@@ -172,7 +173,7 @@ fun HabitCard(habit: ApiHabit, onDelete: () -> Unit) {
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.15f))) {
         Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text(habit.icon ?: "⭐", fontSize = 26.sp)
+            Text(habitIconToEmoji(habit.icon), fontSize = 26.sp)
             Spacer(Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(habit.name, color = Color.White, fontSize = 17.sp, fontWeight = FontWeight.Bold)

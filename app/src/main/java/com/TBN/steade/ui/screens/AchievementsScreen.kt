@@ -12,12 +12,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.TBN.steade.data.network.ApiAchievement
+import com.TBN.steade.data.network.RetrofitClient
 import com.TBN.steade.ui.components.BottomNavBar
 import com.TBN.steade.ui.components.MainGradientBackground
 import com.TBN.steade.ui.viewmodel.SteadEViewModel
@@ -102,11 +105,20 @@ fun AchievementCard(achievement: ApiAchievement) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(
-                achievement.icon,
-                fontSize = 40.sp,
-                modifier = Modifier.alpha(if (unlocked) 1f else 0.25f)
-            )
+            if (achievement.icon.endsWith(".png") || achievement.icon.endsWith(".jpg") || achievement.icon.endsWith(".webp")) {
+                AsyncImage(
+                    model             = "${RetrofitClient.BASE_URL}images/achievements/${achievement.icon}",
+                    contentDescription = achievement.title,
+                    contentScale      = ContentScale.Fit,
+                    modifier          = Modifier.size(48.dp).alpha(if (unlocked) 1f else 0.25f)
+                )
+            } else {
+                Text(
+                    achievement.icon,
+                    fontSize = 40.sp,
+                    modifier = Modifier.alpha(if (unlocked) 1f else 0.25f)
+                )
+            }
             Spacer(Modifier.height(8.dp))
             Text(
                 achievement.title,

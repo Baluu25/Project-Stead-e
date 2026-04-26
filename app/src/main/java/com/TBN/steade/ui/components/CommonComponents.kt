@@ -35,6 +35,72 @@ import com.TBN.steade.ui.theme.SteadeBlue
 import com.TBN.steade.ui.theme.SteadeMidPurple
 import com.TBN.steade.ui.theme.SteadeRed
 
+// ─── Font Awesome class name → emoji mapping ─────────────────────────────────
+
+fun habitIconToEmoji(icon: String?): String {
+    if (icon.isNullOrBlank()) return "⭐"
+    if (!icon.startsWith("fa-")) return icon  // already emoji or plain text
+    return when {
+        // Nutrition
+        icon.contains("apple")           -> "🍎"
+        icon.contains("carrot")          -> "🥕"
+        icon.contains("lemon")           -> "🍋"
+        icon.contains("bowl")            -> "🥣"
+        icon.contains("mug-saucer")      -> "☕"
+        icon.contains("burger")          -> "🍔"
+        icon.contains("fish")            -> "🐟"
+        icon.contains("egg")             -> "🥚"
+        icon.contains("droplet")         -> "💧"
+        icon.contains("wine")            -> "🍷"
+        // Fitness
+        icon.contains("dumbbell")        -> "🏋️"
+        icon.contains("person-running")  -> "🏃"
+        icon.contains("person-walking")  -> "🚶"
+        icon.contains("bicycle")         -> "🚲"
+        icon.contains("heart-pulse")     -> "💓"
+        icon.contains("fire")            -> "🔥"
+        icon.contains("stopwatch")       -> "⏱️"
+        icon.contains("shoe")            -> "👟"
+        icon.contains("weight-scale")    -> "⚖️"
+        icon.contains("swimming")        -> "🏊"
+        // Mindfulness
+        icon.contains("brain")           -> "🧠"
+        icon.contains("spa")             -> "🌸"
+        icon.contains("face-smile")      -> "😊"
+        icon.contains("feather")         -> "🪶"
+        icon.contains("leaf")            -> "🌿"
+        icon.contains("om")              -> "🕉️"
+        icon.contains("cloud")           -> "☁️"
+        icon.contains("wind")            -> "🌬️"
+        icon.contains("moon")            -> "🌙"
+        icon.contains("heart")           -> "❤️"
+        // Study
+        icon.contains("book-open")       -> "📖"
+        icon.contains("book")            -> "📚"
+        icon.contains("graduation")      -> "🎓"
+        icon.contains("pencil")          -> "✏️"
+        icon.contains("lightbulb")       -> "💡"
+        icon.contains("microscope")      -> "🔬"
+        icon.contains("flask")           -> "🧪"
+        icon.contains("language")        -> "🌐"
+        icon.contains("pen")             -> "🖊️"
+        // Work
+        icon.contains("briefcase")       -> "💼"
+        icon.contains("laptop")          -> "💻"
+        icon.contains("computer")        -> "🖥️"
+        icon.contains("calendar")        -> "📅"
+        icon.contains("chart-line")      -> "📈"
+        icon.contains("chart")           -> "📊"
+        icon.contains("envelope")        -> "📧"
+        icon.contains("users")           -> "👥"
+        icon.contains("mug-hot")         -> "☕"
+        icon.contains("clock")           -> "🕐"
+        // Generic
+        icon.contains("star")            -> "⭐"
+        else                             -> "⭐"
+    }
+}
+
 // ─── Brand gradient matching CSS: linear-gradient(135deg, #ff2a00, #2a51ff) ──────────
 
 val SteadeGradientBrush = Brush.linearGradient(
