@@ -79,12 +79,19 @@ fun GoalsScreen(navController: NavController, viewModel: SteadEViewModel) {
             }
             Spacer(Modifier.height(16.dp))
 
-            if (viewModel.goalsLoading) {
-                Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
+            when {
+                viewModel.goalsLoading -> Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator(color = Color.White)
                 }
-            } else {
-                LazyColumn(modifier = Modifier.weight(1f)) {
+                viewModel.goalsError != null -> Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(viewModel.goalsError!!, color = Color.White.copy(alpha = 0.7f), fontSize = 14.sp, textAlign = TextAlign.Center)
+                        Spacer(Modifier.height(12.dp))
+                        Button(onClick = { viewModel.loadGoals() },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = SteadeNavyBlue)) { Text("Retry") }
+                    }
+                }
+                else -> LazyColumn(modifier = Modifier.weight(1f)) {
                     items(viewModel.goals) { goal ->
                         GoalCard(goal = goal, onDelete = { viewModel.deleteGoal(goal) })
                         Spacer(Modifier.height(12.dp))
@@ -104,6 +111,7 @@ fun GoalsScreen(navController: NavController, viewModel: SteadEViewModel) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddGoalDialog(onDismiss: () -> Unit, onGoalAdded: (String, String, String) -> Unit) {
     var name by remember { mutableStateOf("") }
@@ -120,21 +128,21 @@ fun AddGoalDialog(onDismiss: () -> Unit, onGoalAdded: (String, String, String) -
                 OutlinedTextField(
                     value = name, onValueChange = { name = it },
                     label = { Text("Goal Name") }, modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(8.dp), singleLine = true, colors = OutlinedTextFieldDefaults.colors()
+                    shape = RoundedCornerShape(8.dp), singleLine = true, colors = webTextFieldColors()
                 )
                 Spacer(Modifier.height(12.dp))
 
                 OutlinedTextField(
                     value = deadline, onValueChange = { deadline = it },
                     label = { Text("Deadline (YYYY-MM-DD)") }, modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(8.dp), singleLine = true, colors = OutlinedTextFieldDefaults.colors()
+                    shape = RoundedCornerShape(8.dp), singleLine = true, colors = webTextFieldColors()
                 )
                 Spacer(Modifier.height(12.dp))
 
                 OutlinedTextField(
                     value = description, onValueChange = { description = it },
                     label = { Text("Description") }, modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(8.dp), colors = OutlinedTextFieldDefaults.colors()
+                    shape = RoundedCornerShape(8.dp), minLines = 2, colors = webTextFieldColors()
                 )
                 Spacer(Modifier.height(16.dp))
 
