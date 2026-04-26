@@ -118,18 +118,18 @@ class SteadEViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch { repository.deleteHabit(habit.id).onSuccess { habits.remove(habit) } }
     }
 
-    fun logHabitCompletion(habitId: Int, onDone: (completed: Int) -> Unit = {}) {
+    fun logHabitCompletion(habitId: Int, quantity: Int = 1, onDone: (completed: Int) -> Unit = {}) {
         viewModelScope.launch {
-            repository.logHabitCompletion(habitId).onSuccess { response ->
+            repository.logHabitCompletion(habitId, quantity).onSuccess { response ->
                 loadStatistics()
                 onDone(response.completed)
             }
         }
     }
 
-    fun removeHabitCompletion(habitId: Int, onDone: (completed: Int) -> Unit = {}) {
+    fun removeHabitCompletion(habitId: Int, amount: Int = 1, onDone: (completed: Int) -> Unit = {}) {
         viewModelScope.launch {
-            repository.removeHabitCompletion(habitId).onSuccess { response ->
+            repository.removeHabitCompletion(habitId, amount).onSuccess { response ->
                 loadStatistics()
                 onDone(response.completed)
             }
