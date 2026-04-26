@@ -32,7 +32,7 @@ class SteadERepository(context: Context) {
         } catch (_: Exception) { raw }
     }
 
-    // ─── Auth ─────────────────────────────────────────────────────────────────
+    // ─── Auth ──────────────────────────────────────────────────────────────────────────────────
     suspend fun login(email: String, password: String): Result<AuthResponse> =
         withContext(Dispatchers.IO) {
             try {
@@ -66,7 +66,7 @@ class SteadERepository(context: Context) {
         clearToken(); Result.success(Unit)
     }
 
-    // ─── User ─────────────────────────────────────────────────────────────────
+    // ─── User ──────────────────────────────────────────────────────────────────────────────────
     suspend fun getUser(): Result<ApiUser> = withContext(Dispatchers.IO) {
         try {
             val r = api.getUser(bearer())
@@ -78,7 +78,7 @@ class SteadERepository(context: Context) {
         } catch (e: Exception) { Result.failure(e) }
     }
 
-    // ─── Habits ───────────────────────────────────────────────────────────────
+    // ─── Habits ────────────────────────────────────────────────────────────────────────────────
     suspend fun getHabits(): Result<List<ApiHabit>> = withContext(Dispatchers.IO) {
         try {
             val r = api.getHabits(bearer())
@@ -103,7 +103,7 @@ class SteadERepository(context: Context) {
         } catch (e: Exception) { Result.failure(e) }
     }
 
-    // ─── Goals ────────────────────────────────────────────────────────────────
+    // ─── Goals ──────────────────────────────────────────────────────────────────────────────────
     suspend fun getGoals(): Result<List<ApiGoal>> = withContext(Dispatchers.IO) {
         try {
             val r = api.getGoals(bearer())
@@ -115,7 +115,14 @@ class SteadERepository(context: Context) {
     suspend fun createGoal(name: String, deadline: String, description: String): Result<ApiGoal> =
         withContext(Dispatchers.IO) {
             try {
-                val r = api.createGoal(bearer(), CreateGoalRequest(name, deadline.ifBlank { null }, description.ifBlank { null }))
+                val r = api.createGoal(
+                    bearer(),
+                    CreateGoalRequest(
+                        title = name,
+                        deadline = deadline.ifBlank { null },
+                        description = description.ifBlank { null }
+                    )
+                )
                 if (r.isSuccessful && r.body() != null) Result.success(r.body()!!)
                 else Result.failure(Exception("Create goal error: ${r.code()}"))
             } catch (e: Exception) { Result.failure(e) }
@@ -129,7 +136,7 @@ class SteadERepository(context: Context) {
         } catch (e: Exception) { Result.failure(e) }
     }
 
-    // ─── Statistics ───────────────────────────────────────────────────────────
+    // ─── Statistics ─────────────────────────────────────────────────────────────────────────────
     suspend fun getStatistics(): Result<ApiStatistics> = withContext(Dispatchers.IO) {
         try {
             val r = api.getStatistics(bearer())
@@ -138,7 +145,7 @@ class SteadERepository(context: Context) {
         } catch (e: Exception) { Result.failure(e) }
     }
 
-    // ─── Achievements ─────────────────────────────────────────────────────────
+    // ─── Achievements ──────────────────────────────────────────────────────────────────────────────
     suspend fun getAchievements(): Result<List<ApiAchievement>> = withContext(Dispatchers.IO) {
         try {
             val r = api.getAchievements(bearer())
@@ -147,7 +154,7 @@ class SteadERepository(context: Context) {
         } catch (e: Exception) { Result.failure(e) }
     }
 
-    // ─── Habit Completions ────────────────────────────────────────────────────
+    // ─── Habit Completions ───────────────────────────────────────────────────────────────────────────
     suspend fun logHabitCompletion(habitId: Int, quantity: Int = 1): Result<HabitCompletionResponse> =
         withContext(Dispatchers.IO) {
             try {
