@@ -1,4 +1,4 @@
-package com.TBN.steade.ui.screens
+﻿package com.TBN.steade.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -15,13 +15,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.TBN.steade.R
-import com.TBN.steade.ui.components.MainGradientBackground
+import com.TBN.steade.ui.components.DarkGradientBackground
 import com.TBN.steade.ui.navigation.Screen
 import com.TBN.steade.ui.theme.SteadeNavyBlue
 
 @Composable
 fun WelcomeScreen(navController: NavController) {
-    MainGradientBackground(showShadow = false) {
+    DarkGradientBackground() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -58,7 +58,7 @@ fun WelcomeScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(56.dp))
 
-            // Primary button – navy blue matching the web app
+            // Primary button â€“ navy blue matching the web app
             Button(
                 onClick   = { navController.navigate(Screen.Login.route) },
                 modifier  = Modifier
@@ -88,3 +88,6 @@ fun WelcomeScreen(navController: NavController) {
         }
     }
 }
+
+
+

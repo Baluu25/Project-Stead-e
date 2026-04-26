@@ -1,4 +1,4 @@
-package com.TBN.steade.ui.screens
+﻿package com.TBN.steade.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.TBN.steade.R
 import com.TBN.steade.ui.navigation.Screen
-import com.TBN.steade.ui.theme.SteadeNavyBlue
+import com.TBN.steade.ui.components.DarkGradientBrush
 import com.TBN.steade.ui.viewmodel.SteadEViewModel
 import kotlinx.coroutines.delay
 
@@ -36,9 +36,14 @@ fun LoadingScreen(navController: NavController, viewModel: SteadEViewModel) {
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize().background(SteadeNavyBlue)) {
+    // Darker blue gradient background matching the Laravel project's deeper navy tone
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(brush = DarkGradientBrush)
+    ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier              = Modifier.fillMaxSize(),
             verticalArrangement   = Arrangement.Center,
             horizontalAlignment   = Alignment.CenterHorizontally
         ) {
@@ -61,10 +66,11 @@ fun LoadingScreen(navController: NavController, viewModel: SteadEViewModel) {
             )
             Spacer(modifier = Modifier.height(48.dp))
             CircularProgressIndicator(
-                color         = Color.White,
-                strokeWidth   = 3.dp,
-                modifier      = Modifier.size(40.dp)
+                color       = Color.White,
+                strokeWidth = 3.dp,
+                modifier    = Modifier.size(40.dp)
             )
         }
     }
 }
+

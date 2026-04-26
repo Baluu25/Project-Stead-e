@@ -1,4 +1,4 @@
-package com.TBN.steade.ui.screens
+﻿package com.TBN.steade.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.TBN.steade.R
-import com.TBN.steade.ui.components.MainGradientBackground
+import com.TBN.steade.ui.components.DarkGradientBackground
 import com.TBN.steade.ui.navigation.Screen
 import com.TBN.steade.ui.theme.SteadeNavyBlue
 import com.TBN.steade.ui.viewmodel.SteadEViewModel
@@ -77,7 +77,7 @@ fun RegisterScreen(navController: NavController, viewModel: SteadEViewModel) {
                     }
                     if (!hasScrolledToEnd) {
                         Spacer(Modifier.height(6.dp))
-                        Text("↓ Scroll down to enable Accept", color = Color(0xFFFF6B00), fontSize = 11.sp)
+                        Text("â†“ Scroll down to enable Accept", color = Color(0xFFFF6B00), fontSize = 11.sp)
                     }
                 }
             },
@@ -105,7 +105,7 @@ fun RegisterScreen(navController: NavController, viewModel: SteadEViewModel) {
         )
     }
 
-    MainGradientBackground(showShadow = true) {
+    DarkGradientBackground() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -192,7 +192,7 @@ fun RegisterScreen(navController: NavController, viewModel: SteadEViewModel) {
     }
 }
 
-// ─── Shared form components (used by Login too via import) ────────────────────
+// â”€â”€â”€ Shared form components (used by Login too via import) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -262,3 +262,6 @@ fun WebPasswordField(
             Text(errorMsg, color = Color.Red, fontSize = 11.sp)
     }
 }
+
+
+

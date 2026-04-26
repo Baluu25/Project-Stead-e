@@ -35,6 +35,7 @@ class SteadEViewModel(application: Application) : AndroidViewModel(application) 
 
     val achievements        = mutableStateListOf<ApiAchievement>()
     var achievementsLoading by mutableStateOf(false)
+    var achievementsError   by mutableStateOf<String?>(null)
 
     init { if (isLoggedIn) loadAllData() }
 
@@ -122,6 +123,8 @@ class SteadEViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch {
             repository.logHabitCompletion(habitId, quantity).onSuccess { response ->
                 loadStatistics()
+                // Reload achievements after every habit completion so unlock state stays current
+                loadAchievements()
                 onDone(response.completed)
             }
         }
@@ -131,6 +134,8 @@ class SteadEViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch {
             repository.removeHabitCompletion(habitId, amount).onSuccess { response ->
                 loadStatistics()
+                // Reload achievements to reflect any progress changes
+                loadAchievements()
                 onDone(response.completed)
             }
         }
@@ -170,12 +175,25 @@ class SteadEViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     // ── Achievements ──────────────────────────────────────────────────────────
+    /**
+     * Fetches the authenticated user's achievements from the API.
+     * The API returns the real is_unlocked / progress values for the current user,
+     * so no client-side computation is needed – we just display whatever the server sends.
+     * If the request fails the existing list is preserved (fallback in AchievementsScreen).
+     */
     fun loadAchievements() {
         viewModelScope.launch {
             achievementsLoading = true
+            achievementsError   = null
             repository.getAchievements().fold(
-                onSuccess = { achievements.clear(); achievements.addAll(it) },
-                onFailure = { /* keep fallback list */ }
+                onSuccess = { list ->
+                    achievements.clear()
+                    achievements.addAll(list)
+                },
+                onFailure = { e ->
+                    achievementsError = e.message
+                    // keep whatever was in the list already (fallback list stays visible)
+                }
             )
             achievementsLoading = false
         }

@@ -10,6 +10,11 @@ val SteadeMidPurple  = Color(0xFF8B2FD1)   // midpoint for 3-stop gradient
 val SteadeNavyBlue   = Color(0xFF25408F)   // #25408f – button / accent
 val SteadeNavyLight  = Color(0xFF3C5BBF)   // #3c5bbf – hover state
 
+// ─── Dark blue palette – splash screen + login/register backgrounds ────────────
+val SteadeSplashBg       = Color(0xFF0A1540)   // very dark navy  – splash solid bg
+val SteadeDarkGradStart  = Color(0xFF7A1200)   // darkened red    – gradient start
+val SteadeDarkGradEnd    = Color(0xFF0D2080)   // deep dark blue  – gradient end
+
 val CardWhite        = Color(0xFFFFFFFF)
 val CardBackground   = Color(0x26FFFFFF)   // white 15% alpha
 val TextWhite        = Color(0xFFFFFFFF)

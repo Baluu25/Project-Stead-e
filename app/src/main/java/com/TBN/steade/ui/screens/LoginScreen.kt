@@ -1,4 +1,4 @@
-package com.TBN.steade.ui.screens
+﻿package com.TBN.steade.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -23,12 +23,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.TBN.steade.R
-import com.TBN.steade.ui.components.MainGradientBackground
+import com.TBN.steade.ui.components.DarkGradientBackground
 import com.TBN.steade.ui.navigation.Screen
 import com.TBN.steade.ui.theme.SteadeNavyBlue
 import com.TBN.steade.ui.viewmodel.SteadEViewModel
 
-// ─── Shared text-field colours (white surface, fully black text) ──────────────
+// â”€â”€â”€ Shared text-field colours (white surface, fully black text) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun webTextFieldColors() = OutlinedTextFieldDefaults.colors(
@@ -74,7 +74,7 @@ fun LoginScreen(navController: NavController, viewModel: SteadEViewModel) {
     val isEmailValid  = remember(email)      { android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() }
     val isForgotValid = remember(forgotEmail){ android.util.Patterns.EMAIL_ADDRESS.matcher(forgotEmail).matches() }
 
-    // ── Forgot-password dialog ────────────────────────────────────────────────
+    // â”€â”€ Forgot-password dialog â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     if (showForgotDialog) {
         AlertDialog(
             onDismissRequest = { showForgotDialog = false; resetSent = false; forgotEmail = "" },
@@ -121,8 +121,8 @@ fun LoginScreen(navController: NavController, viewModel: SteadEViewModel) {
         )
     }
 
-    // ── Main content ─────────────────────────────────────────────────────────
-    MainGradientBackground(showShadow = false) {
+    // â”€â”€ Main content â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    DarkGradientBackground() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -147,7 +147,7 @@ fun LoginScreen(navController: NavController, viewModel: SteadEViewModel) {
             )
             Spacer(Modifier.height(32.dp))
 
-            // ── White card ────────────────────────────────────────────────────
+            // â”€â”€ White card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             Surface(
                 shape           = RoundedCornerShape(20.dp),
                 color           = Color.White,
@@ -220,7 +220,7 @@ fun LoginScreen(navController: NavController, viewModel: SteadEViewModel) {
 
                     Spacer(Modifier.height(4.dp))
 
-                    // Sign In button – always enabled when fields have valid content,
+                    // Sign In button â€“ always enabled when fields have valid content,
                     // never hidden, shows spinner while loading
                     Button(
                         onClick  = {
@@ -279,3 +279,6 @@ fun LoginScreen(navController: NavController, viewModel: SteadEViewModel) {
         }
     }
 }
+
+
+

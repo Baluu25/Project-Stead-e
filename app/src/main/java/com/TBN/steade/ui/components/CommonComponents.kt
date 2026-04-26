@@ -1,4 +1,4 @@
-package com.TBN.steade.ui.components
+﻿package com.TBN.steade.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -93,9 +93,11 @@ import com.TBN.steade.R
 import com.TBN.steade.ui.navigation.Screen
 import com.TBN.steade.ui.theme.SteadeBlue
 import com.TBN.steade.ui.theme.SteadeMidPurple
+import com.TBN.steade.ui.theme.SteadeDarkGradEnd
+import com.TBN.steade.ui.theme.SteadeDarkGradStart
 import com.TBN.steade.ui.theme.SteadeRed
 
-// ─── FA class / emoji → Material ImageVector ─────────────────────────────────
+// â”€â”€â”€ FA class / emoji â†’ Material ImageVector â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 fun habitIconToMaterialIcon(icon: String?): ImageVector {
     val s = icon.orEmpty()
@@ -171,21 +173,21 @@ fun habitIconToMaterialIcon(icon: String?): ImageVector {
         s.contains("mug-hot")            -> Icons.Default.LocalCafe
         s.contains("clock")              -> Icons.Default.AccessTime
         // Emoji from older Android picker entries
-        s.contains("🏋") || s.contains("💪") -> Icons.Default.FitnessCenter
-        s.contains("🧘")                 -> Icons.Default.SelfImprovement
-        s.contains("🍎") || s.contains("🥕") || s.contains("🍋") -> Icons.Default.Restaurant
-        s.contains("📖") || s.contains("📚") -> Icons.Default.MenuBook
-        s.contains("💻")                 -> Icons.Default.Laptop
-        s.contains("💧")                 -> Icons.Default.WaterDrop
-        s.contains("🏃")                 -> Icons.Default.DirectionsRun
-        s.contains("🌱")                 -> Icons.Default.Eco
-        s.contains("🎯")                 -> Icons.Default.TrackChanges
-        s.contains("🛌")                 -> Icons.Default.Bedtime
+        s.contains("đźŹ‹") || s.contains("đź’Ş") -> Icons.Default.FitnessCenter
+        s.contains("đź§")                 -> Icons.Default.SelfImprovement
+        s.contains("đźŤŽ") || s.contains("đźĄ•") || s.contains("đźŤ‹") -> Icons.Default.Restaurant
+        s.contains("đź“–") || s.contains("đź“š") -> Icons.Default.MenuBook
+        s.contains("đź’»")                 -> Icons.Default.Laptop
+        s.contains("đź’§")                 -> Icons.Default.WaterDrop
+        s.contains("đźŹ")                 -> Icons.Default.DirectionsRun
+        s.contains("đźŚ±")                 -> Icons.Default.Eco
+        s.contains("đźŽŻ")                 -> Icons.Default.TrackChanges
+        s.contains("đź›Ś")                 -> Icons.Default.Bedtime
         else                             -> Icons.Default.Star
     }
 }
 
-// ─── Category-specific icon lists (FA class → Material Icon) ─────────────────
+// â”€â”€â”€ Category-specific icon lists (FA class â†’ Material Icon) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 val habitCategoryIcons: Map<String, List<Pair<String, ImageVector>>> = mapOf(
     "Nutrition" to listOf(
@@ -276,15 +278,34 @@ val habitCategoryIcons: Map<String, List<Pair<String, ImageVector>>> = mapOf(
     )
 )
 
-// ─── Brand gradient matching CSS: linear-gradient(135deg, #ff2a00, #2a51ff) ──────────
+// â”€â”€â”€ Brand gradient matching CSS: linear-gradient(135deg, #ff2a00, #2a51ff) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
+
+// Dark gradient brush for splash / login / register screens
+val DarkGradientBrush: Brush = Brush.linearGradient(
+    colors = listOf(SteadeDarkGradStart, SteadeDarkGradEnd),
+    start  = Offset(0f, 0f),
+    end    = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
+)
+
+@Composable
+fun DarkGradientBackground(
+    content: @Composable BoxScope.() -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(brush = DarkGradientBrush),
+        content = content
+    )
+}
 val SteadeGradientBrush = Brush.linearGradient(
     colors = listOf(SteadeRed, SteadeBlue),
     start  = Offset(0f, 0f),
     end    = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
 )
 
-// ─── Full-screen gradient background ─────────────────────────────────────────
+// â”€â”€â”€ Full-screen gradient background â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 @Composable
 fun MainGradientBackground(
@@ -309,11 +330,11 @@ fun MainGradientBackground(
     }
 }
 
-// ─── White pill / frosted card background ────────────────────────────────────
+// â”€â”€â”€ White pill / frosted card background â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 val cardBg = Color.White.copy(alpha = 0.15f)
 
-// ─── Bottom Navigation Bar ────────────────────────────────────────────────────
+// â”€â”€â”€ Bottom Navigation Bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 data class NavItem(
     val screen: Screen,
@@ -389,7 +410,7 @@ fun NavIcon(
     }
 }
 
-// ─── Frosted Card ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ Frosted Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 @Composable
 fun FrostedCard(
@@ -406,3 +427,4 @@ fun FrostedCard(
         content = content
     )
 }
+

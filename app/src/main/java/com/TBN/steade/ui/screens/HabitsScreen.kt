@@ -1,4 +1,4 @@
-package com.TBN.steade.ui.screens
+﻿package com.TBN.steade.ui.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -122,7 +122,7 @@ fun AddHabitDialog(
     val iconOptions    = habitCategoryIcons[selectedCat] ?: emptyList()
     var selectedIconFa by remember(selectedCat) { mutableStateOf(iconOptions.firstOrNull()?.first ?: "fa-solid fa-star") }
 
-    AlertDialog(
+    AlertDialog(containerColor = Color.White, 
         onDismissRequest = onDismiss,
         title = { Text("Create New Habit", fontWeight = FontWeight.Bold, color = SteadeNavyBlue) },
         text  = {
@@ -237,7 +237,7 @@ fun AddHabitDialog(
                 }
                 Spacer(Modifier.height(10.dp))
 
-                // Icon picker — category-specific Material Icons
+                // Icon picker â€” category-specific Material Icons
                 Text("Icon", fontSize = 13.sp, color = SteadeNavyBlue, fontWeight = FontWeight.SemiBold)
                 Spacer(Modifier.height(6.dp))
                 iconOptions.chunked(5).forEach { row ->
@@ -294,7 +294,7 @@ fun HabitCard(habit: ApiHabit, onDelete: () -> Unit) {
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.padding(top = 4.dp)) {
                     if (!habit.category.isNullOrBlank()) Chip(habit.category)
                     if (!habit.frequency.isNullOrBlank()) Chip(habit.frequency.replaceFirstChar { it.uppercase() })
-                    if (habit.isCompletedToday) Chip("✓ Done")
+                    if (habit.isCompletedToday) Chip("âś“ Done")
                 }
             }
             IconButton(onClick = onDelete) {
@@ -311,3 +311,4 @@ fun Chip(text: String) {
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp))
     }
 }
+
