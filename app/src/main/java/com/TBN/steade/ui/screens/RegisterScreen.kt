@@ -77,7 +77,7 @@ fun RegisterScreen(navController: NavController, viewModel: SteadEViewModel) {
                     }
                     if (!hasScrolledToEnd) {
                         Spacer(Modifier.height(6.dp))
-                        Text("â†" Scroll down to enable Accept", color = Color(0xFFFF6B00), fontSize = 11.sp)
+                        Text("\u2193 Scroll down to enable Accept", color = Color(0xFFFF6B00), fontSize = 11.sp)
                     }
                 }
             },

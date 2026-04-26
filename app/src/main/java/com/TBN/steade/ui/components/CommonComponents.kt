@@ -172,17 +172,6 @@ fun habitIconToMaterialIcon(icon: String?): ImageVector {
         s.contains("users")              -> Icons.Default.Group
         s.contains("mug-hot")            -> Icons.Default.LocalCafe
         s.contains("clock")              -> Icons.Default.AccessTime
-        // Emoji from older Android picker entries
-        s.contains("đźŹ‹") || s.contains("đź’Ş") -> Icons.Default.FitnessCenter
-        s.contains("đź§")                 -> Icons.Default.SelfImprovement
-        s.contains("đźŤŽ") || s.contains("đźĄ•") || s.contains("đźŤ‹") -> Icons.Default.Restaurant
-        s.contains("đź"–") || s.contains("đź"š") -> Icons.Default.MenuBook
-        s.contains("đź’»")                 -> Icons.Default.Laptop
-        s.contains("đź’§")                 -> Icons.Default.WaterDrop
-        s.contains("đźŹ")                 -> Icons.Default.DirectionsRun
-        s.contains("đźŚ±")                 -> Icons.Default.Eco
-        s.contains("đźŽŻ")                 -> Icons.Default.TrackChanges
-        s.contains("đź›Ś")                 -> Icons.Default.Bedtime
         else                             -> Icons.Default.Star
     }
 }
