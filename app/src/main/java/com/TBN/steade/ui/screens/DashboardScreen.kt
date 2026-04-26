@@ -1,7 +1,6 @@
 package com.TBN.steade.ui.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
@@ -32,6 +31,8 @@ import com.TBN.steade.ui.components.BottomNavBar
 import com.TBN.steade.ui.components.MainGradientBackground
 import com.TBN.steade.ui.components.habitIconToMaterialIcon
 import com.TBN.steade.ui.navigation.Screen
+import com.TBN.steade.ui.theme.SteadeNavyBlue
+import com.TBN.steade.ui.theme.SteadeRed
 import com.TBN.steade.ui.viewmodel.SteadEViewModel
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -234,7 +235,7 @@ fun DashboardStreakCard(streak: Int, dailyMap: Map<String, Int>) {
                 Icon(
                     Icons.Default.LocalFireDepartment,
                     contentDescription = "Streak",
-                    tint     = Color(0xFFFF5722),
+                    tint     = Color.White,
                     modifier = Modifier.size(32.dp)
                 )
                 Spacer(Modifier.width(10.dp))
@@ -264,22 +265,17 @@ fun DashboardStreakCard(streak: Int, dailyMap: Map<String, Int>) {
                         .take(2)
 
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        // Active: SteadeNavyBlue (#25408F) matching .day-circle.active
+                        // Inactive: rgba(255,255,255,0.1) matching .day-circle
                         Box(
                             modifier = Modifier
                                 .size(28.dp)
-                                .then(
-                                    if (!done) Modifier.border(
-                                        width = 1.5.dp,
-                                        color = Color.White.copy(alpha = if (isToday) 0.7f else 0.35f),
-                                        shape = CircleShape
-                                    ) else Modifier
-                                )
                                 .clip(CircleShape)
                                 .background(
                                     when {
-                                        done    -> Color(0xFF4CAF50)
-                                        isToday -> Color.White.copy(alpha = 0.12f)
-                                        else    -> Color.Transparent
+                                        done    -> SteadeNavyBlue
+                                        isToday -> Color.White.copy(alpha = 0.18f)
+                                        else    -> Color.White.copy(alpha = 0.1f)
                                     }
                                 ),
                             contentAlignment = Alignment.Center
@@ -331,8 +327,9 @@ fun DashHabitItem(
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape    = RoundedCornerShape(12.dp),
+        // Completed card: rgba(37,64,143,0.3) matching .habit-item.completed
         colors   = CardDefaults.cardColors(
-            containerColor = if (isDone) Color(0xFF4CAF50).copy(alpha = 0.18f)
+            containerColor = if (isDone) SteadeNavyBlue.copy(alpha = 0.3f)
                              else        Color.White.copy(alpha = 0.13f)
         )
     ) {
@@ -353,7 +350,7 @@ fun DashHabitItem(
                             .size(34.dp)
                             .clip(CircleShape)
                             .background(
-                                if (isDone) Color(0xFF4CAF50).copy(alpha = 0.35f)
+                                if (isDone) SteadeNavyBlue.copy(alpha = 0.45f)
                                 else        Color.White.copy(alpha = 0.15f)
                             ),
                         contentAlignment = Alignment.Center
@@ -361,7 +358,7 @@ fun DashHabitItem(
                         Icon(
                             icon,
                             contentDescription = null,
-                            tint     = if (isDone) Color.White else Color.White.copy(alpha = 0.85f),
+                            tint     = Color.White.copy(alpha = if (isDone) 1f else 0.85f),
                             modifier = Modifier.size(17.dp)
                         )
                     }
@@ -384,7 +381,7 @@ fun DashHabitItem(
                     isPast -> Icon(
                         if (isDone) Icons.Default.Check else Icons.Default.Close,
                         contentDescription = null,
-                        tint     = if (isDone) Color(0xFF4CAF50) else Color.Red.copy(alpha = 0.7f),
+                        tint     = if (isDone) Color.White else Color.White.copy(alpha = 0.5f),
                         modifier = Modifier.size(20.dp)
                     )
 
@@ -395,31 +392,23 @@ fun DashHabitItem(
                         modifier = Modifier.size(18.dp)
                     )
 
-                    // Done badge — matches Laravel's habit-done-badge
-                    isDone -> Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(20.dp))
-                            .background(Color(0xFF4CAF50).copy(alpha = 0.3f))
-                            .padding(horizontal = 12.dp, vertical = 6.dp),
-                        contentAlignment = Alignment.Center
+                    // Done badge — matches Laravel's habit-done-badge (white icon, no fill)
+                    isDone -> Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Icon(
-                                Icons.Default.Check,
-                                contentDescription = "Done",
-                                tint     = Color(0xFF4CAF50),
-                                modifier = Modifier.size(14.dp)
-                            )
-                            Text(
-                                "Done",
-                                color      = Color(0xFF4CAF50),
-                                fontSize   = 12.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        }
+                        Icon(
+                            Icons.Default.Check,
+                            contentDescription = "Done",
+                            tint     = Color.White,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Text(
+                            "Done",
+                            color      = Color.White,
+                            fontSize   = 12.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
                     }
 
                     // Active controls: − [step] + (matches Laravel's habit-actions)
@@ -427,19 +416,22 @@ fun DashHabitItem(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        // − button
+                        // − button: SteadeNavyBlue (#25408F) matching .btn-remove-progress
                         Box(
                             modifier = Modifier
                                 .size(30.dp)
                                 .clip(CircleShape)
-                                .background(Color.White.copy(alpha = if (completed > 0) 0.2f else 0.07f))
+                                .background(
+                                    if (completed > 0) SteadeNavyBlue
+                                    else SteadeNavyBlue.copy(alpha = 0.35f)
+                                )
                                 .clickable(enabled = completed > 0) { onRemove(step) },
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 Icons.Default.Remove,
                                 contentDescription = "Decrease",
-                                tint     = Color.White.copy(alpha = if (completed > 0) 1f else 0.3f),
+                                tint     = Color.White.copy(alpha = if (completed > 0) 1f else 0.4f),
                                 modifier = Modifier.size(14.dp)
                             )
                         }
@@ -470,12 +462,12 @@ fun DashHabitItem(
                             )
                         }
 
-                        // + button
+                        // + button: SteadeNavyBlue (#25408F) matching .btn-add-progress
                         Box(
                             modifier = Modifier
                                 .size(30.dp)
                                 .clip(CircleShape)
-                                .background(Color.White.copy(alpha = 0.2f))
+                                .background(SteadeNavyBlue)
                                 .clickable { onAdd(step) },
                             contentAlignment = Alignment.Center
                         ) {
@@ -505,9 +497,8 @@ fun DashHabitItem(
                             .fillMaxWidth(progress)
                             .fillMaxHeight()
                             .clip(RoundedCornerShape(2.dp))
-                            .background(
-                                if (isDone) Color(0xFF4CAF50) else Color.White.copy(alpha = 0.65f)
-                            )
+                            // Progress fill: SteadeRed (#FF2A00) matching .progress-bar-fill
+                            .background(SteadeRed)
                     )
                 }
             }
