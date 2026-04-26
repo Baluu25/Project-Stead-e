@@ -125,5 +125,18 @@ data class ApiAchievement(
     @SerializedName("threshold_value")  val thresholdValue: Int = 0
 )
 
+// ─── Habit Completions ────────────────────────────────────────────────────────
+data class HabitCompletionRequest(
+    @SerializedName("habit_id") val habitId: Int,
+    val quantity: Int = 1
+)
+
+data class HabitCompletionResponse(
+    val completed: Int = 0,
+    val target: Int = 1,
+    @SerializedName("daily_progress_percent") val dailyProgressPercent: Int = 0,
+    @SerializedName("has_completion_today")   val hasCompletionToday: Boolean = false
+)
+
 // ─── Generic ──────────────────────────────────────────────────────────────────
 data class GenericResponse(val message: String? = null)

@@ -57,4 +57,17 @@ interface SteadEApiService {
     // Returns a plain JSON array
     @GET("api/achievements")
     suspend fun getAchievements(@Header("Authorization") token: String): Response<List<ApiAchievement>>
+
+    @POST("api/habit-completions")
+    suspend fun logHabitCompletion(
+        @Header("Authorization") token: String,
+        @Body request: HabitCompletionRequest
+    ): Response<HabitCompletionResponse>
+
+    @DELETE("api/habit-completions/{habitId}/today/last")
+    suspend fun removeHabitCompletion(
+        @Header("Authorization") token: String,
+        @Path("habitId") habitId: Int,
+        @Query("amount") amount: Int = 1
+    ): Response<HabitCompletionResponse>
 }

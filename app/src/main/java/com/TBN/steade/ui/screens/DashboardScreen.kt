@@ -15,10 +15,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -29,7 +27,6 @@ import com.TBN.steade.ui.components.MainGradientBackground
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.TBN.steade.ui.components.habitIconToMaterialIcon
 import com.TBN.steade.ui.navigation.Screen
-import com.TBN.steade.ui.theme.SteadeNavyBlue
 import com.TBN.steade.ui.viewmodel.SteadEViewModel
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -38,17 +35,9 @@ import java.time.format.DateTimeFormatter
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun DashboardScreen(navController: NavController, viewModel: SteadEViewModel) {
-    val context = LocalContext.current
-    val modulePrefs = remember { context.getSharedPreferences("ModulePrefs", android.content.Context.MODE_PRIVATE) }
-
-    val fitnessEnabled     = modulePrefs.getBoolean("fitness", true)
-    val mindfulnessEnabled = modulePrefs.getBoolean("mindfulness", true)
-    val nutritionEnabled   = modulePrefs.getBoolean("nutrition", true)
-    val studyEnabled       = modulePrefs.getBoolean("study", true)
-    val workEnabled        = modulePrefs.getBoolean("work", true)
-
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
-    val localCompletions = remember { mutableStateMapOf<String, Boolean>() }
+    // habitId -> completedToday count (optimistic local state)
+    val localCompletions = remember { mutableStateMapOf<Int, Int>() }
 
     val apiHabits = viewModel.habits
     val today = LocalDate.now()
@@ -93,15 +82,14 @@ fun DashboardScreen(navController: NavController, viewModel: SteadEViewModel) {
 
                 Spacer(Modifier.height(20.dp))
 
-                // Streak card
+                // Streak card — refreshes automatically when viewModel.statistics updates
                 DashboardStreakCard(
-                    streak       = viewModel.statistics?.currentStreak ?: 0,
-                    dailyMap     = viewModel.statistics?.dailyCompletions ?: emptyMap()
+                    streak   = viewModel.statistics?.currentStreak ?: 0,
+                    dailyMap = viewModel.statistics?.dailyCompletions ?: emptyMap()
                 )
 
                 Spacer(Modifier.height(20.dp))
 
-                // Habits for selected date
                 val isPast   = selectedDate.isBefore(today)
                 val isFuture = selectedDate.isAfter(today)
                 val titleStr = when {
@@ -118,40 +106,41 @@ fun DashboardScreen(navController: NavController, viewModel: SteadEViewModel) {
                         CircularProgressIndicator(color = Color.White)
                     }
                 } else if (apiHabits.isEmpty()) {
-                    // fallback to module-based list when no API data
-                    val fallbackHabits = buildList {
-                        if (fitnessEnabled)     add("Fitness 🏋️")
-                        if (mindfulnessEnabled) add("Mindfulness 🧘")
-                        if (nutritionEnabled)   add("Nutrition 🍎")
-                        if (studyEnabled)       add("Study 📖")
-                        if (workEnabled)        add("Work 💻")
-                    }
-                    fallbackHabits.forEach { h ->
-                        val done = if (isPast) (h.length + selectedDate.dayOfMonth) % 2 == 0
-                                   else if (selectedDate == today) localCompletions[h] ?: false
-                                   else false
-                        DashHabitItem(
-                            name      = h,
-                            icon      = Icons.Default.Star,
-                            isPast    = isPast,
-                            isFuture  = isFuture,
-                            isDone    = done,
-                            onToggle  = { localCompletions[h] = it }
-                        )
-                        Spacer(Modifier.height(8.dp))
-                    }
+                    Text(
+                        "No habits yet. Add habits from the Habits tab.",
+                        color     = Color.White.copy(alpha = 0.7f),
+                        fontSize  = 14.sp,
+                        textAlign = TextAlign.Center,
+                        modifier  = Modifier.fillMaxWidth().padding(vertical = 16.dp)
+                    )
                 } else {
                     apiHabits.filter { it.isActive }.forEach { habit ->
-                        val done = if (isPast) (habit.name.length + selectedDate.dayOfMonth) % 2 == 0
-                                   else if (selectedDate == today) localCompletions[habit.name] ?: habit.isCompletedToday
-                                   else false
+                        val target    = habit.targetCount ?: 1
+                        // Use local optimistic state; fall back to API value on first access
+                        val completed = localCompletions.getOrElse(habit.id) { habit.completedToday }
+
                         DashHabitItem(
-                            name     = habit.name,
-                            icon     = habitIconToMaterialIcon(habit.icon),
-                            isPast   = isPast,
-                            isFuture = isFuture,
-                            isDone   = done,
-                            onToggle = { checked -> localCompletions[habit.name] = checked }
+                            name      = habit.name,
+                            icon      = habitIconToMaterialIcon(habit.icon),
+                            unit      = habit.unit ?: "",
+                            completed = completed,
+                            target    = target,
+                            isPast    = isPast,
+                            isFuture  = isFuture,
+                            onAdd     = {
+                                localCompletions[habit.id] = completed + 1
+                                viewModel.logHabitCompletion(habit.id) { serverCount ->
+                                    localCompletions[habit.id] = serverCount
+                                }
+                            },
+                            onRemove  = {
+                                if (completed > 0) {
+                                    localCompletions[habit.id] = completed - 1
+                                    viewModel.removeHabitCompletion(habit.id) { serverCount ->
+                                        localCompletions[habit.id] = serverCount
+                                    }
+                                }
+                            }
                         )
                         Spacer(Modifier.height(8.dp))
                     }
@@ -167,8 +156,7 @@ fun DashboardScreen(navController: NavController, viewModel: SteadEViewModel) {
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun WeeklyDateStrip(selectedDate: LocalDate, onDateSelected: (LocalDate) -> Unit) {
-    val today = LocalDate.now()
-    // Show the week containing today, centred
+    val today  = LocalDate.now()
     val monday = today.with(DayOfWeek.MONDAY)
 
     Column {
@@ -214,10 +202,10 @@ fun WeeklyDateStrip(selectedDate: LocalDate, onDateSelected: (LocalDate) -> Unit
 
 @Composable
 fun DashboardStreakCard(streak: Int, dailyMap: Map<String, Int>) {
-    val fmt   = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val fmt   = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val today = LocalDate.now()
+    // Last 7 days ending today
     val last7 = (6 downTo 0).map { today.minusDays(it.toLong()) }
-    val dayLabels = listOf("M","T","W","T","F","S","S")
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -235,25 +223,33 @@ fun DashboardStreakCard(streak: Int, dailyMap: Map<String, Int>) {
                     fontSize = 14.sp
                 )
             }
-            // Dots on the right
-            Column(horizontalAlignment = Alignment.End) {
-                Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                    last7.forEachIndexed { i, date ->
-                        val hasCompletion = (dailyMap[date.format(fmt)] ?: 0) > 0
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(
-                                dayLabels[date.dayOfWeek.value % 7],
-                                color    = Color.White.copy(alpha = 0.5f),
-                                fontSize = 9.sp
-                            )
-                            Spacer(Modifier.height(3.dp))
-                            Box(
-                                modifier = Modifier
-                                    .size(9.dp)
-                                    .clip(CircleShape)
-                                    .background(if (hasCompletion) Color(0xFF4CAF50) else Color.White.copy(alpha = 0.2f))
-                            )
-                        }
+            // Last-7-days dots — today dot turns green once a completion is logged and stats reload
+            Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                last7.forEach { date ->
+                    val hasCompletion = (dailyMap[date.format(fmt)] ?: 0) > 0
+                    val isToday       = date == today
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text     = date.dayOfWeek.getDisplayName(
+                                java.time.format.TextStyle.NARROW,
+                                java.util.Locale.getDefault()
+                            ),
+                            color    = Color.White.copy(alpha = 0.5f),
+                            fontSize = 9.sp
+                        )
+                        Spacer(Modifier.height(3.dp))
+                        Box(
+                            modifier = Modifier
+                                .size(if (isToday) 11.dp else 9.dp)
+                                .clip(CircleShape)
+                                .background(
+                                    when {
+                                        hasCompletion -> Color(0xFF4CAF50)  // green when done
+                                        isToday       -> Color.White.copy(alpha = 0.4f)  // highlighted today
+                                        else          -> Color.White.copy(alpha = 0.2f)
+                                    }
+                                )
+                        )
                     }
                 }
             }
@@ -261,46 +257,155 @@ fun DashboardStreakCard(streak: Int, dailyMap: Map<String, Int>) {
     }
 }
 
-
 @Composable
 fun DashHabitItem(
-    name    : String,
-    icon    : ImageVector,
-    isPast  : Boolean,
-    isFuture: Boolean,
-    isDone  : Boolean,
-    onToggle: (Boolean) -> Unit
+    name     : String,
+    icon     : ImageVector,
+    unit     : String,
+    completed: Int,
+    target   : Int,
+    isPast   : Boolean,
+    isFuture : Boolean,
+    onAdd    : () -> Unit,
+    onRemove : () -> Unit
 ) {
-    val alpha = if (isPast && !isDone) 0.45f else 1f
+    val isDone   = completed >= target
+    val progress = (completed.toFloat() / target.coerceAtLeast(1)).coerceIn(0f, 1f)
+
     Card(
-        modifier = Modifier.fillMaxWidth().alpha(alpha),
+        modifier = Modifier.fillMaxWidth(),
         shape    = RoundedCornerShape(12.dp),
-        colors   = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.13f))
+        colors   = CardDefaults.cardColors(
+            containerColor = if (isDone) Color.White.copy(alpha = 0.22f) else Color.White.copy(alpha = 0.13f)
+        )
     ) {
-        Row(
-            modifier              = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment     = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
-            Icon(icon, contentDescription = null, tint = Color.White.copy(alpha = 0.85f), modifier = Modifier.size(18.dp))
-            Spacer(Modifier.width(8.dp))
-            Text(name, color = Color.White, fontSize = 15.sp, modifier = Modifier.weight(1f))
-            when {
-                isPast  -> Icon(
-                    if (isDone) Icons.Default.Check else Icons.Default.Close,
-                    contentDescription = null,
-                    tint = if (isDone) Color.Green else Color.Red.copy(alpha = 0.7f)
-                )
-                isFuture -> Icon(Icons.Default.Lock, contentDescription = null, tint = Color.White.copy(alpha = 0.35f), modifier = Modifier.size(18.dp))
-                else     -> Checkbox(
-                    checked         = isDone,
-                    onCheckedChange = onToggle,
-                    colors          = CheckboxDefaults.colors(
-                        uncheckedColor = Color.White,
-                        checkedColor   = Color.White,
-                        checkmarkColor = Color.Black
+            Row(
+                verticalAlignment     = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier              = Modifier.fillMaxWidth()
+            ) {
+                // Icon + name + count
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
+                    Box(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clip(CircleShape)
+                            .background(Color.White.copy(alpha = if (isDone) 0.3f else 0.15f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            icon,
+                            contentDescription = null,
+                            tint     = if (isDone) Color(0xFF4CAF50) else Color.White.copy(alpha = 0.85f),
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                    Spacer(Modifier.width(10.dp))
+                    Column {
+                        Text(name, color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Medium)
+                        Text(
+                            "$completed / $target${if (unit.isNotBlank()) " $unit" else ""}",
+                            color    = Color.White.copy(alpha = 0.6f),
+                            fontSize = 12.sp
+                        )
+                    }
+                }
+
+                Spacer(Modifier.width(8.dp))
+
+                // Action controls on the right
+                when {
+                    isPast -> Icon(
+                        if (isDone) Icons.Default.Check else Icons.Default.Close,
+                        contentDescription = null,
+                        tint     = if (isDone) Color(0xFF4CAF50) else Color.Red.copy(alpha = 0.7f),
+                        modifier = Modifier.size(20.dp)
                     )
-                )
+                    isFuture -> Icon(
+                        Icons.Default.Lock,
+                        contentDescription = null,
+                        tint     = Color.White.copy(alpha = 0.35f),
+                        modifier = Modifier.size(18.dp)
+                    )
+                    isDone -> Box(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clip(CircleShape)
+                            .background(Color(0xFF4CAF50).copy(alpha = 0.25f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            Icons.Default.Check,
+                            contentDescription = "Done",
+                            tint     = Color(0xFF4CAF50),
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                    else -> Row(
+                        verticalAlignment     = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        // − button
+                        Box(
+                            modifier = Modifier
+                                .size(30.dp)
+                                .clip(CircleShape)
+                                .background(Color.White.copy(alpha = if (completed > 0) 0.2f else 0.07f))
+                                .clickable(enabled = completed > 0, onClick = onRemove),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                Icons.Default.Remove,
+                                contentDescription = "Decrease",
+                                tint     = Color.White.copy(alpha = if (completed > 0) 1f else 0.3f),
+                                modifier = Modifier.size(14.dp)
+                            )
+                        }
+                        // + button
+                        Box(
+                            modifier = Modifier
+                                .size(30.dp)
+                                .clip(CircleShape)
+                                .background(Color.White.copy(alpha = 0.2f))
+                                .clickable(onClick = onAdd),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                Icons.Default.Add,
+                                contentDescription = "Increase",
+                                tint     = Color.White,
+                                modifier = Modifier.size(14.dp)
+                            )
+                        }
+                    }
+                }
+            }
+
+            // Progress bar — shown for today and past dates
+            if (!isFuture) {
+                Spacer(Modifier.height(8.dp))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(4.dp)
+                        .clip(RoundedCornerShape(2.dp))
+                        .background(Color.White.copy(alpha = 0.15f))
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(progress)
+                            .fillMaxHeight()
+                            .clip(RoundedCornerShape(2.dp))
+                            .background(
+                                if (isDone) Color(0xFF4CAF50) else Color.White.copy(alpha = 0.7f)
+                            )
+                    )
+                }
             }
         }
     }

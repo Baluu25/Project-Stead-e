@@ -146,4 +146,23 @@ class SteadERepository(context: Context) {
             else Result.failure(Exception("Achievements error: ${r.code()}"))
         } catch (e: Exception) { Result.failure(e) }
     }
+
+    // ─── Habit Completions ────────────────────────────────────────────────────
+    suspend fun logHabitCompletion(habitId: Int, quantity: Int = 1): Result<HabitCompletionResponse> =
+        withContext(Dispatchers.IO) {
+            try {
+                val r = api.logHabitCompletion(bearer(), HabitCompletionRequest(habitId, quantity))
+                if (r.isSuccessful && r.body() != null) Result.success(r.body()!!)
+                else Result.failure(Exception("Log completion error: ${r.code()}"))
+            } catch (e: Exception) { Result.failure(e) }
+        }
+
+    suspend fun removeHabitCompletion(habitId: Int, amount: Int = 1): Result<HabitCompletionResponse> =
+        withContext(Dispatchers.IO) {
+            try {
+                val r = api.removeHabitCompletion(bearer(), habitId, amount)
+                if (r.isSuccessful && r.body() != null) Result.success(r.body()!!)
+                else Result.failure(Exception("Remove completion error: ${r.code()}"))
+            } catch (e: Exception) { Result.failure(e) }
+        }
 }

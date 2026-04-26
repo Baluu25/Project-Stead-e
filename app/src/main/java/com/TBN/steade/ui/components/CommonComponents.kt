@@ -298,7 +298,7 @@ fun MainGradientBackground(
             Image(
                 painter      = painterResource(id = R.drawable.shadow),
                 contentDescription = null,
-                modifier     = Modifier.fillMaxWidth(0.6f).align(Alignment.BottomEnd),
+                modifier     = Modifier.fillMaxWidth(0.65f).align(Alignment.Center),
                 contentScale = ContentScale.Fit,
                 alpha        = 0.18f
             )
