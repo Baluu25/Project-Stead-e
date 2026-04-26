@@ -11,10 +11,14 @@ import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Bedtime
 import androidx.compose.material.icons.filled.Biotech
 import androidx.compose.material.icons.filled.Book
-import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Business
+import androidx.compose.material.icons.filled.Calculate
+import androidx.compose.material.icons.filled.Cake
 import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.Computer
+import androidx.compose.material.icons.filled.Cookie
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.DirectionsBike
 import androidx.compose.material.icons.filled.DirectionsRun
 import androidx.compose.material.icons.filled.DirectionsWalk
@@ -22,10 +26,13 @@ import androidx.compose.material.icons.filled.DinnerDining
 import androidx.compose.material.icons.filled.Eco
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.EventAvailable
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FitnessCenter
+import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Group
+import androidx.compose.material.icons.filled.Hiking
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Laptop
 import androidx.compose.material.icons.filled.Lightbulb
@@ -35,7 +42,11 @@ import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.filled.LunchDining
 import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.MonitorHeart
+import androidx.compose.material.icons.filled.Park
+import androidx.compose.material.icons.filled.Pets
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Pool
+import androidx.compose.material.icons.filled.Print
 import androidx.compose.material.icons.filled.Psychology
 import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material.icons.filled.Scale
@@ -45,12 +56,17 @@ import androidx.compose.material.icons.filled.SelfImprovement
 import androidx.compose.material.icons.filled.SentimentSatisfied
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Spa
+import androidx.compose.material.icons.filled.SportsSoccer
+import androidx.compose.material.icons.filled.SportsBasketball
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Straighten
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.filled.TrackChanges
 import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material.icons.filled.TrendingUp
+import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.WaterDrop
+import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material.icons.filled.Work
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material3.Icon
@@ -77,75 +93,186 @@ import com.TBN.steade.ui.theme.SteadeBlue
 import com.TBN.steade.ui.theme.SteadeMidPurple
 import com.TBN.steade.ui.theme.SteadeRed
 
-// ─── Icon name / FA class / emoji → Material ImageVector ─────────────────────
+// ─── FA class / emoji → Material ImageVector ─────────────────────────────────
 
 fun habitIconToMaterialIcon(icon: String?): ImageVector {
     val s = icon.orEmpty()
     return when {
-        // FA class strings (from web app)
-        s.contains("dumbbell")          -> Icons.Default.FitnessCenter
-        s.contains("person-running")    -> Icons.Default.DirectionsRun
-        s.contains("person-walking")    -> Icons.Default.DirectionsWalk
-        s.contains("bicycle")           -> Icons.Default.DirectionsBike
-        s.contains("heart-pulse")       -> Icons.Default.MonitorHeart
-        s.contains("fire")              -> Icons.Default.LocalFireDepartment
-        s.contains("stopwatch")         -> Icons.Default.Timer
-        s.contains("shoe")              -> Icons.Default.DirectionsWalk
-        s.contains("weight-scale")      -> Icons.Default.Scale
-        s.contains("swimming")          -> Icons.Default.Pool
-        s.contains("apple")             -> Icons.Default.Restaurant
-        s.contains("carrot")            -> Icons.Default.Eco
-        s.contains("lemon")             -> Icons.Default.Restaurant
-        s.contains("bowl")              -> Icons.Default.DinnerDining
-        s.contains("mug-saucer")        -> Icons.Default.LocalCafe
-        s.contains("burger")            -> Icons.Default.LunchDining
-        s.contains("fish")              -> Icons.Default.Restaurant
-        s.contains("egg")               -> Icons.Default.Restaurant
-        s.contains("droplet")           -> Icons.Default.WaterDrop
-        s.contains("wine")              -> Icons.Default.LocalBar
-        s.contains("brain")             -> Icons.Default.Psychology
-        s.contains("spa")               -> Icons.Default.Spa
-        s.contains("face-smile")        -> Icons.Default.SentimentSatisfied
-        s.contains("feather")           -> Icons.Default.Edit
-        s.contains("leaf")              -> Icons.Default.Eco
-        s.contains("om")                -> Icons.Default.SelfImprovement
-        s.contains("cloud")             -> Icons.Default.Cloud
-        s.contains("wind")              -> Icons.Default.Air
-        s.contains("moon")              -> Icons.Default.Bedtime
-        s.contains("heart")             -> Icons.Default.Favorite
-        s.contains("book-open")         -> Icons.Default.MenuBook
-        s.contains("book")              -> Icons.Default.Book
-        s.contains("graduation")        -> Icons.Default.School
-        s.contains("pencil")            -> Icons.Default.Edit
-        s.contains("lightbulb")         -> Icons.Default.Lightbulb
-        s.contains("microscope")        -> Icons.Default.Biotech
-        s.contains("flask")             -> Icons.Default.Science
-        s.contains("language")          -> Icons.Default.Translate
-        s.contains("pen")               -> Icons.Default.Create
-        s.contains("briefcase")         -> Icons.Default.Work
-        s.contains("laptop")            -> Icons.Default.Laptop
-        s.contains("computer")          -> Icons.Default.Computer
-        s.contains("calendar")          -> Icons.Default.EventAvailable
-        s.contains("chart-line")        -> Icons.Default.TrendingUp
-        s.contains("chart")             -> Icons.Default.BarChart
-        s.contains("envelope")          -> Icons.Default.Email
-        s.contains("users")             -> Icons.Default.Group
-        s.contains("mug-hot")           -> Icons.Default.LocalCafe
-        s.contains("clock")             -> Icons.Default.AccessTime
-        // Emoji stored by the Android icon picker
+        s.contains("dumbbell")           -> Icons.Default.FitnessCenter
+        s.contains("person-running")     -> Icons.Default.DirectionsRun
+        s.contains("person-walking")     -> Icons.Default.DirectionsWalk
+        s.contains("person-biking")      -> Icons.Default.DirectionsBike
+        s.contains("bicycle")            -> Icons.Default.DirectionsBike
+        s.contains("person-hiking")      -> Icons.Default.Hiking
+        s.contains("heart-pulse")        -> Icons.Default.MonitorHeart
+        s.contains("heartbeat")          -> Icons.Default.MonitorHeart
+        s.contains("fire")               -> Icons.Default.LocalFireDepartment
+        s.contains("stopwatch")          -> Icons.Default.Timer
+        s.contains("shoe")               -> Icons.Default.DirectionsWalk
+        s.contains("weight-scale")       -> Icons.Default.Scale
+        s.contains("swimming")           -> Icons.Default.Pool
+        s.contains("futbol")             -> Icons.Default.SportsSoccer
+        s.contains("basketball")         -> Icons.Default.SportsBasketball
+        s.contains("dog") || s.contains("cat") || s.contains("dove") -> Icons.Default.Pets
+        s.contains("apple")              -> Icons.Default.Restaurant
+        s.contains("carrot")             -> Icons.Default.Eco
+        s.contains("lemon")              -> Icons.Default.Restaurant
+        s.contains("bowl")               -> Icons.Default.DinnerDining
+        s.contains("plate-wheat")        -> Icons.Default.DinnerDining
+        s.contains("mug-saucer")         -> Icons.Default.LocalCafe
+        s.contains("burger")             -> Icons.Default.LunchDining
+        s.contains("fish")               -> Icons.Default.Restaurant
+        s.contains("egg")                -> Icons.Default.Restaurant
+        s.contains("utensils")           -> Icons.Default.Restaurant
+        s.contains("cookie")             -> Icons.Default.Cookie
+        s.contains("cake")               -> Icons.Default.Cake
+        s.contains("droplet")            -> Icons.Default.WaterDrop
+        s.contains("wine")               -> Icons.Default.LocalBar
+        s.contains("brain")              -> Icons.Default.Psychology
+        s.contains("spa")                -> Icons.Default.Spa
+        s.contains("face-smile")         -> Icons.Default.SentimentSatisfied
+        s.contains("feather")            -> Icons.Default.Edit
+        s.contains("leaf")               -> Icons.Default.Eco
+        s.contains("om")                 -> Icons.Default.SelfImprovement
+        s.contains("cloud")              -> Icons.Default.Cloud
+        s.contains("wind")               -> Icons.Default.Air
+        s.contains("moon")               -> Icons.Default.Bedtime
+        s.contains("sun")                -> Icons.Default.WbSunny
+        s.contains("tree")               -> Icons.Default.Park
+        s.contains("heart")              -> Icons.Default.Favorite
+        s.contains("book-open")          -> Icons.Default.MenuBook
+        s.contains("book")               -> Icons.Default.Book
+        s.contains("graduation")         -> Icons.Default.School
+        s.contains("pencil")             -> Icons.Default.Edit
+        s.contains("lightbulb")          -> Icons.Default.Lightbulb
+        s.contains("microscope")         -> Icons.Default.Biotech
+        s.contains("flask")              -> Icons.Default.Science
+        s.contains("language")           -> Icons.Default.Translate
+        s.contains("calculator")         -> Icons.Default.Calculate
+        s.contains("glasses")            -> Icons.Default.Visibility
+        s.contains("ruler")              -> Icons.Default.Straighten
+        s.contains("chalkboard") || s.contains("school") -> Icons.Default.School
+        s.contains("pen")                -> Icons.Default.Create
+        s.contains("briefcase")          -> Icons.Default.Work
+        s.contains("laptop")             -> Icons.Default.Laptop
+        s.contains("computer")           -> Icons.Default.Computer
+        s.contains("building")           -> Icons.Default.Business
+        s.contains("phone")              -> Icons.Default.Phone
+        s.contains("file-lines")         -> Icons.Default.Description
+        s.contains("folder")             -> Icons.Default.Folder
+        s.contains("print")              -> Icons.Default.Print
+        s.contains("calendar")           -> Icons.Default.EventAvailable
+        s.contains("chart-line")         -> Icons.Default.TrendingUp
+        s.contains("chart")              -> Icons.Default.BarChart
+        s.contains("envelope")           -> Icons.Default.Email
+        s.contains("users")              -> Icons.Default.Group
+        s.contains("mug-hot")            -> Icons.Default.LocalCafe
+        s.contains("clock")              -> Icons.Default.AccessTime
+        // Emoji from older Android picker entries
         s.contains("🏋") || s.contains("💪") -> Icons.Default.FitnessCenter
-        s.contains("🧘")                -> Icons.Default.SelfImprovement
+        s.contains("🧘")                 -> Icons.Default.SelfImprovement
         s.contains("🍎") || s.contains("🥕") || s.contains("🍋") -> Icons.Default.Restaurant
         s.contains("📖") || s.contains("📚") -> Icons.Default.MenuBook
-        s.contains("💻")                -> Icons.Default.Laptop
-        s.contains("💧")                -> Icons.Default.WaterDrop
-        s.contains("🏃")                -> Icons.Default.DirectionsRun
-        s.contains("🌱")                -> Icons.Default.Eco
-        s.contains("🎯")                -> Icons.Default.TrackChanges
-        s.contains("🛌")                -> Icons.Default.Bedtime
-        else                            -> Icons.Default.Star
+        s.contains("💻")                 -> Icons.Default.Laptop
+        s.contains("💧")                 -> Icons.Default.WaterDrop
+        s.contains("🏃")                 -> Icons.Default.DirectionsRun
+        s.contains("🌱")                 -> Icons.Default.Eco
+        s.contains("🎯")                 -> Icons.Default.TrackChanges
+        s.contains("🛌")                 -> Icons.Default.Bedtime
+        else                             -> Icons.Default.Star
     }
 }
+
+// ─── Category-specific icon lists (FA class → Material Icon) ─────────────────
+
+val habitCategoryIcons: Map<String, List<Pair<String, ImageVector>>> = mapOf(
+    "Nutrition" to listOf(
+        "fa-solid fa-apple-whole"  to Icons.Default.Restaurant,
+        "fa-solid fa-carrot"       to Icons.Default.Eco,
+        "fa-solid fa-lemon"        to Icons.Default.Restaurant,
+        "fa-solid fa-bowl-food"    to Icons.Default.DinnerDining,
+        "fa-solid fa-mug-saucer"   to Icons.Default.LocalCafe,
+        "fa-solid fa-burger"       to Icons.Default.LunchDining,
+        "fa-solid fa-fish"         to Icons.Default.Restaurant,
+        "fa-solid fa-egg"          to Icons.Default.Restaurant,
+        "fa-solid fa-droplet"      to Icons.Default.WaterDrop,
+        "fa-solid fa-wine-bottle"  to Icons.Default.LocalBar,
+        "fa-solid fa-utensils"     to Icons.Default.Restaurant,
+        "fa-solid fa-plate-wheat"  to Icons.Default.DinnerDining,
+        "fa-solid fa-cookie"       to Icons.Default.Cookie,
+        "fa-solid fa-cake-candles" to Icons.Default.Cake,
+        "fa-solid fa-mug-hot"      to Icons.Default.LocalCafe,
+    ),
+    "Fitness" to listOf(
+        "fa-solid fa-dumbbell"         to Icons.Default.FitnessCenter,
+        "fa-solid fa-person-running"   to Icons.Default.DirectionsRun,
+        "fa-solid fa-person-walking"   to Icons.Default.DirectionsWalk,
+        "fa-solid fa-bicycle"          to Icons.Default.DirectionsBike,
+        "fa-solid fa-heart-pulse"      to Icons.Default.MonitorHeart,
+        "fa-solid fa-fire"             to Icons.Default.LocalFireDepartment,
+        "fa-solid fa-stopwatch"        to Icons.Default.Timer,
+        "fa-solid fa-shoe-prints"      to Icons.Default.DirectionsWalk,
+        "fa-solid fa-weight-scale"     to Icons.Default.Scale,
+        "fa-solid fa-person-swimming"  to Icons.Default.Pool,
+        "fa-solid fa-person-biking"    to Icons.Default.DirectionsBike,
+        "fa-solid fa-person-hiking"    to Icons.Default.Hiking,
+        "fa-solid fa-futbol"           to Icons.Default.SportsSoccer,
+        "fa-solid fa-basketball"       to Icons.Default.SportsBasketball,
+        "fa-solid fa-dog"              to Icons.Default.Pets,
+        "fa-solid fa-heartbeat"        to Icons.Default.MonitorHeart,
+    ),
+    "Mindfulness" to listOf(
+        "fa-solid fa-brain"        to Icons.Default.Psychology,
+        "fa-solid fa-heart"        to Icons.Default.Favorite,
+        "fa-solid fa-spa"          to Icons.Default.Spa,
+        "fa-regular fa-face-smile" to Icons.Default.SentimentSatisfied,
+        "fa-solid fa-feather"      to Icons.Default.Edit,
+        "fa-solid fa-leaf"         to Icons.Default.Eco,
+        "fa-solid fa-om"           to Icons.Default.SelfImprovement,
+        "fa-solid fa-cloud"        to Icons.Default.Cloud,
+        "fa-solid fa-wind"         to Icons.Default.Air,
+        "fa-regular fa-moon"       to Icons.Default.Bedtime,
+        "fa-solid fa-dog"          to Icons.Default.Pets,
+        "fa-solid fa-cat"          to Icons.Default.Pets,
+        "fa-solid fa-dove"         to Icons.Default.Air,
+        "fa-regular fa-sun"        to Icons.Default.WbSunny,
+        "fa-solid fa-tree"         to Icons.Default.Park,
+    ),
+    "Study" to listOf(
+        "fa-solid fa-book"           to Icons.Default.Book,
+        "fa-solid fa-book-open"      to Icons.Default.MenuBook,
+        "fa-solid fa-graduation-cap" to Icons.Default.School,
+        "fa-solid fa-pencil"         to Icons.Default.Edit,
+        "fa-solid fa-pen"            to Icons.Default.Create,
+        "fa-solid fa-brain"          to Icons.Default.Psychology,
+        "fa-solid fa-lightbulb"      to Icons.Default.Lightbulb,
+        "fa-solid fa-microscope"     to Icons.Default.Biotech,
+        "fa-solid fa-flask"          to Icons.Default.Science,
+        "fa-solid fa-language"       to Icons.Default.Translate,
+        "fa-solid fa-calculator"     to Icons.Default.Calculate,
+        "fa-solid fa-glasses"        to Icons.Default.Visibility,
+        "fa-solid fa-ruler"          to Icons.Default.Straighten,
+        "fa-solid fa-chalkboard"     to Icons.Default.School,
+        "fa-solid fa-school"         to Icons.Default.School,
+    ),
+    "Work" to listOf(
+        "fa-solid fa-briefcase"      to Icons.Default.Work,
+        "fa-solid fa-laptop"         to Icons.Default.Laptop,
+        "fa-solid fa-computer"       to Icons.Default.Computer,
+        "fa-solid fa-clock"          to Icons.Default.AccessTime,
+        "fa-solid fa-calendar-check" to Icons.Default.EventAvailable,
+        "fa-solid fa-chart-line"     to Icons.Default.TrendingUp,
+        "fa-solid fa-chart-simple"   to Icons.Default.BarChart,
+        "fa-solid fa-envelope"       to Icons.Default.Email,
+        "fa-solid fa-users"          to Icons.Default.Group,
+        "fa-solid fa-mug-hot"        to Icons.Default.LocalCafe,
+        "fa-solid fa-building"       to Icons.Default.Business,
+        "fa-solid fa-phone"          to Icons.Default.Phone,
+        "fa-solid fa-file-lines"     to Icons.Default.Description,
+        "fa-solid fa-folder"         to Icons.Default.Folder,
+        "fa-solid fa-print"          to Icons.Default.Print,
+    )
+)
 
 // ─── Brand gradient matching CSS: linear-gradient(135deg, #ff2a00, #2a51ff) ──────────
 
@@ -197,7 +324,7 @@ val navItems = listOf(
     NavItem(Screen.Habits,       Icons.AutoMirrored.Filled.List,       "Habits"),
     NavItem(Screen.Goals,        Icons.Default.Star,       "Goals"),
     NavItem(Screen.Statistics,   Icons.Default.BarChart,   "Stats"),
-    NavItem(Screen.Achievements, Icons.Default.CheckCircle,"Awards"),
+    NavItem(Screen.Achievements, Icons.Default.EmojiEvents, "Achievements"),
     NavItem(Screen.Settings,     Icons.Default.Settings,   "Settings")
 )
 

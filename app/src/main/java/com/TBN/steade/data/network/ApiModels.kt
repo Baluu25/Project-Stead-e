@@ -68,10 +68,13 @@ data class ApiHabit(
 data class CreateHabitRequest(
     val name: String,
     val description: String = "",
-    val category: String = "General",
+    val category: String = "Fitness",
     val frequency: String = "daily",
-    @SerializedName("target_count") val targetCount: Int = 1,
-    val icon: String = "star"
+    @SerializedName("target_count")   val targetCount: Int = 1,
+    val unit: String = "times",
+    @SerializedName("scheduled_days") val scheduledDays: List<Int>? = null,
+    val icon: String = "fa-solid fa-star",
+    @SerializedName("goal_id")        val goalId: Int? = null
 )
 
 data class HabitResponse(val habit: ApiHabit? = null, val message: String? = null)
@@ -112,9 +115,15 @@ data class ApiStatistics(
 
 // ─── Achievements ─────────────────────────────────────────────────────────────
 data class ApiAchievement(
-    val id: Int = 0, val title: String = "", val description: String = "", val icon: String = "",
-    @SerializedName("is_unlocked") val isUnlocked: Boolean = false,
-    @SerializedName("unlocked_at") val unlockedAt: String? = null
+    val id: Int = 0,
+    val title: String = "",
+    val description: String = "",
+    val icon: String = "",
+    @SerializedName("achievement_type") val achievementType: String? = null,
+    @SerializedName("is_unlocked")      val isUnlocked: Boolean = false,
+    @SerializedName("unlocked_at")      val unlockedAt: String? = null,
+    val progress: Float = 0f,
+    @SerializedName("threshold_value")  val thresholdValue: Int = 0
 )
 
 // ─── Generic ──────────────────────────────────────────────────────────────────

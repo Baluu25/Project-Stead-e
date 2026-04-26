@@ -95,10 +95,20 @@ class SteadEViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun createHabit(name: String, description: String, category: String, frequency: String, icon: String) {
+    fun createHabit(
+        name: String, description: String, category: String,
+        frequency: String, icon: String,
+        targetCount: Int = 1, unit: String = "times",
+        scheduledDays: List<Int>? = null
+    ) {
         viewModelScope.launch {
-            repository.createHabit(CreateHabitRequest(name, description, category, frequency.lowercase(), 1, icon))
-                .onSuccess { habits.add(0, it) }
+            repository.createHabit(
+                CreateHabitRequest(
+                    name = name, description = description, category = category,
+                    frequency = frequency.lowercase(), targetCount = targetCount,
+                    unit = unit, scheduledDays = scheduledDays, icon = icon
+                )
+            ).onSuccess { habits.add(0, it) }
         }
     }
 
