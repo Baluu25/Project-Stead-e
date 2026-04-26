@@ -294,9 +294,9 @@ fun HabitCard(habit: ApiHabit, onDelete: () -> Unit) {
                 if (!habit.description.isNullOrBlank())
                     Text(habit.description, color = Color.White.copy(alpha = 0.65f), fontSize = 13.sp, maxLines = 1)
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.padding(top = 4.dp)) {
-                    if (!habit.category.isNullOrBlank()) Chip(habit.category)
-                    if (!habit.frequency.isNullOrBlank()) Chip(habit.frequency.replaceFirstChar { it.uppercase() })
-                    if (habit.isCompletedToday) Chip(“Done”, icon = Icons.Default.Check)
+                    if (!habit.category.isNullOrBlank()) HabitChip(habit.category)
+                    if (!habit.frequency.isNullOrBlank()) HabitChip(habit.frequency.replaceFirstChar { it.uppercase() })
+                    if (habit.isCompletedToday) HabitChip(“Done”, icon = Icons.Default.Check)
                 }
             }
             IconButton(onClick = onDelete) {
@@ -307,7 +307,7 @@ fun HabitCard(habit: ApiHabit, onDelete: () -> Unit) {
 }
 
 @Composable
-fun Chip(text: String, icon: ImageVector? = null) {
+fun HabitChip(text: String, icon: ImageVector? = null) {
     Surface(shape = RoundedCornerShape(20.dp), color = Color.White.copy(alpha = 0.15f)) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
