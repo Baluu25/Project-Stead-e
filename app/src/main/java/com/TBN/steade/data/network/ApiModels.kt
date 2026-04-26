@@ -51,7 +51,7 @@ data class ApiHabit(
     @SerializedName("completed_today") val completedToday: Int = 0,
     @SerializedName("goal_name")       val goalName: String? = null,
     @SerializedName("goal_id")         val goalId: Int? = null,
-    @SerializedName("scheduled_days")  val scheduledDays: String? = null,
+    @SerializedName("scheduled_days")  val scheduledDays: List<Any>? = null,
     @SerializedName("user_id")         val userId: Int? = null,
     @SerializedName("created_at")      val createdAt: String? = null
 ) {
