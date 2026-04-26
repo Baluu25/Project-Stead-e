@@ -58,7 +58,7 @@ fun WelcomeScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(56.dp))
 
-            // Primary button â€“ navy blue matching the web app
+            // Primary button â€" navy blue matching the web app
             Button(
                 onClick   = { navController.navigate(Screen.Login.route) },
                 modifier  = Modifier

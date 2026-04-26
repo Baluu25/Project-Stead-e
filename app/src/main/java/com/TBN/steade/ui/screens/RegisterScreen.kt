@@ -77,7 +77,7 @@ fun RegisterScreen(navController: NavController, viewModel: SteadEViewModel) {
                     }
                     if (!hasScrolledToEnd) {
                         Spacer(Modifier.height(6.dp))
-                        Text("â†“ Scroll down to enable Accept", color = Color(0xFFFF6B00), fontSize = 11.sp)
+                        Text("â†" Scroll down to enable Accept", color = Color(0xFFFF6B00), fontSize = 11.sp)
                     }
                 }
             },
@@ -192,7 +192,7 @@ fun RegisterScreen(navController: NavController, viewModel: SteadEViewModel) {
     }
 }
 
-// â”€â”€â”€ Shared form components (used by Login too via import) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€â"€ Shared form components (used by Login too via import) â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -239,7 +239,7 @@ fun AddHabitDialog(
                 }
                 Spacer(Modifier.height(10.dp))
 
-                // Icon picker â€” category-specific Material Icons
+                // Icon picker â€" category-specific Material Icons
                 Text("Icon", fontSize = 13.sp, color = SteadeNavyBlue, fontWeight = FontWeight.SemiBold)
                 Spacer(Modifier.height(6.dp))
                 iconOptions.chunked(5).forEach { row ->
@@ -296,7 +296,7 @@ fun HabitCard(habit: ApiHabit, onDelete: () -> Unit) {
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.padding(top = 4.dp)) {
                     if (!habit.category.isNullOrBlank()) HabitChip(habit.category)
                     if (!habit.frequency.isNullOrBlank()) HabitChip(habit.frequency.replaceFirstChar { it.uppercase() })
-                    if (habit.isCompletedToday) HabitChip(“Done”, icon = Icons.Default.Check)
+                    if (habit.isCompletedToday) HabitChip("Done", icon = Icons.Default.Check)
                 }
             }
             IconButton(onClick = onDelete) {
