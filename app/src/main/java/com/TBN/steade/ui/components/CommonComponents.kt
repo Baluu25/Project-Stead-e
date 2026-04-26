@@ -5,12 +5,54 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.Air
 import androidx.compose.material.icons.filled.BarChart
+import androidx.compose.material.icons.filled.Bedtime
+import androidx.compose.material.icons.filled.Biotech
+import androidx.compose.material.icons.filled.Book
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Cloud
+import androidx.compose.material.icons.filled.Computer
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.DirectionsBike
+import androidx.compose.material.icons.filled.DirectionsRun
+import androidx.compose.material.icons.filled.DirectionsWalk
+import androidx.compose.material.icons.filled.DinnerDining
+import androidx.compose.material.icons.filled.Eco
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.EventAvailable
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FitnessCenter
+import androidx.compose.material.icons.filled.Group
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Laptop
+import androidx.compose.material.icons.filled.Lightbulb
+import androidx.compose.material.icons.filled.LocalBar
+import androidx.compose.material.icons.filled.LocalCafe
+import androidx.compose.material.icons.filled.LocalFireDepartment
+import androidx.compose.material.icons.filled.LunchDining
+import androidx.compose.material.icons.filled.MenuBook
+import androidx.compose.material.icons.filled.MonitorHeart
+import androidx.compose.material.icons.filled.Pool
+import androidx.compose.material.icons.filled.Psychology
+import androidx.compose.material.icons.filled.Restaurant
+import androidx.compose.material.icons.filled.Scale
+import androidx.compose.material.icons.filled.School
+import androidx.compose.material.icons.filled.Science
+import androidx.compose.material.icons.filled.SelfImprovement
+import androidx.compose.material.icons.filled.SentimentSatisfied
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Spa
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material.icons.filled.TrackChanges
+import androidx.compose.material.icons.filled.Translate
+import androidx.compose.material.icons.filled.TrendingUp
+import androidx.compose.material.icons.filled.WaterDrop
+import androidx.compose.material.icons.filled.Work
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -35,69 +77,73 @@ import com.TBN.steade.ui.theme.SteadeBlue
 import com.TBN.steade.ui.theme.SteadeMidPurple
 import com.TBN.steade.ui.theme.SteadeRed
 
-// ─── Font Awesome class name → emoji mapping ─────────────────────────────────
+// ─── Icon name / FA class / emoji → Material ImageVector ─────────────────────
 
-fun habitIconToEmoji(icon: String?): String {
-    if (icon.isNullOrBlank()) return "⭐"
-    if (!icon.startsWith("fa-")) return icon  // already emoji or plain text
+fun habitIconToMaterialIcon(icon: String?): ImageVector {
+    val s = icon.orEmpty()
     return when {
-        // Nutrition
-        icon.contains("apple")           -> "🍎"
-        icon.contains("carrot")          -> "🥕"
-        icon.contains("lemon")           -> "🍋"
-        icon.contains("bowl")            -> "🥣"
-        icon.contains("mug-saucer")      -> "☕"
-        icon.contains("burger")          -> "🍔"
-        icon.contains("fish")            -> "🐟"
-        icon.contains("egg")             -> "🥚"
-        icon.contains("droplet")         -> "💧"
-        icon.contains("wine")            -> "🍷"
-        // Fitness
-        icon.contains("dumbbell")        -> "🏋️"
-        icon.contains("person-running")  -> "🏃"
-        icon.contains("person-walking")  -> "🚶"
-        icon.contains("bicycle")         -> "🚲"
-        icon.contains("heart-pulse")     -> "💓"
-        icon.contains("fire")            -> "🔥"
-        icon.contains("stopwatch")       -> "⏱️"
-        icon.contains("shoe")            -> "👟"
-        icon.contains("weight-scale")    -> "⚖️"
-        icon.contains("swimming")        -> "🏊"
-        // Mindfulness
-        icon.contains("brain")           -> "🧠"
-        icon.contains("spa")             -> "🌸"
-        icon.contains("face-smile")      -> "😊"
-        icon.contains("feather")         -> "🪶"
-        icon.contains("leaf")            -> "🌿"
-        icon.contains("om")              -> "🕉️"
-        icon.contains("cloud")           -> "☁️"
-        icon.contains("wind")            -> "🌬️"
-        icon.contains("moon")            -> "🌙"
-        icon.contains("heart")           -> "❤️"
-        // Study
-        icon.contains("book-open")       -> "📖"
-        icon.contains("book")            -> "📚"
-        icon.contains("graduation")      -> "🎓"
-        icon.contains("pencil")          -> "✏️"
-        icon.contains("lightbulb")       -> "💡"
-        icon.contains("microscope")      -> "🔬"
-        icon.contains("flask")           -> "🧪"
-        icon.contains("language")        -> "🌐"
-        icon.contains("pen")             -> "🖊️"
-        // Work
-        icon.contains("briefcase")       -> "💼"
-        icon.contains("laptop")          -> "💻"
-        icon.contains("computer")        -> "🖥️"
-        icon.contains("calendar")        -> "📅"
-        icon.contains("chart-line")      -> "📈"
-        icon.contains("chart")           -> "📊"
-        icon.contains("envelope")        -> "📧"
-        icon.contains("users")           -> "👥"
-        icon.contains("mug-hot")         -> "☕"
-        icon.contains("clock")           -> "🕐"
-        // Generic
-        icon.contains("star")            -> "⭐"
-        else                             -> "⭐"
+        // FA class strings (from web app)
+        s.contains("dumbbell")          -> Icons.Default.FitnessCenter
+        s.contains("person-running")    -> Icons.Default.DirectionsRun
+        s.contains("person-walking")    -> Icons.Default.DirectionsWalk
+        s.contains("bicycle")           -> Icons.Default.DirectionsBike
+        s.contains("heart-pulse")       -> Icons.Default.MonitorHeart
+        s.contains("fire")              -> Icons.Default.LocalFireDepartment
+        s.contains("stopwatch")         -> Icons.Default.Timer
+        s.contains("shoe")              -> Icons.Default.DirectionsWalk
+        s.contains("weight-scale")      -> Icons.Default.Scale
+        s.contains("swimming")          -> Icons.Default.Pool
+        s.contains("apple")             -> Icons.Default.Restaurant
+        s.contains("carrot")            -> Icons.Default.Eco
+        s.contains("lemon")             -> Icons.Default.Restaurant
+        s.contains("bowl")              -> Icons.Default.DinnerDining
+        s.contains("mug-saucer")        -> Icons.Default.LocalCafe
+        s.contains("burger")            -> Icons.Default.LunchDining
+        s.contains("fish")              -> Icons.Default.Restaurant
+        s.contains("egg")               -> Icons.Default.Restaurant
+        s.contains("droplet")           -> Icons.Default.WaterDrop
+        s.contains("wine")              -> Icons.Default.LocalBar
+        s.contains("brain")             -> Icons.Default.Psychology
+        s.contains("spa")               -> Icons.Default.Spa
+        s.contains("face-smile")        -> Icons.Default.SentimentSatisfied
+        s.contains("feather")           -> Icons.Default.Edit
+        s.contains("leaf")              -> Icons.Default.Eco
+        s.contains("om")                -> Icons.Default.SelfImprovement
+        s.contains("cloud")             -> Icons.Default.Cloud
+        s.contains("wind")              -> Icons.Default.Air
+        s.contains("moon")              -> Icons.Default.Bedtime
+        s.contains("heart")             -> Icons.Default.Favorite
+        s.contains("book-open")         -> Icons.Default.MenuBook
+        s.contains("book")              -> Icons.Default.Book
+        s.contains("graduation")        -> Icons.Default.School
+        s.contains("pencil")            -> Icons.Default.Edit
+        s.contains("lightbulb")         -> Icons.Default.Lightbulb
+        s.contains("microscope")        -> Icons.Default.Biotech
+        s.contains("flask")             -> Icons.Default.Science
+        s.contains("language")          -> Icons.Default.Translate
+        s.contains("pen")               -> Icons.Default.Create
+        s.contains("briefcase")         -> Icons.Default.Work
+        s.contains("laptop")            -> Icons.Default.Laptop
+        s.contains("computer")          -> Icons.Default.Computer
+        s.contains("calendar")          -> Icons.Default.EventAvailable
+        s.contains("chart-line")        -> Icons.Default.TrendingUp
+        s.contains("chart")             -> Icons.Default.BarChart
+        s.contains("envelope")          -> Icons.Default.Email
+        s.contains("users")             -> Icons.Default.Group
+        s.contains("mug-hot")           -> Icons.Default.LocalCafe
+        s.contains("clock")             -> Icons.Default.AccessTime
+        // Emoji stored by the Android icon picker
+        s.contains("🏋") || s.contains("💪") -> Icons.Default.FitnessCenter
+        s.contains("🧘")                -> Icons.Default.SelfImprovement
+        s.contains("🍎") || s.contains("🥕") || s.contains("🍋") -> Icons.Default.Restaurant
+        s.contains("📖") || s.contains("📚") -> Icons.Default.MenuBook
+        s.contains("💻")                -> Icons.Default.Laptop
+        s.contains("💧")                -> Icons.Default.WaterDrop
+        s.contains("🏃")                -> Icons.Default.DirectionsRun
+        s.contains("🌱")                -> Icons.Default.Eco
+        s.contains("🎯")                -> Icons.Default.TrackChanges
+        s.contains("🛌")                -> Icons.Default.Bedtime
+        else                            -> Icons.Default.Star
     }
 }
 

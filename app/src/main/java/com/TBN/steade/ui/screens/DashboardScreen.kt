@@ -26,7 +26,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.TBN.steade.ui.components.BottomNavBar
 import com.TBN.steade.ui.components.MainGradientBackground
-import com.TBN.steade.ui.components.habitIconToEmoji
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.TBN.steade.ui.components.habitIconToMaterialIcon
 import com.TBN.steade.ui.navigation.Screen
 import com.TBN.steade.ui.theme.SteadeNavyBlue
 import com.TBN.steade.ui.viewmodel.SteadEViewModel
@@ -137,6 +138,7 @@ fun DashboardScreen(navController: NavController, viewModel: SteadEViewModel) {
                                    else false
                         DashHabitItem(
                             name      = h,
+                            icon      = Icons.Default.Star,
                             isPast    = isPast,
                             isFuture  = isFuture,
                             isDone    = done,
@@ -150,7 +152,8 @@ fun DashboardScreen(navController: NavController, viewModel: SteadEViewModel) {
                                    else if (selectedDate == today) localCompletions[habit.name] ?: habit.isCompletedToday
                                    else false
                         DashHabitItem(
-                            name     = "${habitIconToEmoji(habit.icon)} ${habit.name}",
+                            name     = habit.name,
+                            icon     = habitIconToMaterialIcon(habit.icon),
                             isPast   = isPast,
                             isFuture = isFuture,
                             isDone   = done,
@@ -273,6 +276,7 @@ fun SleepSuggestionCard() {
 @Composable
 fun DashHabitItem(
     name    : String,
+    icon    : ImageVector,
     isPast  : Boolean,
     isFuture: Boolean,
     isDone  : Boolean,
@@ -289,6 +293,8 @@ fun DashHabitItem(
             verticalAlignment     = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+            Icon(icon, contentDescription = null, tint = Color.White.copy(alpha = 0.85f), modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(8.dp))
             Text(name, color = Color.White, fontSize = 15.sp, modifier = Modifier.weight(1f))
             when {
                 isPast  -> Icon(
