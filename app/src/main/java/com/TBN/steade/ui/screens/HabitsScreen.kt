@@ -13,7 +13,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -294,7 +296,7 @@ fun HabitCard(habit: ApiHabit, onDelete: () -> Unit) {
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.padding(top = 4.dp)) {
                     if (!habit.category.isNullOrBlank()) Chip(habit.category)
                     if (!habit.frequency.isNullOrBlank()) Chip(habit.frequency.replaceFirstChar { it.uppercase() })
-                    if (habit.isCompletedToday) Chip("âś“ Done")
+                    if (habit.isCompletedToday) Chip(“Done”, icon = Icons.Default.Check)
                 }
             }
             IconButton(onClick = onDelete) {
@@ -305,10 +307,19 @@ fun HabitCard(habit: ApiHabit, onDelete: () -> Unit) {
 }
 
 @Composable
-fun Chip(text: String) {
+fun Chip(text: String, icon: ImageVector? = null) {
     Surface(shape = RoundedCornerShape(20.dp), color = Color.White.copy(alpha = 0.15f)) {
-        Text(text, color = Color.White.copy(alpha = 0.8f), fontSize = 10.sp,
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+        ) {
+            if (icon != null) {
+                Icon(icon, contentDescription = null,
+                    tint = Color.White.copy(alpha = 0.8f), modifier = Modifier.size(10.dp))
+                Spacer(Modifier.width(3.dp))
+            }
+            Text(text, color = Color.White.copy(alpha = 0.8f), fontSize = 10.sp)
+        }
     }
 }
 

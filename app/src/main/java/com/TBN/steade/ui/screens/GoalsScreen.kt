@@ -13,7 +13,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -149,29 +148,26 @@ fun AddGoalDialog(onDismiss: () -> Unit, onGoalAdded: (String, String, String) -
                 Text("Icon", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = SteadeNavyBlue)
                 Spacer(Modifier.height(8.dp))
 
-                // Icon selection using Surface with border
+                // Icon selection
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                     goalIcons.chunked(5).forEach { row ->
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             row.forEach { (key, icon) ->
                                 val isSelected = selectedIcon.first == key
-                                Surface(
+                                Box(
                                     modifier = Modifier
-                                        .size(48.dp)
+                                        .size(44.dp)
                                         .clip(CircleShape)
+                                        .background(if (isSelected) SteadeNavyBlue.copy(alpha = 0.15f) else Color.Transparent)
                                         .clickable { selectedIcon = key to icon },
-                                    shape = CircleShape,
-                                    color = if (isSelected) SteadeNavyBlue.copy(alpha = 0.15f) else Color.Transparent,
-                                    border = if (isSelected) BorderStroke(2.dp, SteadeNavyBlue) else BorderStroke(1.dp, Color.Gray.copy(alpha = 0.3f))
+                                    contentAlignment = Alignment.Center
                                 ) {
-                                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                                        Icon(icon, contentDescription = null, tint = if (isSelected) SteadeNavyBlue else Color.Gray, modifier = Modifier.size(24.dp))
-                                    }
+                                    Icon(icon, contentDescription = null, tint = SteadeNavyBlue, modifier = Modifier.size(24.dp))
                                 }
                             }
-                            repeat(5 - row.size) { Spacer(Modifier.size(48.dp)) }
+                            repeat(5 - row.size) { Spacer(Modifier.size(44.dp)) }
                         }
-                        Spacer(Modifier.height(8.dp))
+                        Spacer(Modifier.height(4.dp))
                     }
                 }
 
