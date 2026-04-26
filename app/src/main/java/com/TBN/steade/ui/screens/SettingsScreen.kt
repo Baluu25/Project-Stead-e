@@ -3,17 +3,20 @@ package com.TBN.steade.ui.screens
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -30,122 +33,137 @@ import com.TBN.steade.ui.navigation.Screen
 import com.TBN.steade.ui.theme.SteadeNavyBlue
 import com.TBN.steade.ui.viewmodel.SteadEViewModel
 import kotlinx.coroutines.delay
+import kotlin.math.abs
 import kotlin.random.Random
 
 @Composable
 fun SettingsScreen(navController: NavController, viewModel: SteadEViewModel) {
     val context = LocalContext.current
-    val prefs   = remember { context.getSharedPreferences("ModulePrefs", android.content.Context.MODE_PRIVATE) }
+    val prefs   = remember { context.getSharedPreferences("SteadESettings", android.content.Context.MODE_PRIVATE) }
 
-    var fitnessEnabled     by remember { mutableStateOf(prefs.getBoolean("fitness",     true)) }
-    var mindfulnessEnabled by remember { mutableStateOf(prefs.getBoolean("mindfulness", true)) }
-    var nutritionEnabled   by remember { mutableStateOf(prefs.getBoolean("nutrition",   true)) }
-    var studyEnabled       by remember { mutableStateOf(prefs.getBoolean("study",       true)) }
-    var workEnabled        by remember { mutableStateOf(prefs.getBoolean("work",        true)) }
-    var sleepEnabled       by remember { mutableStateOf(prefs.getBoolean("sleep",       true)) }
+    // ── Habit category toggles ──────────────────────────────────────────────
+    var fitnessEnabled     by remember { mutableStateOf(prefs.getBoolean("cat_fitness",     true)) }
+    var nutritionEnabled   by remember { mutableStateOf(prefs.getBoolean("cat_nutrition",   true)) }
+    var mindfulnessEnabled by remember { mutableStateOf(prefs.getBoolean("cat_mindfulness", true)) }
+    var studyEnabled       by remember { mutableStateOf(prefs.getBoolean("cat_study",       true)) }
+    var workEnabled        by remember { mutableStateOf(prefs.getBoolean("cat_work",        true)) }
 
-    var masterNotifications by remember { mutableStateOf(true) }
-    var popupNotifications  by remember { mutableStateOf(true) }
-    var vibration           by remember { mutableStateOf(true) }
+    // ── UI state ────────────────────────────────────────────────────────────
+    var showLogoutDialog by remember { mutableStateOf(false) }
+    var showEasterEgg    by remember { mutableStateOf(false) }
+    var copyrightTaps    by remember { mutableStateOf(0) }
+    var refreshed        by remember { mutableStateOf(false) }
 
-    var showEasterEgg by remember { mutableStateOf(false) }
+    // Clear "Synced ✓" badge after 2 s
+    LaunchedEffect(refreshed) {
+        if (refreshed) { delay(2_000); refreshed = false }
+    }
+
+    // Reset tap counter after 3 s of inactivity so partial taps don’t linger
+    LaunchedEffect(copyrightTaps) {
+        if (copyrightTaps in 1..4) { delay(3_000); copyrightTaps = 0 }
+    }
+
+    // ── Logout confirmation ─────────────────────────────────────────────────
+    if (showLogoutDialog) {
+        AlertDialog(
+            onDismissRequest = { showLogoutDialog = false },
+            title  = { Text("Log Out", fontWeight = FontWeight.Bold) },
+            text   = { Text("Are you sure you want to log out?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    showLogoutDialog = false
+                    viewModel.logout {
+                        navController.navigate(Screen.Welcome.route) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    }
+                }) {
+                    Text("Log Out", color = Color.Red, fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showLogoutDialog = false }) { Text("Cancel") }
+            }
+        )
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         MainGradientBackground(showShadow = true) {
             Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+
                 Column(
                     modifier = Modifier
                         .weight(1f)
                         .verticalScroll(rememberScrollState())
                 ) {
                     Spacer(Modifier.height(32.dp))
-
-                    Row(
-                        modifier              = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment     = Alignment.CenterVertically
-                    ) {
-                        Text("Settings", color = Color.White, fontSize = 28.sp, fontWeight = FontWeight.Bold)
-                        Text(
-                            "💪",
-                            modifier  = Modifier
-                                .alpha(0.08f)
-                                .padding(8.dp),
-                            fontSize  = 20.sp
-                        )
-                    }
-
-                    Spacer(Modifier.height(24.dp))
-                    SectionHeader("Enabled Modules")
-                    Spacer(Modifier.height(10.dp))
-
-                    ModuleToggle("Fitness",     fitnessEnabled)     { fitnessEnabled     = it; prefs.edit().putBoolean("fitness",     it).apply() }
-                    ModuleToggle("Mindfulness", mindfulnessEnabled) { mindfulnessEnabled = it; prefs.edit().putBoolean("mindfulness", it).apply() }
-                    ModuleToggle("Nutrition",   nutritionEnabled)   { nutritionEnabled   = it; prefs.edit().putBoolean("nutrition",   it).apply() }
-                    ModuleToggle("Study",       studyEnabled)       { studyEnabled       = it; prefs.edit().putBoolean("study",       it).apply() }
-                    ModuleToggle("Work",        workEnabled)        { workEnabled        = it; prefs.edit().putBoolean("work",        it).apply() }
-                    ModuleToggle("Sleep",       sleepEnabled)       { sleepEnabled       = it; prefs.edit().putBoolean("sleep",       it).apply() }
-
-                    Spacer(Modifier.height(24.dp))
-                    SectionHeader("Notifications")
-                    Spacer(Modifier.height(10.dp))
-
-                    ModuleToggle("Master Notifications", masterNotifications) { masterNotifications = it }
-                    if (masterNotifications) {
-                        ModuleToggle("Pop-up Notifications", popupNotifications) { popupNotifications = it }
-                        ModuleToggle("Vibration",            vibration)           { vibration           = it }
-                    }
-
-                    Spacer(Modifier.height(24.dp))
-                    SectionHeader("Easter Egg")
-                    Spacer(Modifier.height(10.dp))
-
-                    // Easter egg card
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        shape    = RoundedCornerShape(14.dp),
-                        border   = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
-                        colors   = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f))
-                    ) {
-                        Row(
-                            modifier          = Modifier
-                                .fillMaxWidth()
-                                .padding(14.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text("Weight Catcher Mini-Game 🎮", color = Color.White, fontSize = 15.sp)
-                            Button(
-                                onClick = { showEasterEgg = true },
-                                colors  = ButtonDefaults.buttonColors(
-                                    containerColor = Color.White,
-                                    contentColor   = SteadeNavyBlue
-                                ),
-                                shape   = RoundedCornerShape(8.dp)
-                            ) { Text("Play", fontWeight = FontWeight.Bold) }
-                        }
-                    }
-
-                    Spacer(Modifier.height(28.dp))
-
                     Text(
-                        "Note: Certain data and advanced account settings can only be adjusted or modified on the official website.",
-                        color     = Color.White.copy(alpha = 0.55f),
-                        fontSize  = 12.sp,
-                        textAlign = TextAlign.Center,
-                        modifier  = Modifier.fillMaxWidth().padding(horizontal = 12.dp)
+                        "Settings",
+                        color      = Color.White,
+                        fontSize   = 28.sp,
+                        fontWeight = FontWeight.Bold
                     )
 
-                    Spacer(Modifier.height(16.dp))
+                    // ── Habit Categories ────────────────────────────────────
+                    Spacer(Modifier.height(28.dp))
+                    SettingsSectionHeader("Habit Categories")
+                    Spacer(Modifier.height(10.dp))
 
-                    Button(
-                        onClick  = {
-                            viewModel.logout {
-                                navController.navigate(Screen.Welcome.route) {
-                                    popUpTo(0) { inclusive = true }
+                    CategoryToggle("Fitness",     fitnessEnabled)     { v -> fitnessEnabled     = v; prefs.edit().putBoolean("cat_fitness",     v).apply() }
+                    CategoryToggle("Nutrition",   nutritionEnabled)   { v -> nutritionEnabled   = v; prefs.edit().putBoolean("cat_nutrition",   v).apply() }
+                    CategoryToggle("Mindfulness", mindfulnessEnabled) { v -> mindfulnessEnabled = v; prefs.edit().putBoolean("cat_mindfulness", v).apply() }
+                    CategoryToggle("Study",       studyEnabled)       { v -> studyEnabled       = v; prefs.edit().putBoolean("cat_study",       v).apply() }
+                    CategoryToggle("Work",        workEnabled)        { v -> workEnabled        = v; prefs.edit().putBoolean("cat_work",        v).apply() }
+
+                    // ── Profile & Data ──────────────────────────────────────
+                    Spacer(Modifier.height(28.dp))
+                    SettingsSectionHeader("Profile & Data")
+                    Spacer(Modifier.height(10.dp))
+
+                    SettingsActionRow(
+                        label   = "View Profile",
+                        icon    = Icons.Default.Person,
+                        onClick = { navController.navigate(Screen.Profile.route) }
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    SettingsActionRow(
+                        label   = if (refreshed) "Synced ✓" else "Refresh All Data",
+                        icon    = if (refreshed) Icons.Default.Check else Icons.Default.Refresh,
+                        tint    = if (refreshed) Color(0xFF66FF99) else Color.White,
+                        onClick = {
+                            viewModel.loadUser()
+                            viewModel.loadHabits()
+                            viewModel.loadGoals()
+                            viewModel.loadStatistics()
+                            viewModel.loadAchievements()
+                            refreshed = true
+                        }
+                    )
+
+                    // ── Copyright + hidden easter-egg trigger ───────────────
+                    Spacer(Modifier.height(40.dp))
+                    Text(
+                        "© 2025 SteadE · All rights reserved",
+                        color     = Color.White.copy(alpha = 0.35f),
+                        fontSize  = 12.sp,
+                        textAlign = TextAlign.Center,
+                        modifier  = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                copyrightTaps++
+                                if (copyrightTaps >= 5) {
+                                    copyrightTaps = 0
+                                    showEasterEgg = true
                                 }
                             }
-                        },
+                            .padding(vertical = 10.dp)
+                    )
+
+                    // ── Log Out ─────────────────────────────────────────────
+                    Spacer(Modifier.height(16.dp))
+                    Button(
+                        onClick  = { showLogoutDialog = true },
                         modifier = Modifier.fillMaxWidth().height(54.dp),
                         shape    = RoundedCornerShape(10.dp),
                         colors   = ButtonDefaults.buttonColors(
@@ -153,14 +171,17 @@ fun SettingsScreen(navController: NavController, viewModel: SteadEViewModel) {
                             contentColor   = Color.White
                         )
                     ) {
-                        Text("Logout", fontSize = 17.sp, fontWeight = FontWeight.SemiBold)
+                        Text("Log Out", fontSize = 17.sp, fontWeight = FontWeight.SemiBold)
                     }
+
                     Spacer(Modifier.height(24.dp))
                 }
+
                 BottomNavBar(navController)
             }
         }
 
+        // Easter egg overlay (full-screen, above everything)
         if (showEasterEgg) {
             Box(modifier = Modifier.fillMaxSize().zIndex(10f)) {
                 StackGame(onClose = { showEasterEgg = false })
@@ -169,8 +190,9 @@ fun SettingsScreen(navController: NavController, viewModel: SteadEViewModel) {
     }
 }
 
+// ── Shared section header ───────────────────────────────────────────────────
 @Composable
-fun SectionHeader(title: String) {
+fun SettingsSectionHeader(title: String) {
     Text(
         title,
         color      = Color.White,
@@ -179,8 +201,9 @@ fun SectionHeader(title: String) {
     )
 }
 
+// ── Category toggle row ─────────────────────────────────────────────────────
 @Composable
-fun ModuleToggle(label: String, isEnabled: Boolean, onToggle: (Boolean) -> Unit) {
+fun CategoryToggle(label: String, isEnabled: Boolean, onToggle: (Boolean) -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
         shape    = RoundedCornerShape(12.dp),
@@ -194,9 +217,9 @@ fun ModuleToggle(label: String, isEnabled: Boolean, onToggle: (Boolean) -> Unit)
         ) {
             Text(label, color = Color.White, fontSize = 15.sp)
             Switch(
-                checked        = isEnabled,
-                onCheckedChange= onToggle,
-                colors         = SwitchDefaults.colors(
+                checked         = isEnabled,
+                onCheckedChange = onToggle,
+                colors          = SwitchDefaults.colors(
                     checkedThumbColor   = Color.White,
                     checkedTrackColor   = Color.Green.copy(alpha = 0.5f),
                     uncheckedThumbColor = Color.LightGray,
@@ -207,6 +230,43 @@ fun ModuleToggle(label: String, isEnabled: Boolean, onToggle: (Boolean) -> Unit)
     }
 }
 
+// ── Tappable action row ─────────────────────────────────────────────────────
+@Composable
+fun SettingsActionRow(
+    label  : String,
+    icon   : ImageVector,
+    tint   : Color = Color.White,
+    onClick: () -> Unit
+) {
+    Card(
+        onClick = onClick,
+        shape   = RoundedCornerShape(12.dp),
+        border  = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
+        colors  = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f))
+    ) {
+        Row(
+            modifier              = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 14.dp),
+            verticalAlignment     = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(
+                verticalAlignment     = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(20.dp))
+                Text(label, color = tint, fontSize = 15.sp)
+            }
+            Icon(
+                Icons.Default.ChevronRight,
+                contentDescription = null,
+                tint     = tint.copy(alpha = 0.45f),
+                modifier = Modifier.size(18.dp)
+            )
+        }
+    }
+}
+
+// ── Easter-egg mini-game ────────────────────────────────────────────────────
 @Composable
 fun StackGame(onClose: () -> Unit) {
     var score           by remember { mutableStateOf(0) }
@@ -222,11 +282,11 @@ fun StackGame(onClose: () -> Unit) {
             delay(16)
             fallingY += speed
             if (fallingY >= 0.85f) {
-                val hit = kotlin.math.abs(weightPositionX - catcherPosition) < 0.18f
+                val hit = abs(weightPositionX - catcherPosition) < 0.18f
                 if (hit) {
-                    score         += 10
-                    fallingY       = 0f
-                    weightPositionX= Random.nextFloat()
+                    score           += 10
+                    fallingY         = 0f
+                    weightPositionX  = Random.nextFloat()
                 } else if (fallingY >= 1.05f) {
                     gameOver = true
                 }
@@ -274,7 +334,9 @@ fun StackGame(onClose: () -> Unit) {
                 "Drag left/right to catch!",
                 color    = Color.White.copy(alpha = 0.45f),
                 fontSize = 13.sp,
-                modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 130.dp)
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 130.dp)
             )
         } else {
             Column(
