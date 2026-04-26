@@ -1,5 +1,6 @@
 package com.TBN.steade.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -276,6 +277,7 @@ fun AddHabitDialog(
 fun HabitCard(habit: ApiHabit, onDelete: () -> Unit) {
     Card(modifier = Modifier.fillMaxWidth().alpha(if (habit.isActive) 1f else 0.55f),
         shape = RoundedCornerShape(16.dp),
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
         colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.15f))) {
         Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
             Icon(

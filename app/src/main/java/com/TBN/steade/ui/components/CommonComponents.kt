@@ -1,6 +1,8 @@
 package com.TBN.steade.ui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -336,6 +338,7 @@ fun BottomNavBar(navController: NavController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .border(1.dp, Color.White.copy(alpha = 0.2f), RoundedCornerShape(24.dp))
             .background(Color.White.copy(alpha = 0.12f), RoundedCornerShape(24.dp))
             .padding(horizontal = 4.dp, vertical = 6.dp),
         horizontalArrangement = Arrangement.SpaceAround,
@@ -397,10 +400,8 @@ fun FrostedCard(
 ) {
     androidx.compose.foundation.layout.Column(
         modifier = modifier
-            .background(
-                Color.White.copy(alpha = alpha),
-                RoundedCornerShape(cornerRadius.dp)
-            )
+            .border(1.dp, Color.White.copy(alpha = 0.2f), RoundedCornerShape(cornerRadius.dp))
+            .background(Color.White.copy(alpha = alpha), RoundedCornerShape(cornerRadius.dp))
             .padding(16.dp),
         content = content
     )

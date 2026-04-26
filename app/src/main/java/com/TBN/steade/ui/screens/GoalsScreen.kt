@@ -1,5 +1,6 @@
 package com.TBN.steade.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -115,6 +116,7 @@ fun AddGoalDialog(onDismiss: () -> Unit, onGoalAdded: (String, String, String) -
 @Composable
 fun GoalCard(goal: ApiGoal, onDelete: (() -> Unit)? = null) {
     Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp),
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
         colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.15f))) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(modifier = Modifier.fillMaxWidth(),

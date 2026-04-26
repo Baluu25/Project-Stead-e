@@ -1,6 +1,7 @@
 package com.TBN.steade.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
@@ -227,6 +228,7 @@ fun DashboardStreakCard(streak: Int, dailyMap: Map<String, Int>) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape    = RoundedCornerShape(16.dp),
+        border   = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
         colors   = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.15f))
     ) {
         Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp)) {
@@ -327,7 +329,9 @@ fun DashHabitItem(
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape    = RoundedCornerShape(12.dp),
-        // Completed card: rgba(37,64,143,0.3) matching .habit-item.completed
+        // Completed card: rgba(37,64,143,0.3) + border rgba(37,64,143,0.5) per .habit-item.completed
+        border   = if (isDone) BorderStroke(1.dp, SteadeNavyBlue.copy(alpha = 0.5f))
+                   else        BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
         colors   = CardDefaults.cardColors(
             containerColor = if (isDone) SteadeNavyBlue.copy(alpha = 0.3f)
                              else        Color.White.copy(alpha = 0.13f)

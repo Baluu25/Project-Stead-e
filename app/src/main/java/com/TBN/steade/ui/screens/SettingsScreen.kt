@@ -1,5 +1,6 @@
 package com.TBN.steade.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -103,6 +104,7 @@ fun SettingsScreen(navController: NavController, viewModel: SteadEViewModel) {
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape    = RoundedCornerShape(14.dp),
+                        border   = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
                         colors   = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f))
                     ) {
                         Row(
@@ -182,6 +184,7 @@ fun ModuleToggle(label: String, isEnabled: Boolean, onToggle: (Boolean) -> Unit)
     Card(
         modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
         shape    = RoundedCornerShape(12.dp),
+        border   = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
         colors   = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f))
     ) {
         Row(

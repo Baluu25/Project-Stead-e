@@ -1,6 +1,7 @@
 package com.TBN.steade.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -15,8 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.TBN.steade.R
-import com.TBN.steade.ui.components.MainGradientBackground
 import com.TBN.steade.ui.navigation.Screen
+import com.TBN.steade.ui.theme.SteadeNavyBlue
 import com.TBN.steade.ui.viewmodel.SteadEViewModel
 import kotlinx.coroutines.delay
 
@@ -35,7 +36,7 @@ fun LoadingScreen(navController: NavController, viewModel: SteadEViewModel) {
         }
     }
 
-    MainGradientBackground {
+    Box(modifier = Modifier.fillMaxSize().background(SteadeNavyBlue)) {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement   = Arrangement.Center,

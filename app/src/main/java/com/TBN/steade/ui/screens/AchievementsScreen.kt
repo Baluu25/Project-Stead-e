@@ -1,5 +1,6 @@
 package com.TBN.steade.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -117,6 +118,7 @@ fun AchievementCard(achievement: ApiAchievement) {
     Card(
         modifier = Modifier.fillMaxWidth().alpha(if (unlocked) 1f else 0.75f),
         shape    = RoundedCornerShape(14.dp),
+        border   = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
         colors   = CardDefaults.cardColors(
             containerColor = if (unlocked) Color.White.copy(alpha = 0.22f) else Color.White.copy(alpha = 0.08f)
         )

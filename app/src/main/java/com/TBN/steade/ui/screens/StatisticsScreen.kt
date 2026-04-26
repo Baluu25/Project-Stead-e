@@ -1,5 +1,6 @@
 package com.TBN.steade.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -119,6 +120,7 @@ fun StatCard(label: String, value: String, icon: ImageVector, modifier: Modifier
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(16.dp),
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
         colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.15f))
     ) {
         Column(modifier = Modifier.padding(14.dp), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -152,6 +154,7 @@ fun StatCard(label: String, value: String, icon: ImageVector, modifier: Modifier
 fun WeekLineChart(dataPoints: List<Float>) {
     val dayLabels = listOf("M","T","W","T","F","S","S")
     Card(modifier = Modifier.fillMaxWidth().height(180.dp), shape = RoundedCornerShape(16.dp),
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
         colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.15f))) {
         Box(modifier = Modifier.fillMaxSize()) {
             Canvas(modifier = Modifier.fillMaxSize().padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 32.dp)) {

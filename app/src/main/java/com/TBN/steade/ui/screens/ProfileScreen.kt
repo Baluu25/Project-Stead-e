@@ -2,6 +2,7 @@ package com.TBN.steade.ui.screens
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -116,7 +117,8 @@ fun ProfileScreen(navController: NavController, viewModel: SteadEViewModel) {
 @Composable
 fun ProfileInfoRow(label: String, value: String) {
     Surface(modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
-        shape = RoundedCornerShape(14.dp), color = Color.White.copy(alpha = 0.12f)) {
+        shape = RoundedCornerShape(14.dp), color = Color.White.copy(alpha = 0.12f),
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f))) {
         Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
             verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
