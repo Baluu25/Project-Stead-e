@@ -34,7 +34,6 @@ import com.TBN.steade.ui.viewmodel.SteadEViewModel
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import kotlin.random.Random
 
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
@@ -47,7 +46,6 @@ fun DashboardScreen(navController: NavController, viewModel: SteadEViewModel) {
     val nutritionEnabled   = modulePrefs.getBoolean("nutrition", true)
     val studyEnabled       = modulePrefs.getBoolean("study", true)
     val workEnabled        = modulePrefs.getBoolean("work", true)
-    val sleepEnabled       = modulePrefs.getBoolean("sleep", true)
 
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
     val localCompletions = remember { mutableStateMapOf<String, Boolean>() }
@@ -96,15 +94,12 @@ fun DashboardScreen(navController: NavController, viewModel: SteadEViewModel) {
                 Spacer(Modifier.height(20.dp))
 
                 // Streak card
-                DashboardStreakCard(streak = viewModel.statistics?.currentStreak ?: 0)
+                DashboardStreakCard(
+                    streak       = viewModel.statistics?.currentStreak ?: 0,
+                    dailyMap     = viewModel.statistics?.dailyCompletions ?: emptyMap()
+                )
 
                 Spacer(Modifier.height(20.dp))
-
-                // Sleep suggestion card
-                if (sleepEnabled) {
-                    SleepSuggestionCard()
-                    Spacer(Modifier.height(20.dp))
-                }
 
                 // Habits for selected date
                 val isPast   = selectedDate.isBefore(today)
@@ -130,7 +125,6 @@ fun DashboardScreen(navController: NavController, viewModel: SteadEViewModel) {
                         if (nutritionEnabled)   add("Nutrition 🍎")
                         if (studyEnabled)       add("Study 📖")
                         if (workEnabled)        add("Work 💻")
-                        if (sleepEnabled)       add("Sleep 🌙")
                     }
                     fallbackHabits.forEach { h ->
                         val done = if (isPast) (h.length + selectedDate.dayOfMonth) % 2 == 0
@@ -219,7 +213,12 @@ fun WeeklyDateStrip(selectedDate: LocalDate, onDateSelected: (LocalDate) -> Unit
 }
 
 @Composable
-fun DashboardStreakCard(streak: Int) {
+fun DashboardStreakCard(streak: Int, dailyMap: Map<String, Int>) {
+    val fmt   = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val today = LocalDate.now()
+    val last7 = (6 downTo 0).map { today.minusDays(it.toLong()) }
+    val dayLabels = listOf("M","T","W","T","F","S","S")
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape    = RoundedCornerShape(16.dp),
@@ -228,23 +227,31 @@ fun DashboardStreakCard(streak: Int) {
         Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Text("🔥", fontSize = 34.sp)
             Spacer(Modifier.width(14.dp))
-            Column {
+            Column(modifier = Modifier.weight(1f)) {
                 Text("Current Streak", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 Text(
                     "$streak day${if (streak != 1) "s" else ""}",
                     color    = Color.White.copy(alpha = 0.8f),
                     fontSize = 14.sp
                 )
-                Spacer(Modifier.height(8.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    listOf("M","T","W","T","F","S","S").forEach { d ->
+            }
+            // Dots on the right
+            Column(horizontalAlignment = Alignment.End) {
+                Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                    last7.forEachIndexed { i, date ->
+                        val hasCompletion = (dailyMap[date.format(fmt)] ?: 0) > 0
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(d, color = Color.White.copy(alpha = 0.5f), fontSize = 10.sp)
+                            Text(
+                                dayLabels[date.dayOfWeek.value % 7],
+                                color    = Color.White.copy(alpha = 0.5f),
+                                fontSize = 9.sp
+                            )
+                            Spacer(Modifier.height(3.dp))
                             Box(
                                 modifier = Modifier
-                                    .size(8.dp)
+                                    .size(9.dp)
                                     .clip(CircleShape)
-                                    .background(if (Random.nextBoolean()) Color.Green else Color.White.copy(alpha = 0.2f))
+                                    .background(if (hasCompletion) Color(0xFF4CAF50) else Color.White.copy(alpha = 0.2f))
                             )
                         }
                     }
@@ -254,24 +261,6 @@ fun DashboardStreakCard(streak: Int) {
     }
 }
 
-@Composable
-fun SleepSuggestionCard() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape    = RoundedCornerShape(16.dp),
-        colors   = CardDefaults.cardColors(containerColor = Color.Blue.copy(alpha = 0.18f))
-    ) {
-        Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text("🌙", fontSize = 30.sp)
-            Spacer(Modifier.width(14.dp))
-            Column {
-                Text("Optimal Sleep Schedule", color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Bold)
-                Text("Suggested: 22:30 – 06:30", color = Color.White.copy(alpha = 0.8f), fontSize = 13.sp)
-                Text("Duration: 8 hours", color = Color.White.copy(alpha = 0.6f), fontSize = 12.sp)
-            }
-        }
-    }
-}
 
 @Composable
 fun DashHabitItem(

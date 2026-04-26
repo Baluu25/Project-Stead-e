@@ -29,7 +29,9 @@ class SteadEViewModel(application: Application) : AndroidViewModel(application) 
     var goalsLoading by mutableStateOf(false)
     var goalsError   by mutableStateOf<String?>(null)
 
-    var statistics   by mutableStateOf<ApiStatistics?>(null)
+    var statistics        by mutableStateOf<ApiStatistics?>(null)
+    var statisticsLoading by mutableStateOf(false)
+    var statisticsError   by mutableStateOf<String?>(null)
 
     val achievements        = mutableStateListOf<ApiAchievement>()
     var achievementsLoading by mutableStateOf(false)
@@ -140,7 +142,13 @@ class SteadEViewModel(application: Application) : AndroidViewModel(application) 
 
     // ── Statistics ────────────────────────────────────────────────────────────
     fun loadStatistics() {
-        viewModelScope.launch { repository.getStatistics().onSuccess { statistics = it } }
+        viewModelScope.launch {
+            statisticsLoading = true; statisticsError = null
+            repository.getStatistics().fold(
+                onSuccess = { statisticsLoading = false; statistics = it },
+                onFailure = { statisticsLoading = false; statisticsError = it.message }
+            )
+        }
     }
 
     // ── Achievements ──────────────────────────────────────────────────────────

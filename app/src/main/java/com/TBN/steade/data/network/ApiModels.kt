@@ -100,17 +100,16 @@ data class CreateGoalRequest(
 )
 
 // ─── Statistics ───────────────────────────────────────────────────────────────
-data class DailyCompletion(val date: String? = null, val count: Int = 0)
-data class CategoryBreakdown(val category: String? = null, val count: Int = 0)
-
+// The API returns daily_completions and category_breakdown as keyed JSON objects,
+// e.g. {"2026-04-20": 3, "Fitness": 12}, so Map<String,Int> is the correct type.
 data class ApiStatistics(
     @SerializedName("total_habits")          val totalHabits: Int = 0,
     @SerializedName("active_habits")         val activeHabits: Int = 0,
     @SerializedName("current_streak")        val currentStreak: Int = 0,
     @SerializedName("longest_streak")        val longestStreak: Int = 0,
     @SerializedName("completions_this_week") val completionsThisWeek: Int = 0,
-    @SerializedName("daily_completions")     val dailyCompletions: List<DailyCompletion> = emptyList(),
-    @SerializedName("category_breakdown")    val categoryBreakdown: List<CategoryBreakdown> = emptyList()
+    @SerializedName("daily_completions")     val dailyCompletions: Map<String, Int> = emptyMap(),
+    @SerializedName("category_breakdown")    val categoryBreakdown: Map<String, Int> = emptyMap()
 )
 
 // ─── Achievements ─────────────────────────────────────────────────────────────

@@ -277,7 +277,7 @@ val habitCategoryIcons: Map<String, List<Pair<String, ImageVector>>> = mapOf(
 // ─── Brand gradient matching CSS: linear-gradient(135deg, #ff2a00, #2a51ff) ──────────
 
 val SteadeGradientBrush = Brush.linearGradient(
-    colors = listOf(SteadeRed, SteadeMidPurple, SteadeBlue),
+    colors = listOf(SteadeRed, SteadeBlue),
     start  = Offset(0f, 0f),
     end    = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
 )
@@ -298,9 +298,9 @@ fun MainGradientBackground(
             Image(
                 painter      = painterResource(id = R.drawable.shadow),
                 contentDescription = null,
-                modifier     = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop,
-                alpha        = 0.35f
+                modifier     = Modifier.fillMaxWidth(0.6f).align(Alignment.BottomEnd),
+                contentScale = ContentScale.Fit,
+                alpha        = 0.18f
             )
         }
         content()
