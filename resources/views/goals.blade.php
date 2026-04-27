@@ -28,7 +28,15 @@
 <div class="goals-section">
     <div class="goals-grid">
         @forelse($goals as $goal)
-        <div class="goal-card {{ $goal->status }}" data-id="{{ $goal->id }}">
+        <div class="goal-card {{ $goal->status }}"
+             data-id="{{ $goal->id }}"
+             data-title="{{ $goal->title }}"
+             data-description="{{ $goal->description ?? '' }}"
+             data-category="{{ $goal->category }}"
+             data-target-value="{{ $goal->target_value }}"
+             data-unit="{{ $goal->unit }}"
+             data-deadline="{{ $goal->deadline ? $goal->deadline->format('Y-m-d') : '' }}"
+             data-icon="{{ $goal->icon }}">
             <div class="goal-header">
                 <div class="goal-icon">
                     <i class="{{ $goal->icon }}"></i>
@@ -66,11 +74,14 @@
                         </button>
                     </div>
                 @endif
-                <form action="{{ route('goals.destroy', $goal) }}" method="POST" onsubmit="return confirm('Delete this goal?')">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-delete">Delete</button>
-                </form>
+                <div class="goal-action-buttons">
+                    <button class="btn btn-edit">Edit</button>
+                    <form action="{{ route('goals.destroy', $goal) }}" method="POST" onsubmit="return confirm('Delete this goal?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-delete">Delete</button>
+                    </form>
+                </div>
             </div>
 
         </div>
@@ -91,10 +102,10 @@
 {{-- Add Goal Popup --}}
 <div class="goal-form-card" id="goalFormPopup" style="display: none;">
     <div class="goal-form-header">
-        <h1 class="goal-form-title">Add Goal</h1>
+        <h1 class="goal-form-title" id="goalFormTitle">Add Goal</h1>
         <button type="button" class="close-goal-form" id="closePopupBtn">&times;</button>
     </div>
-    <p class="goal-form-subtitle">Add a new goal to track your progress</p>
+    <p class="goal-form-subtitle" id="goalFormSubtitle">Add a new goal to track your progress</p>
 
     <form method="POST" action="{{ route('goals.store') }}" id="goal-form">
         @csrf
@@ -213,7 +224,7 @@
             @enderror
         </div>
 
-        <button type="submit" class="btn btn-add">Add Goal</button>
+        <button type="submit" class="btn btn-add" id="goalFormSubmitBtn">Add Goal</button>
     </form>
 </div>
 

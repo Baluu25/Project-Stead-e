@@ -29,6 +29,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const goalUnitSelect      = document.getElementById('unit');
     const goalCustomUnitGroup = document.getElementById('goal-custom-unit-group');
     const goalCustomUnitInput = document.getElementById('goal_custom_unit');
+    const popupTitle          = document.getElementById('goalFormTitle');
+    const popupSubtitle       = document.getElementById('goalFormSubtitle');
+    const submitBtn           = document.getElementById('goalFormSubmitBtn');
 
     // summary stats
     window.updateStats = function () {
@@ -111,17 +114,57 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // popup form
-    function showPopup() {
+    function showPopup(goalData) {
         popup.style.display = 'block';
-        if (form) form.reset();
-        iconDisplay.className  = 'fa-solid fa-bullseye';
-        iconInput.value        = 'fa-solid fa-bullseye';
-        if (category) category.value = '';
-        iconGrid.innerHTML     = '';
-        iconGrid.style.display = 'none';
 
-        if (goalCustomUnitGroup) goalCustomUnitGroup.style.display = 'none';
-        if (goalCustomUnitInput) goalCustomUnitInput.value = '';
+        if (goalData) {
+            popupTitle.textContent    = 'Edit Goal';
+            popupSubtitle.textContent = 'Update your goal details';
+            submitBtn.textContent     = 'Edit Goal';
+            form.dataset.mode   = 'edit';
+            form.dataset.goalId = goalData.id;
+
+            document.getElementById('title').value        = goalData.title;
+            document.getElementById('description').value  = goalData.description;
+            document.getElementById('category').value     = goalData.category;
+            document.getElementById('target_value').value = goalData.targetValue;
+            document.getElementById('deadline').value     = goalData.deadline;
+
+            const standardUnits = ['times', 'days', 'km', 'books', 'minutes'];
+            if (standardUnits.includes(goalData.unit)) {
+                goalUnitSelect.value              = goalData.unit;
+                goalCustomUnitGroup.style.display = 'none';
+                goalCustomUnitInput.value         = '';
+            } else {
+                goalUnitSelect.value              = 'custom';
+                goalCustomUnitGroup.style.display = 'block';
+                goalCustomUnitInput.value         = goalData.unit;
+            }
+
+            iconDisplay.className  = goalData.icon;
+            iconInput.value        = goalData.icon;
+            iconGrid.innerHTML     = '';
+            iconGrid.style.display = 'none';
+            if (categoryIcons[goalData.category]) {
+                populateIcons(categoryIcons[goalData.category]);
+                iconGrid.style.display = 'none';
+            }
+        } else {
+            popupTitle.textContent    = 'Add Goal';
+            popupSubtitle.textContent = 'Add a new goal to track your progress';
+            submitBtn.textContent     = 'Add Goal';
+            form.dataset.mode = 'add';
+            delete form.dataset.goalId;
+
+            if (form) form.reset();
+            iconDisplay.className  = 'fa-solid fa-bullseye';
+            iconInput.value        = 'fa-solid fa-bullseye';
+            if (category) category.value = '';
+            iconGrid.innerHTML     = '';
+            iconGrid.style.display = 'none';
+            if (goalCustomUnitGroup) goalCustomUnitGroup.style.display = 'none';
+            if (goalCustomUnitInput) goalCustomUnitInput.value = '';
+        }
     }
 
     function hidePopup() {
@@ -155,7 +198,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 fd.set('unit', customText);
             }
 
-            fetch(form.action, {
+            const isEdit = form.dataset.mode === 'edit';
+            const url    = isEdit ? '/goals/' + form.dataset.goalId : form.action;
+
+            if (isEdit) {
+                fd.set('_method', 'PUT');
+            }
+
+            fetch(url, {
                 method: 'POST',
                 headers: { 'X-CSRF-TOKEN': csrf ? csrf.content : '' },
                 body: fd
@@ -167,8 +217,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     alert('Could not save goal.');
                 }
-        })
-        .catch(function () { alert('Network error.'); });
+            })
+            .catch(function () { alert('Network error.'); });
         });
     }
 
@@ -253,6 +303,24 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         numberInput.addEventListener('click', function () { this.select(); });
+    });
+
+    // edit button
+    document.querySelectorAll('.btn-edit').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const card = btn.closest('.goal-card');
+            showPopup({
+                id:          card.dataset.id,
+                title:       card.dataset.title,
+                description: card.dataset.description,
+                category:    card.dataset.category,
+                targetValue: card.dataset.targetValue,
+                unit:        card.dataset.unit,
+                deadline:    card.dataset.deadline,
+                icon:        card.dataset.icon,
+            });
+        });
     });
 
     // filter tabs
