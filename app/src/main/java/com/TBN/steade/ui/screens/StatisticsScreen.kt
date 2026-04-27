@@ -33,7 +33,6 @@ import com.TBN.steade.ui.components.MainGradientBackground
 import com.TBN.steade.ui.viewmodel.SteadEViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-
 @Composable
 fun StatisticsScreen(navController: NavController, viewModel: SteadEViewModel) {
     LaunchedEffect(Unit) { viewModel.loadStatistics() }
@@ -90,9 +89,8 @@ fun StatisticsScreen(navController: NavController, viewModel: SteadEViewModel) {
                         val last7 = (6 downTo 0).map { today.minusDays(it.toLong()) }
                         val dailyMap = stats?.dailyCompletions ?: emptyMap()
                         val weekCounts = last7.map { dailyMap[it.format(fmt)] ?: 0 }
-                        val maxCount = weekCounts.maxOrNull()?.toFloat()?.coerceAtLeast(1f) ?: 1f
-                        val weekPoints = weekCounts.map { it / maxCount }
-                        WeekLineChart(weekPoints)
+                        val dateLabels = last7.map { it.dayOfMonth.toString() }
+                        WeekLineChart(weekCounts, dateLabels)
 
                         // Category breakdown
                         val catMap = stats?.categoryBreakdown ?: emptyMap()
@@ -151,31 +149,67 @@ fun StatCard(label: String, value: String, icon: ImageVector, modifier: Modifier
 }
 
 @Composable
-fun WeekLineChart(dataPoints: List<Float>) {
-    val dayLabels = listOf("M","T","W","T","F","S","S")
+fun WeekLineChart(rawCounts: List<Int>, dateLabels: List<String>) {
+    val maxCount   = rawCounts.maxOrNull()?.coerceAtLeast(1) ?: 1
+    val midCount   = maxCount / 2
+    val normalized = rawCounts.map { it.toFloat() / maxCount }
+
     Card(modifier = Modifier.fillMaxWidth().height(180.dp), shape = RoundedCornerShape(16.dp),
         border = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
         colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.15f))) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Canvas(modifier = Modifier.fillMaxSize().padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 32.dp)) {
-                val pts = dataPoints.take(7)
-                if (pts.size < 2) return@Canvas
-                val stepX = size.width / (pts.size - 1).coerceAtLeast(1)
-                val path  = Path()
-                pts.forEachIndexed { i, v ->
-                    val x = i * stepX
-                    val y = size.height * (1f - v.coerceIn(0f, 1f))
-                    if (i == 0) path.moveTo(x, y) else path.lineTo(x, y)
-                }
-                drawPath(path, Color.White, style = Stroke(width = 3f, cap = StrokeCap.Round))
-                pts.forEachIndexed { i, v ->
-                    drawCircle(Color.White, 5f, Offset(i * stepX, size.height * (1f - v.coerceIn(0f, 1f))))
+
+        Row(modifier = Modifier.fillMaxSize().padding(top = 12.dp, bottom = 8.dp, start = 8.dp, end = 12.dp)) {
+
+            // Y-axis labels (max at top → 0 at bottom), padded to match canvas height
+            Column(
+                modifier = Modifier.width(26.dp).fillMaxHeight().padding(bottom = 18.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                listOf(maxCount, midCount, 0).forEach { v ->
+                    Text("$v", color = Color.White.copy(alpha = 0.55f),
+                        fontSize = 9.sp, textAlign = TextAlign.End,
+                        modifier = Modifier.fillMaxWidth())
                 }
             }
-            Row(modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter)
-                .padding(horizontal = 16.dp, vertical = 6.dp),
-                horizontalArrangement = Arrangement.SpaceBetween) {
-                dayLabels.forEach { Text(it, color = Color.White.copy(alpha = 0.5f), fontSize = 10.sp) }
+
+            Spacer(Modifier.width(4.dp))
+
+            // Chart + X-axis date labels
+            Column(modifier = Modifier.weight(1f).fillMaxHeight()) {
+                Canvas(modifier = Modifier.weight(1f).fillMaxWidth()) {
+                    val pts = normalized.take(7)
+                    if (pts.size < 2) return@Canvas
+                    val stepX = size.width / (pts.size - 1).coerceAtLeast(1)
+
+                    // Horizontal gridlines at 0 %, 50 %, 100 %
+                    listOf(0f, 0.5f, 1f).forEach { frac ->
+                        val y = size.height * (1f - frac)
+                        drawLine(Color.White.copy(alpha = 0.1f), Offset(0f, y), Offset(size.width, y), strokeWidth = 1f)
+                    }
+
+                    // Line
+                    val path = Path()
+                    pts.forEachIndexed { i, v ->
+                        val x = i * stepX
+                        val y = size.height * (1f - v.coerceIn(0f, 1f))
+                        if (i == 0) path.moveTo(x, y) else path.lineTo(x, y)
+                    }
+                    drawPath(path, Color.White, style = Stroke(width = 3f, cap = StrokeCap.Round))
+
+                    // Dots
+                    pts.forEachIndexed { i, v ->
+                        drawCircle(Color.White, 5f, Offset(i * stepX, size.height * (1f - v.coerceIn(0f, 1f))))
+                    }
+                }
+
+                // X-axis: date numbers
+                Row(modifier = Modifier.fillMaxWidth().height(18.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    dateLabels.forEach { d ->
+                        Text(d, color = Color.White.copy(alpha = 0.55f),
+                            fontSize = 9.sp, textAlign = TextAlign.Center)
+                    }
+                }
             }
         }
     }

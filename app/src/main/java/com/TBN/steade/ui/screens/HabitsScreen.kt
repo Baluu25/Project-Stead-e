@@ -57,7 +57,7 @@ fun HabitsScreen(navController: NavController, viewModel: SteadEViewModel) {
             Spacer(Modifier.height(32.dp))
             Row(modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text("My Habits", color = Color.White, fontSize = 28.sp, fontWeight = FontWeight.Bold)
+                Text("Habits", color = Color.White, fontSize = 28.sp, fontWeight = FontWeight.Bold)
                 FloatingActionButton(onClick = { showAddDialog = true },
                     containerColor = Color.White, contentColor = SteadeNavyBlue,
                     shape = RoundedCornerShape(14.dp), modifier = Modifier.size(48.dp)) {
