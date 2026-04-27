@@ -91,16 +91,21 @@ return new class extends Migration
             DB::table('goals')->where('icon', $fa)->update(['icon' => $material]);
         }
 
-        Schema::table('goals', function (Blueprint $table) {
-            $table->string('icon')->default('sports')->change();
-        });
+        // SQLite nem támogatja a ->change()-t Doctrine DBAL nélkül, ezért kihagyjuk
+        if (DB::getDriverName() !== 'sqlite') {
+            Schema::table('goals', function (Blueprint $table) {
+                $table->string('icon')->default('sports')->change();
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('goals', function (Blueprint $table) {
-            $table->string('icon')->default('fa-bullseye')->change();
-        });
+        if (DB::getDriverName() !== 'sqlite') {
+            Schema::table('goals', function (Blueprint $table) {
+                $table->string('icon')->default('fa-bullseye')->change();
+            });
+        }
 
         $reversed = array_flip($this->map);
         foreach ($reversed as $material => $fa) {

@@ -49,7 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/goals/{goal}', [GoalController::class, 'destroy'])->name('goals.destroy');
     
     // Achievements
-    Route::get('/achievements', [AchievementController::class, 'index'])->name('achievements');
+    Route::get('/achievements', [AchievementController::class, 'webIndex'])->name('achievements');
 });
 
 //Admin
