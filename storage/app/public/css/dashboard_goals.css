@@ -81,7 +81,7 @@
   margin-bottom: 1.25rem;
 }
 
-.goal-header i {
+.goal-header .material-icons {
   font-size: 1.5rem;
 }
 
@@ -100,7 +100,7 @@
   padding: 1rem;
 }
 
-.goal-icon i{
+.goal-icon .material-icons {
   font-size: 2rem;
 }
 
@@ -383,7 +383,7 @@
   background-color: #f9f9f9;
 }
 
-.selected-icon i {
+.selected-icon .material-icons {
   font-size: 24px;
   color: black;
 }
@@ -425,7 +425,7 @@
   background-color: #f0f0f0;
 }
 
-.icon-grid i {
+.icon-grid .material-icons {
   font-size: 24px;
   color: black;
 }
