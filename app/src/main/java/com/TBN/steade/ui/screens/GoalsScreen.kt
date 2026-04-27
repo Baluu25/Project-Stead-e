@@ -51,7 +51,7 @@ private val materialIconMap: Map<String, ImageVector> = mapOf(
     "set_meal"              to Icons.Default.SetMeal,
     "soup_kitchen"          to Icons.Default.SoupKitchen,
     "food_bank"             to Icons.Default.FoodBank,
-    "ice_cream"             to Icons.Default.IceCream,
+    "ice_cream"             to Icons.Default.LocalDrink,
     // Fitness
     "fitness_center"        to Icons.Default.FitnessCenter,
     "directions_run"        to Icons.Default.DirectionsRun,
@@ -68,7 +68,7 @@ private val materialIconMap: Map<String, ImageVector> = mapOf(
     "sports"                to Icons.Default.Sports,
     "electric_bike"         to Icons.Default.ElectricBike,
     "accessibility_new"     to Icons.Default.AccessibilityNew,
-    "sprint"                to Icons.Default.Sprint,
+    "sprint"                to Icons.Default.DirectionsBike,
     // Mindfulness
     "psychology"            to Icons.Default.Psychology,
     "favorite"              to Icons.Default.Favorite,
