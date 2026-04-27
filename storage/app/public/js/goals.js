@@ -24,8 +24,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const popup        = document.getElementById('goalFormPopup');
     const closeBtn     = document.getElementById('closePopupBtn');
     const form         = document.getElementById('goal-form');
-    const filterBtns   = document.querySelectorAll('.filter-btn');
-    const csrf         = document.querySelector('meta[name="csrf-token"]');
+    const filterBtns        = document.querySelectorAll('.filter-btn');
+    const csrf              = document.querySelector('meta[name="csrf-token"]');
+    const goalUnitSelect      = document.getElementById('unit');
+    const goalCustomUnitGroup = document.getElementById('goal-custom-unit-group');
+    const goalCustomUnitInput = document.getElementById('goal_custom_unit');
 
     // summary stats
     window.updateStats = function () {
@@ -94,22 +97,18 @@ document.addEventListener('DOMContentLoaded', function () {
         const selector = document.getElementById('icon-selector');
         if (selector && !selector.contains(e.target)) {
             iconGrid.style.display = 'none';
-
-            // show/hide custom unit for goals
-            const goalUnitSelect      = document.getElementById('unit');
-            const goalCustomUnitGroup = document.getElementById('goal-custom-unit-group');
-            const goalCustomUnitInput = document.getElementById('goal_custom_unit');
-
-            if (goalUnitSelect && goalCustomUnitGroup) {
-                goalUnitSelect.addEventListener('change', function () {
-                    goalCustomUnitGroup.style.display = goalUnitSelect.value === 'custom' ? 'block' : 'none';
-                    if (goalUnitSelect.value !== 'custom' && goalCustomUnitInput) {
-                        goalCustomUnitInput.value = '';
-                    }
-                });
-            }
         }
     });
+
+    // show/hide custom unit field
+    if (goalUnitSelect && goalCustomUnitGroup) {
+        goalUnitSelect.addEventListener('change', function () {
+            goalCustomUnitGroup.style.display = goalUnitSelect.value === 'custom' ? 'block' : 'none';
+            if (goalUnitSelect.value !== 'custom' && goalCustomUnitInput) {
+                goalCustomUnitInput.value = '';
+            }
+        });
+    }
 
     // popup form
     function showPopup() {
