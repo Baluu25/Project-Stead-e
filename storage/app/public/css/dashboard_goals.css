@@ -157,6 +157,35 @@
   text-align: right;
 }
 
+.btn-edit {
+  background: var(--color-btn-blue);
+  color: white;
+  width: auto;
+  font-size: 0.95rem;
+  box-shadow: 0 3px 8px rgba(37, 64, 143, 0.3);
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-edit:hover,
+.btn-edit:focus {
+  background-color: var(--color-btn-blue) !important;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(37, 64, 143, 0.4);
+  color: white !important;
+}
+
+.goal-action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-left: auto;
+}
+
 .btn-delete {
   background: var(--color-btn-red);
   color: white;
