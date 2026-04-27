@@ -112,7 +112,7 @@ class SteadERepository(context: Context) {
         } catch (e: Exception) { Result.failure(e) }
     }
 
-    suspend fun createGoal(name: String, deadline: String, description: String): Result<ApiGoal> =
+    suspend fun createGoal(name: String, deadline: String, description: String, icon: String): Result<ApiGoal> =
         withContext(Dispatchers.IO) {
             try {
                 val r = api.createGoal(
@@ -120,7 +120,8 @@ class SteadERepository(context: Context) {
                     CreateGoalRequest(
                         title = name,
                         deadline = deadline.ifBlank { null },
-                        description = description.ifBlank { null }
+                        description = description.ifBlank { null },
+                        icon = icon
                     )
                 )
                 if (r.isSuccessful && r.body() != null) Result.success(r.body()!!)

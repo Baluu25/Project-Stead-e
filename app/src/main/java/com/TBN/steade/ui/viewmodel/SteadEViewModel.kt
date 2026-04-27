@@ -153,9 +153,9 @@ class SteadEViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun createGoal(name: String, deadline: String, description: String = "") {
+    fun createGoal(name: String, deadline: String, description: String = "", icon: String = "sports") {
         viewModelScope.launch {
-            repository.createGoal(name, deadline, description).onSuccess { goals.add(0, it) }
+            repository.createGoal(name, deadline, description, icon).onSuccess { goals.add(0, it) }
         }
     }
 

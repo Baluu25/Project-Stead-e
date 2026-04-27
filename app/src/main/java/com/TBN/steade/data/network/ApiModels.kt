@@ -83,6 +83,7 @@ data class HabitResponse(val habit: ApiHabit? = null, val message: String? = nul
 data class ApiGoal(
     val id: Int = 0, val name: String = "", val title: String? = null,
     val description: String? = null, val deadline: String? = null,
+    val icon: String = "sports",
     @SerializedName("target_value")  val targetValue: Float = 0f,
     @SerializedName("current_value") val currentValue: Float = 0f,
     val status: String? = null,
@@ -99,6 +100,7 @@ data class CreateGoalRequest(
     val title: String,
     val deadline: String? = null,
     val description: String? = null,
+    val icon: String = "sports",
     val category: String = "General",
     @SerializedName("target_value") val targetValue: Int = 1,
     val unit: String = "times"
