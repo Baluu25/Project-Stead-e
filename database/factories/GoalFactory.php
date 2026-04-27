@@ -17,7 +17,16 @@ class GoalFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id'       => \App\Models\User::factory(),
+            'title'         => fake()->sentence(3),
+            'description'   => fake()->sentence(8),
+            'category'      => fake()->randomElement(['Fitness', 'Nutrition', 'Mindfulness', 'Study', 'Work']),
+            'target_value'  => fake()->numberBetween(10, 200),
+            'current_value' => 0,
+            'unit'          => fake()->randomElement(['km', 'db', 'perc', 'kg', 'l']),
+            'status'        => fake()->randomElement(['not-started', 'in-progress', 'completed']),
+            'deadline'      => fake()->optional()->dateTimeBetween('now', '+1 year')?->format('Y-m-d'),
+            'icon'          => 'fa-solid fa-star',
         ];
     }
 }
