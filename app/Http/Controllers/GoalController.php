@@ -18,7 +18,11 @@ class GoalController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return response()->json($goals);
+        if ($request->expectsJson()) {
+            return response()->json($goals);
+        }
+
+        return view('goals', ['goals' => $goals]);
     }
 
     public function store(StoreGoalRequest $request)
