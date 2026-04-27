@@ -12,9 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('habits', function (Blueprint $table) {
-             Schema::table('habits', function (Blueprint $table) {
-                $table->string('unit', 50)->nullable()->after('target_count');
-            });
+            $table->string('unit', 50)->nullable()->after('target_count');
         });
     }
 

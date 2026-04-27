@@ -2,8 +2,8 @@
 
 @section('dashboard-styles')
     <link rel="stylesheet" href="{{ asset('storage/css/dashboard_habits.css') }}">
+    <script src="{{ asset('storage/js/api.js') }}" defer></script>
     <script src="{{ asset('storage/js/habits.js') }}" defer></script>
-    <script src={{ asset('storage/js/api.js') }} defer></script>
     <script>
       window.userGoals = @json($goals->map(fn($g) => ['id' => $g->id, 'title' => $g->title]));
     </script>
@@ -69,7 +69,7 @@
                     <option value="">Select a category</option>
                     <option value="Nutrition" {{ old('category') == 'Nutrition' ? 'selected' : '' }}>Nutrition</option>
                     <option value="Fitness" {{ old('category') == 'Fitness' ? 'selected' : '' }}>Fitness</option>
-                    <option value="Mindfulness" {{ old('category') == 'Mindfullness' ? 'selected' : '' }}>Mindfulness</option>
+                    <option value="Mindfulness" {{ old('category') == 'Mindfulness' ? 'selected' : '' }}>Mindfulness</option>
                     <option value="Study" {{ old('category') == 'Study' ? 'selected' : '' }}>Study</option>
                     <option value="Work" {{ old('category') == 'Work' ? 'selected' : '' }}>Work</option>
                 </select>
