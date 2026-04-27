@@ -1,17 +1,17 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    // icons by category
+    // icons by category (Material Icons names)
     const categoryIcons = {
-        'Nutrition': 
-        ['fa-solid fa-apple-whole','fa-solid fa-carrot','fa-solid fa-lemon','fa-solid fa-bowl-food','fa-solid fa-mug-saucer','fa-solid fa-burger','fa-solid fa-fish','fa-solid fa-egg','fa-solid fa-droplet','fa-solid fa-wine-bottle','fa-solid fa-utensils','fa-solid fa-plate-wheat','fa-solid fa-cookie','fa-solid fa-cake-candles','fa-solid fa-mug-hot'],
-        'Fitness': 
-        ['fa-solid fa-dumbbell','fa-solid fa-person-running','fa-solid fa-person-walking','fa-solid fa-bicycle','fa-solid fa-heart-pulse','fa-solid fa-fire','fa-solid fa-stopwatch','fa-solid fa-shoe-prints','fa-solid fa-weight-scale','fa-solid fa-person-swimming','fa-solid fa-person-biking','fa-solid fa-person-hiking','fa-solid fa-futbol','fa-solid fa-basketball','fa-solid fa-dog','fa-solid fa-heartbeat'],
-        'Mindfulness': 
-        ['fa-solid fa-brain','fa-solid fa-heart','fa-solid fa-spa','fa-regular fa-face-smile','fa-solid fa-feather','fa-solid fa-leaf','fa-solid fa-om','fa-solid fa-cloud','fa-solid fa-wind','fa-regular fa-moon','fa-solid fa-dog','fa-solid fa-cat','fa-solid fa-dove','fa-regular fa-sun','fa-solid fa-tree'],
-        'Study': 
-        ['fa-solid fa-book','fa-solid fa-book-open','fa-solid fa-graduation-cap','fa-solid fa-pencil','fa-solid fa-pen','fa-solid fa-brain','fa-solid fa-lightbulb','fa-solid fa-microscope','fa-solid fa-flask','fa-solid fa-language','fa-solid fa-calculator','fa-solid fa-glasses','fa-solid fa-ruler','fa-solid fa-chalkboard','fa-solid fa-school'],
-        'Work': 
-        ['fa-solid fa-briefcase','fa-solid fa-laptop','fa-solid fa-computer','fa-solid fa-clock','fa-solid fa-calendar-check','fa-solid fa-chart-line','fa-solid fa-chart-simple','fa-solid fa-envelope','fa-solid fa-users','fa-solid fa-mug-hot','fa-solid fa-building','fa-solid fa-phone','fa-solid fa-file-lines','fa-solid fa-folder','fa-solid fa-print']
+        'Nutrition':
+        ['restaurant','local_dining','coffee','local_cafe','kitchen','cake','water_drop','wine_bar','fastfood','free_breakfast','emoji_food_beverage','set_meal','soup_kitchen','food_bank','ice_cream'],
+        'Fitness':
+        ['fitness_center','directions_run','directions_walk','pedal_bike','monitor_heart','local_fire_department','timer','nordic_walking','pool','hiking','sports_soccer','sports_basketball','sports','electric_bike','accessibility_new','sprint'],
+        'Mindfulness':
+        ['psychology','favorite','spa','sentiment_satisfied','cloud','air','bedtime','wb_sunny','park','nature','pets','self_improvement','nightlight','eco','brightness_5'],
+        'Study':
+        ['menu_book','book','school','edit','lightbulb','biotech','science','calculate','translate','visibility','auto_stories','quiz','history_edu','laptop_chromebook','straighten'],
+        'Work':
+        ['work','laptop','computer','schedule','event_available','trending_up','bar_chart','email','group','local_cafe','business','phone','description','folder','print']
     };
 
     // DOM
@@ -48,10 +48,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // icon selector
 
     // set chosen icon
-    function selectIcon(iconClass) {
-        iconDisplay.className = iconClass;
-        iconInput.value       = iconClass;
-        iconGrid.style.display = 'none';
+    function selectIcon(iconName) {
+        iconDisplay.textContent = iconName;
+        iconInput.value         = iconName;
+        iconGrid.style.display  = 'none';
 
         selectedIcon.style.borderColor = '#25408F';
         setTimeout(function () { selectedIcon.style.borderColor = '#ddd'; }, 500);
@@ -60,12 +60,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // build icon grid for category selected
     function populateIcons(icons) {
         iconGrid.innerHTML = '';
-        icons.forEach(function (iconClass) {
+        icons.forEach(function (iconName) {
             const wrapper = document.createElement('div');
-            const icon    = document.createElement('i');
-            icon.className = iconClass;
+            const icon    = document.createElement('span');
+            icon.className   = 'material-icons';
+            icon.textContent = iconName;
             wrapper.appendChild(icon);
-            wrapper.addEventListener('click', function () { selectIcon(iconClass); });
+            wrapper.addEventListener('click', function () { selectIcon(iconName); });
             iconGrid.appendChild(wrapper);
         });
         iconGrid.style.display = 'grid';
@@ -86,8 +87,8 @@ document.addEventListener('DOMContentLoaded', function () {
         category.addEventListener('change', function () {
             if (category.value && categoryIcons[category.value]) {
                 populateIcons(categoryIcons[category.value]);
-                iconDisplay.className = 'fa-solid fa-bullseye';
-                iconInput.value       = 'fa-solid fa-bullseye';
+                iconDisplay.textContent = 'sports';
+                iconInput.value         = 'sports';
             } else {
                 iconGrid.innerHTML    = '';
                 iconGrid.style.display = 'none';
@@ -141,8 +142,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 goalCustomUnitInput.value         = goalData.unit;
             }
 
-            iconDisplay.className  = goalData.icon;
-            iconInput.value        = goalData.icon;
+            iconDisplay.textContent = goalData.icon;
+            iconInput.value         = goalData.icon;
             iconGrid.innerHTML     = '';
             iconGrid.style.display = 'none';
             if (categoryIcons[goalData.category]) {
@@ -157,8 +158,8 @@ document.addEventListener('DOMContentLoaded', function () {
             delete form.dataset.goalId;
 
             if (form) form.reset();
-            iconDisplay.className  = 'fa-solid fa-bullseye';
-            iconInput.value        = 'fa-solid fa-bullseye';
+            iconDisplay.textContent = 'sports';
+            iconInput.value         = 'sports';
             if (category) category.value = '';
             iconGrid.innerHTML     = '';
             iconGrid.style.display = 'none';

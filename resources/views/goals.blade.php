@@ -39,7 +39,7 @@
              data-icon="{{ $goal->icon }}">
             <div class="goal-header">
                 <div class="goal-icon">
-                    <i class="{{ $goal->icon }}"></i>
+                    <span class="material-icons">{{ $goal->icon }}</span>
                 </div>
                 <div class="goal-details">
                     <h5>{{ $goal->title }}</h5>
@@ -213,12 +213,12 @@
             <label class="form-label">Icon</label>
             <div class="icon-selector" id="icon-selector">
                 <div class="selected-icon" id="selected-icon">
-                    <i class="fa-solid fa-bullseye" id="selected-icon-display"></i>
+                    <span class="material-icons" id="selected-icon-display">sports</span>
                     <span>Select an icon</span>
                 </div>
                 <div class="icon-grid" id="icon-grid" style="display: none;"></div>
             </div>
-            <input type="hidden" id="icon" name="icon" value="{{ old('icon', 'fa-solid fa-bullseye') }}">
+            <input type="hidden" id="icon" name="icon" value="{{ old('icon', 'sports') }}">
             @error('icon')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror

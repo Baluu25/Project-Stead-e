@@ -12,6 +12,7 @@
             integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
             crossorigin="anonymous" defer></script>
     <script src="https://kit.fontawesome.com/0bf932704c.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="images/stead-e_logo.png">
     <link rel="stylesheet" href="{{ asset('storage/css/dashboard.css') }}">
     <script src="{{ asset('storage/js/script.js') }}" defer></script>
