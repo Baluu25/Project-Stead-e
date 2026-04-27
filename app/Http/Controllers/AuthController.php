@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Database\Seeders\AchievementSeeder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -26,6 +27,9 @@ class AuthController extends Controller
             'password' => Hash::make($data['password']),
         ]);
 
+        // Seed the default achievement rows for this brand-new user
+        AchievementSeeder::seedForUser($user->id);
+
         $token = $user->createToken('android-app')->plainTextToken;
 
         return response()->json([
@@ -48,6 +52,11 @@ class AuthController extends Controller
         }
 
         $user  = Auth::user();
+
+        // Ensure every user always has all achievement rows (handles older accounts
+        // that were registered before the seeding logic existed).
+        AchievementSeeder::seedForUser($user->id);
+
         $token = $user->createToken('android-app')->plainTextToken;
 
         return response()->json([
