@@ -44,7 +44,7 @@ import java.util.Locale
 @Composable
 fun DashboardScreen(navController: NavController, viewModel: SteadEViewModel) {
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
-    // habitId -> completedToday count (optimistic local state)
+    // Optimistic local completion counts so the UI updates instantly on tap.
     val localCompletions = remember { mutableStateMapOf<Int, Int>() }
 
     val apiHabits = viewModel.habits
@@ -53,14 +53,9 @@ fun DashboardScreen(navController: NavController, viewModel: SteadEViewModel) {
 
     MainGradientBackground(showShadow = true) {
         Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
-            ) {
+            Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState())) {
                 Spacer(Modifier.height(32.dp))
 
-                // Header
                 Row(
                     modifier              = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -95,7 +90,6 @@ fun DashboardScreen(navController: NavController, viewModel: SteadEViewModel) {
 
                 Spacer(Modifier.height(20.dp))
 
-                // Streak card — recomposes automatically when viewModel.statistics updates
                 DashboardStreakCard(
                     streak   = viewModel.statistics?.currentStreak ?: 0,
                     dailyMap = viewModel.statistics?.dailyCompletions ?: emptyMap()
@@ -166,14 +160,11 @@ fun DashboardScreen(navController: NavController, viewModel: SteadEViewModel) {
     }
 }
 
-// ─── Weekly date strip ────────────────────────────────────────────────────────
-
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun WeeklyDateStrip(selectedDate: LocalDate, onDateSelected: (LocalDate) -> Unit) {
-    val today  = LocalDate.now()
-    val monday = today.with(DayOfWeek.MONDAY)
-    // Fixed English single-letter day headers for the strip
+    val today      = LocalDate.now()
+    val monday     = today.with(DayOfWeek.MONDAY)
     val dayLetters = listOf("M", "T", "W", "T", "F", "S", "S")
 
     Column {
@@ -217,8 +208,6 @@ fun WeeklyDateStrip(selectedDate: LocalDate, onDateSelected: (LocalDate) -> Unit
     }
 }
 
-// ─── Streak card — matches Laravel's streak-aside + streak-week layout ────────
-
 @Composable
 fun DashboardStreakCard(streak: Int, dailyMap: Map<String, Int>) {
     val fmt   = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -232,7 +221,6 @@ fun DashboardStreakCard(streak: Int, dailyMap: Map<String, Int>) {
         colors   = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.15f))
     ) {
         Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp)) {
-            // Top: flame icon + streak number
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     Icons.Default.LocalFireDepartment,
@@ -253,7 +241,6 @@ fun DashboardStreakCard(streak: Int, dailyMap: Map<String, Int>) {
 
             Spacer(Modifier.height(14.dp))
 
-            // Bottom: 7-day circles matching Laravel's day-circle design
             Row(
                 modifier              = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround
@@ -261,14 +248,11 @@ fun DashboardStreakCard(streak: Int, dailyMap: Map<String, Int>) {
                 last7.forEach { date ->
                     val done    = (dailyMap[date.format(fmt)] ?: 0) > 0
                     val isToday = date == today
-                    // 2-letter English day label: Mon→Mo, Tue→Tu, etc.
                     val label   = date.dayOfWeek
                         .getDisplayName(java.time.format.TextStyle.SHORT, Locale.ENGLISH)
                         .take(2)
 
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        // Active: SteadeNavyBlue (#25408F) matching .day-circle.active
-                        // Inactive: rgba(255,255,255,0.1) matching .day-circle
                         Box(
                             modifier = Modifier
                                 .size(28.dp)
@@ -294,8 +278,8 @@ fun DashboardStreakCard(streak: Int, dailyMap: Map<String, Int>) {
                         Spacer(Modifier.height(5.dp))
                         Text(
                             label,
-                            color    = Color.White.copy(alpha = if (isToday) 0.9f else 0.55f),
-                            fontSize = 10.sp,
+                            color      = Color.White.copy(alpha = if (isToday) 0.9f else 0.55f),
+                            fontSize   = 10.sp,
                             fontWeight = if (isToday) FontWeight.Bold else FontWeight.Normal
                         )
                     }
@@ -304,8 +288,6 @@ fun DashboardStreakCard(streak: Int, dailyMap: Map<String, Int>) {
         }
     }
 }
-
-// ─── Habit row — matches Laravel's habit-item layout ─────────────────────────
 
 @Composable
 fun DashHabitItem(
@@ -322,14 +304,12 @@ fun DashHabitItem(
     val isDone   = completed >= target
     val progress = (completed.toFloat() / target.coerceAtLeast(1)).coerceIn(0f, 1f)
 
-    // Step value state — local to this item, resets when item leaves composition
     var stepText by remember { mutableStateOf("1") }
     val step = stepText.toIntOrNull()?.coerceAtLeast(1) ?: 1
 
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape    = RoundedCornerShape(12.dp),
-        // Completed card: rgba(37,64,143,0.3) + border rgba(37,64,143,0.5) per .habit-item.completed
         border   = if (isDone) BorderStroke(1.dp, SteadeNavyBlue.copy(alpha = 0.5f))
                    else        BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
         colors   = CardDefaults.cardColors(
@@ -347,7 +327,6 @@ fun DashHabitItem(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier              = Modifier.fillMaxWidth()
             ) {
-                // Habit icon + name + progress counter
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
                     Box(
                         modifier = Modifier
@@ -379,8 +358,6 @@ fun DashHabitItem(
 
                 Spacer(Modifier.width(6.dp))
 
-                // Right-side action area — matches Laravel exactly:
-                // past → check/x, future → lock, done → badge, else → − input +
                 when {
                     isPast -> Icon(
                         if (isDone) Icons.Default.Check else Icons.Default.Close,
@@ -396,9 +373,8 @@ fun DashHabitItem(
                         modifier = Modifier.size(18.dp)
                     )
 
-                    // Done badge — matches Laravel's habit-done-badge (white icon, no fill)
                     isDone -> Row(
-                        verticalAlignment = Alignment.CenterVertically,
+                        verticalAlignment     = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Icon(
@@ -407,20 +383,13 @@ fun DashHabitItem(
                             tint     = Color.White,
                             modifier = Modifier.size(16.dp)
                         )
-                        Text(
-                            "Done",
-                            color      = Color.White,
-                            fontSize   = 12.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
+                        Text("Done", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
                     }
 
-                    // Active controls: − [step] + (matches Laravel's habit-actions)
                     else -> Row(
-                        verticalAlignment = Alignment.CenterVertically,
+                        verticalAlignment     = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        // − button: SteadeNavyBlue (#25408F) matching .btn-remove-progress
                         Box(
                             modifier = Modifier
                                 .size(30.dp)
@@ -440,7 +409,6 @@ fun DashHabitItem(
                             )
                         }
 
-                        // Editable step value
                         Box(
                             modifier = Modifier
                                 .width(36.dp)
@@ -466,7 +434,6 @@ fun DashHabitItem(
                             )
                         }
 
-                        // + button: SteadeNavyBlue (#25408F) matching .btn-add-progress
                         Box(
                             modifier = Modifier
                                 .size(30.dp)
@@ -486,7 +453,7 @@ fun DashHabitItem(
                 }
             }
 
-            // Progress bar — shown for today and past dates
+            // Progress bar shown for today and past dates only.
             if (!isFuture) {
                 Spacer(Modifier.height(8.dp))
                 Box(
@@ -501,7 +468,6 @@ fun DashHabitItem(
                             .fillMaxWidth(progress)
                             .fillMaxHeight()
                             .clip(RoundedCornerShape(2.dp))
-                            // Progress fill: SteadeRed (#FF2A00) matching .progress-bar-fill
                             .background(SteadeRed)
                     )
                 }

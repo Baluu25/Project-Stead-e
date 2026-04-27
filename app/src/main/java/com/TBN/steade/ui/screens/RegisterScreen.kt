@@ -1,4 +1,4 @@
-﻿package com.TBN.steade.ui.screens
+package com.TBN.steade.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -37,17 +37,13 @@ fun RegisterScreen(navController: NavController, viewModel: SteadEViewModel) {
     var email           by remember { mutableStateOf("") }
     var password        by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
-
     var showTandCDialog  by remember { mutableStateOf(false) }
     var hasScrolledToEnd by remember { mutableStateOf(false) }
 
-    val isValidEmail = remember(email) {
-        android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
-    val isPasswordOk = password.length >= 8   // Laravel Password::defaults() requires min 8
+    val isValidEmail = remember(email)    { android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() }
+    val isPasswordOk = password.length >= 8
     val fieldsReady  = name.isNotBlank() && username.isNotBlank() && isValidEmail && isPasswordOk
 
-    // T&C Dialog
     if (showTandCDialog) {
         AlertDialog(
             onDismissRequest = { showTandCDialog = false },
@@ -105,7 +101,7 @@ fun RegisterScreen(navController: NavController, viewModel: SteadEViewModel) {
         )
     }
 
-    DarkGradientBackground() {
+    DarkGradientBackground {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -117,34 +113,49 @@ fun RegisterScreen(navController: NavController, viewModel: SteadEViewModel) {
             Image(painterResource(R.drawable.logo), "Logo", modifier = Modifier.size(70.dp))
             Spacer(Modifier.height(12.dp))
             Text("Create your account", color = Color.White, fontSize = 28.sp, fontWeight = FontWeight.Black)
-            Text("Join Stead-E and start your journey today",
-                color = Color.White.copy(alpha = 0.75f), fontSize = 14.sp, textAlign = TextAlign.Center)
+            Text(
+                "Join Stead-E and start your journey today",
+                color     = Color.White.copy(alpha = 0.75f),
+                fontSize  = 14.sp,
+                textAlign = TextAlign.Center
+            )
             Spacer(Modifier.height(28.dp))
 
-            Surface(shape = RoundedCornerShape(20.dp), color = Color.White, shadowElevation = 8.dp,
-                modifier = Modifier.fillMaxWidth()) {
+            Surface(
+                shape           = RoundedCornerShape(20.dp),
+                color           = Color.White,
+                shadowElevation = 8.dp,
+                modifier        = Modifier.fillMaxWidth()
+            ) {
                 Column(modifier = Modifier.padding(24.dp)) {
 
-                    // API error
                     if (viewModel.authError != null) {
-                        Surface(color = Color(0xFFFFEBEE), shape = RoundedCornerShape(8.dp),
-                            modifier = Modifier.fillMaxWidth()) {
-                            Text(viewModel.authError!!, color = Color(0xFFD32F2F), fontSize = 13.sp,
-                                modifier = Modifier.padding(10.dp))
+                        Surface(
+                            color    = Color(0xFFFFEBEE),
+                            shape    = RoundedCornerShape(8.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(
+                                viewModel.authError!!,
+                                color    = Color(0xFFD32F2F),
+                                fontSize = 13.sp,
+                                modifier = Modifier.padding(10.dp)
+                            )
                         }
                         Spacer(Modifier.height(12.dp))
                     }
 
-                    // Name
-                    WebFormField("Name", name, { name = it }, "Enter your full name")
-                    // Username
+                    WebFormField("Name",    name,     { name = it },     "Enter your full name")
                     WebFormField("Username", username, { username = it }, "Choose a username")
-                    // Email
-                    WebFormField("E-mail", email, { email = it }, "Enter your email address",
+                    WebFormField(
+                        label        = "E-mail",
+                        value        = email,
+                        onValueChange = { email = it },
+                        placeholder  = "Enter your email address",
                         keyboardType = KeyboardType.Email,
-                        isError  = email.isNotEmpty() && !isValidEmail,
-                        errorMsg = "Invalid email format")
-                    // Password (min 8 to match Laravel defaults)
+                        isError      = email.isNotEmpty() && !isValidEmail,
+                        errorMsg     = "Invalid email format"
+                    )
                     WebPasswordField(
                         label           = "Password",
                         value           = password,
@@ -177,11 +188,16 @@ fun RegisterScreen(navController: NavController, viewModel: SteadEViewModel) {
                     }
 
                     Spacer(Modifier.height(18.dp))
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier              = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment     = Alignment.CenterVertically
+                    ) {
                         Text("Already have an account? ", color = Color(0xFF555555), fontSize = 14.sp)
-                        TextButton(onClick = { navController.navigate(Screen.Login.route) },
-                            contentPadding = PaddingValues(0.dp)) {
+                        TextButton(
+                            onClick        = { navController.navigate(Screen.Login.route) },
+                            contentPadding = PaddingValues(0.dp)
+                        ) {
                             Text("sign in", color = SteadeNavyBlue, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
                         }
                     }
@@ -192,8 +208,7 @@ fun RegisterScreen(navController: NavController, viewModel: SteadEViewModel) {
     }
 }
 
-// â"€â"€â"€ Shared form components (used by Login too via import) â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
-
+// Shared text field used across login and register forms.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WebFormField(
@@ -224,6 +239,7 @@ fun WebFormField(
     }
 }
 
+// Shared password field used across login and register forms.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WebPasswordField(
@@ -247,8 +263,10 @@ fun WebPasswordField(
                                    else PasswordVisualTransformation(),
             trailingIcon         = {
                 IconButton(onClick = onToggle) {
-                    Icon(if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
-                        contentDescription = null)
+                    Icon(
+                        if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+                        contentDescription = null
+                    )
                 }
             },
             isError              = isError,
@@ -262,6 +280,3 @@ fun WebPasswordField(
             Text(errorMsg, color = Color.Red, fontSize = 11.sp)
     }
 }
-
-
-

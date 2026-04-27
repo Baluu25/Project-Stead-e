@@ -1,4 +1,4 @@
-﻿package com.TBN.steade.ui.components
+package com.TBN.steade.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -92,13 +92,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.TBN.steade.R
 import com.TBN.steade.ui.navigation.Screen
 import com.TBN.steade.ui.theme.SteadeBlue
-import com.TBN.steade.ui.theme.SteadeMidPurple
 import com.TBN.steade.ui.theme.SteadeDarkGradEnd
 import com.TBN.steade.ui.theme.SteadeDarkGradStart
 import com.TBN.steade.ui.theme.SteadeRed
 
-// â"€â"€â"€ FA class / emoji â†’ Material ImageVector â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
-
+// Maps a FontAwesome class string to the nearest Material icon.
 fun habitIconToMaterialIcon(icon: String?): ImageVector {
     val s = icon.orEmpty()
     return when {
@@ -176,8 +174,7 @@ fun habitIconToMaterialIcon(icon: String?): ImageVector {
     }
 }
 
-// â"€â"€â"€ Category-specific icon lists (FA class â†’ Material Icon) â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
-
+// Icon options per category for the habit form picker.
 val habitCategoryIcons: Map<String, List<Pair<String, ImageVector>>> = mapOf(
     "Nutrition" to listOf(
         "fa-solid fa-apple-whole"  to Icons.Default.Restaurant,
@@ -267,10 +264,7 @@ val habitCategoryIcons: Map<String, List<Pair<String, ImageVector>>> = mapOf(
     )
 )
 
-// â"€â"€â"€ Brand gradient matching CSS: linear-gradient(135deg, #ff2a00, #2a51ff) â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
-
-
-// Dark gradient brush for splash / login / register screens
+// Dark gradient for splash, login and register screens.
 val DarkGradientBrush: Brush = Brush.linearGradient(
     colors = listOf(SteadeDarkGradStart, SteadeDarkGradEnd),
     start  = Offset(0f, 0f),
@@ -278,66 +272,50 @@ val DarkGradientBrush: Brush = Brush.linearGradient(
 )
 
 @Composable
-fun DarkGradientBackground(
-    content: @Composable BoxScope.() -> Unit
-) {
+fun DarkGradientBackground(content: @Composable BoxScope.() -> Unit) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(brush = DarkGradientBrush),
-        content = content
+        modifier = Modifier.fillMaxSize().background(brush = DarkGradientBrush),
+        content  = content
     )
 }
+
 val SteadeGradientBrush = Brush.linearGradient(
     colors = listOf(SteadeRed, SteadeBlue),
     start  = Offset(0f, 0f),
     end    = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
 )
 
-// â"€â"€â"€ Full-screen gradient background â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
-
+// Main gradient background used on every authenticated screen.
 @Composable
 fun MainGradientBackground(
     showShadow: Boolean = false,
     content: @Composable BoxScope.() -> Unit
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(brush = SteadeGradientBrush)
-    ) {
+    Box(modifier = Modifier.fillMaxSize().background(brush = SteadeGradientBrush)) {
         if (showShadow) {
             Image(
-                painter      = painterResource(id = R.drawable.shadow),
+                painter            = painterResource(id = R.drawable.shadow),
                 contentDescription = null,
-                modifier     = Modifier.fillMaxWidth(0.65f).align(Alignment.Center),
-                contentScale = ContentScale.Fit,
-                alpha        = 0.18f
+                modifier           = Modifier.fillMaxWidth(0.65f).align(Alignment.Center),
+                contentScale       = ContentScale.Fit,
+                alpha              = 0.18f
             )
         }
         content()
     }
 }
 
-// â"€â"€â"€ White pill / frosted card background â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
-
 val cardBg = Color.White.copy(alpha = 0.15f)
 
-// â"€â"€â"€ Bottom Navigation Bar â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
-
-data class NavItem(
-    val screen: Screen,
-    val icon: ImageVector,
-    val label: String
-)
+data class NavItem(val screen: Screen, val icon: ImageVector, val label: String)
 
 val navItems = listOf(
-    NavItem(Screen.Dashboard,    Icons.Default.Home,       "Home"),
-    NavItem(Screen.Habits,       Icons.AutoMirrored.Filled.List,       "Habits"),
-    NavItem(Screen.Goals,        Icons.Default.Star,       "Goals"),
-    NavItem(Screen.Statistics,   Icons.Default.BarChart,   "Stats"),
-    NavItem(Screen.Achievements, Icons.Default.EmojiEvents, "Achievements"),
-    NavItem(Screen.Settings,     Icons.Default.Settings,   "Settings")
+    NavItem(Screen.Dashboard,    Icons.Default.Home,             "Home"),
+    NavItem(Screen.Habits,       Icons.AutoMirrored.Filled.List, "Habits"),
+    NavItem(Screen.Goals,        Icons.Default.Star,             "Goals"),
+    NavItem(Screen.Statistics,   Icons.Default.BarChart,         "Stats"),
+    NavItem(Screen.Achievements, Icons.Default.EmojiEvents,      "Achievements"),
+    NavItem(Screen.Settings,     Icons.Default.Settings,         "Settings")
 )
 
 @Composable
@@ -384,7 +362,7 @@ fun NavIcon(
     val tint = if (selected) Color.White else Color.White.copy(alpha = 0.4f)
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(horizontal = 4.dp)
+        modifier            = Modifier.padding(horizontal = 4.dp)
     ) {
         IconButton(onClick = onClick, modifier = Modifier.size(40.dp)) {
             Icon(icon, contentDescription = label, tint = tint, modifier = Modifier.size(22.dp))
@@ -398,8 +376,6 @@ fun NavIcon(
         )
     }
 }
-
-// â"€â"€â"€ Frosted Card â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 
 @Composable
 fun FrostedCard(
@@ -416,4 +392,3 @@ fun FrostedCard(
         content = content
     )
 }
-

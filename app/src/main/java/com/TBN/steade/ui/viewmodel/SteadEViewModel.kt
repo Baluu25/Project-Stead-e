@@ -19,7 +19,7 @@ class SteadEViewModel(application: Application) : AndroidViewModel(application) 
     var authError   by mutableStateOf<String?>(null)
     var authLoading by mutableStateOf(false)
 
-    var currentUser  by mutableStateOf<ApiUser?>(null)
+    var currentUser by mutableStateOf<ApiUser?>(null)
 
     val habits        = mutableStateListOf<ApiHabit>()
     var habitsLoading by mutableStateOf(false)
@@ -43,7 +43,8 @@ class SteadEViewModel(application: Application) : AndroidViewModel(application) 
         loadUser(); loadHabits(); loadGoals(); loadStatistics(); loadAchievements()
     }
 
-    // ── Auth ──────────────────────────────────────────────────────────────────
+    // Auth
+
     fun login(email: String, password: String, onSuccess: () -> Unit) {
         viewModelScope.launch {
             authLoading = true; authError = null
@@ -81,12 +82,14 @@ class SteadEViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    // ── User ──────────────────────────────────────────────────────────────────
-    fun loadUser() { viewModelScope.launch { repository.getUser().onSuccess { currentUser = it } } }
-    fun getDisplayName(): String { val n = currentUser?.name; return if (!n.isNullOrBlank()) n else repository.getUserName() }
-    fun getDisplayEmail(): String { val e = currentUser?.email; return if (!e.isNullOrBlank()) e else repository.getUserEmail() }
+    // User
 
-    // ── Habits ────────────────────────────────────────────────────────────────
+    fun loadUser() { viewModelScope.launch { repository.getUser().onSuccess { currentUser = it } } }
+    fun getDisplayName(): String  = currentUser?.name?.takeIf { it.isNotBlank() }  ?: repository.getUserName()
+    fun getDisplayEmail(): String = currentUser?.email?.takeIf { it.isNotBlank() } ?: repository.getUserEmail()
+
+    // Habits
+
     fun loadHabits() {
         viewModelScope.launch {
             habitsLoading = true; habitsError = null
@@ -115,33 +118,50 @@ class SteadEViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    fun updateHabit(
+        habit: ApiHabit,
+        name: String, description: String, category: String,
+        frequency: String, icon: String,
+        targetCount: Int = 1, unit: String = "times",
+        scheduledDays: List<Int>? = null
+    ) {
+        viewModelScope.launch {
+            repository.updateHabit(
+                habit.id,
+                CreateHabitRequest(
+                    name = name, description = description, category = category,
+                    frequency = frequency.lowercase(), targetCount = targetCount,
+                    unit = unit, scheduledDays = scheduledDays, icon = icon
+                )
+            ).onSuccess { updated ->
+                val idx = habits.indexOfFirst { it.id == habit.id }
+                if (idx >= 0) habits[idx] = updated
+            }
+        }
+    }
+
     fun deleteHabit(habit: ApiHabit) {
         viewModelScope.launch { repository.deleteHabit(habit.id).onSuccess { habits.remove(habit) } }
     }
 
-    fun logHabitCompletion(habitId: Int, quantity: Int = 1, onDone: (completed: Int) -> Unit = {}) {
+    fun logHabitCompletion(habitId: Int, quantity: Int = 1, onDone: (Int) -> Unit = {}) {
         viewModelScope.launch {
             repository.logHabitCompletion(habitId, quantity).onSuccess { response ->
-                loadStatistics()
-                // Reload achievements after every habit completion so unlock state stays current
-                loadAchievements()
-                onDone(response.completed)
+                loadStatistics(); loadAchievements(); onDone(response.completed)
             }
         }
     }
 
-    fun removeHabitCompletion(habitId: Int, amount: Int = 1, onDone: (completed: Int) -> Unit = {}) {
+    fun removeHabitCompletion(habitId: Int, amount: Int = 1, onDone: (Int) -> Unit = {}) {
         viewModelScope.launch {
             repository.removeHabitCompletion(habitId, amount).onSuccess { response ->
-                loadStatistics()
-                // Reload achievements to reflect any progress changes
-                loadAchievements()
-                onDone(response.completed)
+                loadStatistics(); loadAchievements(); onDone(response.completed)
             }
         }
     }
 
-    // ── Goals ─────────────────────────────────────────────────────────────────
+    // Goals
+
     fun loadGoals() {
         viewModelScope.launch {
             goalsLoading = true; goalsError = null
@@ -159,11 +179,21 @@ class SteadEViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    fun updateGoal(goal: ApiGoal, name: String, deadline: String, description: String = "", icon: String = "sports") {
+        viewModelScope.launch {
+            repository.updateGoal(goal.id, name, deadline, description, icon).onSuccess { updated ->
+                val idx = goals.indexOfFirst { it.id == goal.id }
+                if (idx >= 0) goals[idx] = updated
+            }
+        }
+    }
+
     fun deleteGoal(goal: ApiGoal) {
         viewModelScope.launch { repository.deleteGoal(goal.id).onSuccess { goals.remove(goal) } }
     }
 
-    // ── Statistics ────────────────────────────────────────────────────────────
+    // Statistics
+
     fun loadStatistics() {
         viewModelScope.launch {
             statisticsLoading = true; statisticsError = null
@@ -174,26 +204,14 @@ class SteadEViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    // ── Achievements ──────────────────────────────────────────────────────────
-    /**
-     * Fetches the authenticated user's achievements from the API.
-     * The API returns the real is_unlocked / progress values for the current user,
-     * so no client-side computation is needed – we just display whatever the server sends.
-     * If the request fails the existing list is preserved (fallback in AchievementsScreen).
-     */
+    // Achievements
+
     fun loadAchievements() {
         viewModelScope.launch {
-            achievementsLoading = true
-            achievementsError   = null
+            achievementsLoading = true; achievementsError = null
             repository.getAchievements().fold(
-                onSuccess = { list ->
-                    achievements.clear()
-                    achievements.addAll(list)
-                },
-                onFailure = { e ->
-                    achievementsError = e.message
-                    // keep whatever was in the list already (fallback list stays visible)
-                }
+                onSuccess = { achievements.clear(); achievements.addAll(it) },
+                onFailure = { achievementsError = it.message }
             )
             achievementsLoading = false
         }

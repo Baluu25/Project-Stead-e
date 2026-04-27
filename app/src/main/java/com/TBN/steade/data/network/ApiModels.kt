@@ -2,7 +2,8 @@ package com.TBN.steade.data.network
 
 import com.google.gson.annotations.SerializedName
 
-// ─── Auth ─────────────────────────────────────────────────────────────────────────────────
+// Auth models
+
 data class LoginRequest(val email: String, val password: String)
 
 data class RegisterRequest(
@@ -15,7 +16,8 @@ data class AuthResponse(
     val message: String? = null, val errors: Map<String, List<String>>? = null
 ) { val success: Boolean get() = token != null }
 
-// ─── User ──────────────────────────────────────────────────────────────────────────────────
+// User model
+
 data class ApiUser(
     val id: Int = 0, val name: String = "", val username: String? = null, val email: String = "",
     @SerializedName("profile_picture")      val profilePicture: String? = null,
@@ -35,9 +37,9 @@ data class ApiUser(
     }
 }
 
-// ─── Habits ────────────────────────────────────────────────────────────────────────────────
-// MySQL returns is_active as integer 1/0, NOT a JSON boolean.
-// We store it as Any? and convert via computed property.
+// Habits
+// MySQL returns is_active as 1/0 so we store it as Any? and convert.
+
 data class ApiHabit(
     val id: Int = 0,
     val name: String = "",
@@ -79,7 +81,8 @@ data class CreateHabitRequest(
 
 data class HabitResponse(val habit: ApiHabit? = null, val message: String? = null)
 
-// ─── Goals ──────────────────────────────────────────────────────────────────────────────────
+// Goals
+
 data class ApiGoal(
     val id: Int = 0, val name: String = "", val title: String? = null,
     val description: String? = null, val deadline: String? = null,
@@ -94,8 +97,6 @@ data class ApiGoal(
     val displayName: String get() = title ?: name
 }
 
-// title   → maps to the backend 'title' column (required by StoreGoalRequest)
-// category, targetValue, unit → required by StoreGoalRequest; defaults match DB defaults
 data class CreateGoalRequest(
     val title: String,
     val deadline: String? = null,
@@ -106,9 +107,9 @@ data class CreateGoalRequest(
     val unit: String = "times"
 )
 
-// ─── Statistics ────────────────────────────────────────────────────────────────────────────
-// The API returns daily_completions and category_breakdown as keyed JSON objects,
-// e.g. {"2026-04-20": 3, "Fitness": 12}, so Map<String,Int> is the correct type.
+// Statistics
+// dailyCompletions and categoryBreakdown come back as keyed JSON objects.
+
 data class ApiStatistics(
     @SerializedName("total_habits")          val totalHabits: Int = 0,
     @SerializedName("active_habits")         val activeHabits: Int = 0,
@@ -119,7 +120,8 @@ data class ApiStatistics(
     @SerializedName("category_breakdown")    val categoryBreakdown: Map<String, Int> = emptyMap()
 )
 
-// ─── Achievements ───────────────────────────────────────────────────────────────────────────────
+// Achievements
+
 data class ApiAchievement(
     val id: Int = 0,
     val title: String = "",
@@ -132,7 +134,8 @@ data class ApiAchievement(
     @SerializedName("threshold_value")  val thresholdValue: Int = 0
 )
 
-// ─── Habit Completions ───────────────────────────────────────────────────────────────────────────
+// Habit completions
+
 data class HabitCompletionRequest(
     @SerializedName("habit_id") val habitId: Int,
     val quantity: Int = 1
@@ -145,5 +148,4 @@ data class HabitCompletionResponse(
     @SerializedName("has_completion_today")   val hasCompletionToday: Boolean = false
 )
 
-// ─── Generic ──────────────────────────────────────────────────────────────────────────────────
 data class GenericResponse(val message: String? = null)

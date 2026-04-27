@@ -15,5 +15,5 @@ data class User(
     val badHabits: String,
     val goodHabits: String,
     val gender: String,
-    val cycleData: String? = null // Optional menstrual data
+    val cycleData: String? = null
 )

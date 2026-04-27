@@ -1,5 +1,6 @@
 package com.TBN.steade.ui.screens
 
+import android.app.DatePickerDialog
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -32,9 +34,9 @@ import com.TBN.steade.ui.components.BottomNavBar
 import com.TBN.steade.ui.components.MainGradientBackground
 import com.TBN.steade.ui.theme.SteadeNavyBlue
 import com.TBN.steade.ui.viewmodel.SteadEViewModel
+import java.util.Calendar
 
 // Maps every Material icon name used by the web app to its Compose ImageVector.
-// When the API returns goal.icon = "fitness_center" this map resolves it for display.
 private val materialIconMap: Map<String, ImageVector> = mapOf(
     // Nutrition
     "restaurant"            to Icons.Default.Restaurant,
@@ -118,21 +120,35 @@ private val materialIconMap: Map<String, ImageVector> = mapOf(
     "print"                 to Icons.Default.Print,
 )
 
-// Icon picker list — same names as the web app's categoryIcons, in a flat list for the dialog grid.
 private val goalIcons: List<Pair<String, ImageVector>> = materialIconMap.entries
     .map { it.key to it.value }
 
+// Helper: parse a raw deadline string from the API → "YYYY-MM-DD" or ""
+private fun parseDeadlineDateOnly(raw: String?): String {
+    if (raw.isNullOrBlank()) return ""
+    // The API may return "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS" or "YYYY-MM-DDTHH:MM:SSZ"
+    return raw.trim().take(10)
+}
+
 @Composable
 fun GoalsScreen(navController: NavController, viewModel: SteadEViewModel) {
-    var showAddDialog by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
+    var goalToEdit by remember { mutableStateOf<ApiGoal?>(null) }
+
     LaunchedEffect(Unit) { viewModel.loadGoals() }
 
-    if (showAddDialog) {
-        AddGoalDialog(
-            onDismiss = { showAddDialog = false },
-            onGoalAdded = { name, deadline, desc, icon ->
-                viewModel.createGoal(name, deadline, desc, icon)
-                showAddDialog = false
+    if (showDialog) {
+        GoalDialog(
+            goalToEdit = goalToEdit,
+            onDismiss  = { showDialog = false; goalToEdit = null },
+            onConfirm  = { name, deadline, desc, icon ->
+                if (goalToEdit != null) {
+                    viewModel.updateGoal(goalToEdit!!, name, deadline, desc, icon)
+                } else {
+                    viewModel.createGoal(name, deadline, desc, icon)
+                }
+                showDialog = false
+                goalToEdit = null
             }
         )
     }
@@ -140,39 +156,71 @@ fun GoalsScreen(navController: NavController, viewModel: SteadEViewModel) {
     MainGradientBackground(showShadow = true) {
         Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
             Spacer(Modifier.height(32.dp))
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier              = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment     = Alignment.CenterVertically
+            ) {
                 Text("Goals", color = Color.White, fontSize = 28.sp, fontWeight = FontWeight.Bold)
-                FloatingActionButton(onClick = { showAddDialog = true },
-                    containerColor = Color.White, contentColor = SteadeNavyBlue,
-                    shape = RoundedCornerShape(14.dp), modifier = Modifier.size(48.dp)) {
-                    Icon(Icons.Default.Add, null)
-                }
+                FloatingActionButton(
+                    onClick        = { goalToEdit = null; showDialog = true },
+                    containerColor = Color.White,
+                    contentColor   = SteadeNavyBlue,
+                    shape          = RoundedCornerShape(14.dp),
+                    modifier       = Modifier.size(48.dp)
+                ) { Icon(Icons.Default.Add, null) }
             }
             Spacer(Modifier.height(16.dp))
 
             when {
-                viewModel.goalsLoading -> Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = Color.White)
-                }
-                viewModel.goalsError != null -> Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
+                viewModel.goalsLoading -> Box(
+                    modifier            = Modifier.weight(1f).fillMaxWidth(),
+                    contentAlignment    = Alignment.Center
+                ) { CircularProgressIndicator(color = Color.White) }
+
+                viewModel.goalsError != null -> Box(
+                    modifier            = Modifier.weight(1f).fillMaxWidth(),
+                    contentAlignment    = Alignment.Center
+                ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(viewModel.goalsError!!, color = Color.White.copy(alpha = 0.7f), fontSize = 14.sp, textAlign = TextAlign.Center)
+                        Text(
+                            viewModel.goalsError!!,
+                            color    = Color.White.copy(alpha = 0.7f),
+                            fontSize = 14.sp,
+                            textAlign = TextAlign.Center
+                        )
                         Spacer(Modifier.height(12.dp))
-                        Button(onClick = { viewModel.loadGoals() },
-                            colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = SteadeNavyBlue)) { Text("Retry") }
+                        Button(
+                            onClick = { viewModel.loadGoals() },
+                            colors  = ButtonDefaults.buttonColors(
+                                containerColor = Color.White,
+                                contentColor   = SteadeNavyBlue
+                            )
+                        ) { Text("Retry") }
                     }
                 }
+
                 else -> LazyColumn(modifier = Modifier.weight(1f)) {
                     items(viewModel.goals) { goal ->
-                        GoalCard(goal = goal, onDelete = { viewModel.deleteGoal(goal) })
+                        GoalCard(
+                            goal     = goal,
+                            onEdit   = { goalToEdit = goal; showDialog = true },
+                            onDelete = { viewModel.deleteGoal(goal) }
+                        )
                         Spacer(Modifier.height(12.dp))
                     }
                     if (viewModel.goals.isEmpty()) {
                         item {
-                            Box(modifier = Modifier.fillMaxWidth().padding(40.dp), contentAlignment = Alignment.Center) {
-                                Text("No goals yet.\nTap + to set your first goal!",
-                                    color = Color.White.copy(alpha = 0.6f), fontSize = 15.sp, textAlign = TextAlign.Center)
+                            Box(
+                                modifier         = Modifier.fillMaxWidth().padding(40.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    "No goals yet.\nTap + to set your first goal!",
+                                    color     = Color.White.copy(alpha = 0.6f),
+                                    fontSize  = 15.sp,
+                                    textAlign = TextAlign.Center
+                                )
                             }
                         }
                     }
@@ -183,60 +231,158 @@ fun GoalsScreen(navController: NavController, viewModel: SteadEViewModel) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddGoalDialog(onDismiss: () -> Unit, onGoalAdded: (String, String, String, String) -> Unit) {
-    var name by remember { mutableStateOf("") }
-    var deadline by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var selectedIcon by remember { mutableStateOf(goalIcons.first { it.first == "sports" }) }
+fun GoalDialog(
+    goalToEdit: ApiGoal?,
+    onDismiss:  () -> Unit,
+    onConfirm:  (String, String, String, String) -> Unit
+) {
+    val isEdit  = goalToEdit != null
+    val context = LocalContext.current
+
+    var name        by remember { mutableStateOf(goalToEdit?.displayName ?: "") }
+    var description by remember { mutableStateOf(goalToEdit?.description ?: "") }
+
+    // Parse the stored deadline to YYYY-MM-DD only
+    var deadline by remember { mutableStateOf(parseDeadlineDateOnly(goalToEdit?.deadline)) }
+
+    var selectedIcon by remember {
+        val initKey = goalToEdit?.icon ?: "sports"
+        val pair    = goalIcons.find { it.first == initKey }
+                      ?: goalIcons.first { it.first == "sports" }
+        mutableStateOf(pair)
+    }
+
+    // Build DatePickerDialog from the current deadline string, falling back to today
+    fun openDatePicker() {
+        val cal = Calendar.getInstance()
+        // Pre-fill from existing deadline if present and valid
+        val parts = deadline.split("-")
+        if (parts.size == 3) {
+            parts[0].toIntOrNull()?.let { cal.set(Calendar.YEAR,         it) }
+            parts[1].toIntOrNull()?.let { cal.set(Calendar.MONTH,        it - 1) }
+            parts[2].toIntOrNull()?.let { cal.set(Calendar.DAY_OF_MONTH, it) }
+        }
+
+        DatePickerDialog(
+            context,
+            { _, year, month, day ->
+                // Format as YYYY-MM-DD with zero-padding
+                deadline = "%04d-%02d-%02d".format(year, month + 1, day)
+            },
+            cal.get(Calendar.YEAR),
+            cal.get(Calendar.MONTH),
+            cal.get(Calendar.DAY_OF_MONTH)
+        ).also { picker ->
+            // Prevent selecting dates in the past
+            picker.datePicker.minDate = System.currentTimeMillis() - 1000
+        }.show()
+    }
 
     Dialog(onDismissRequest = onDismiss) {
-        Card(shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = Color.White)) {
+        Card(
+            shape  = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White)
+        ) {
             Column(modifier = Modifier.padding(24.dp)) {
-                Text("Add New Goal", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = SteadeNavyBlue)
+
+                // Title
+                Text(
+                    if (isEdit) "Edit Goal" else "Add New Goal",
+                    fontSize   = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color      = SteadeNavyBlue
+                )
                 Spacer(Modifier.height(20.dp))
 
+                // Goal Name
                 OutlinedTextField(
-                    value = name, onValueChange = { name = it },
-                    label = { Text("Goal Name") }, modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(8.dp), singleLine = true, colors = webTextFieldColors()
+                    value          = name,
+                    onValueChange  = { name = it },
+                    label          = { Text("Goal Name") },
+                    modifier       = Modifier.fillMaxWidth(),
+                    shape          = RoundedCornerShape(8.dp),
+                    singleLine     = true,
+                    colors         = webTextFieldColors()
                 )
                 Spacer(Modifier.height(12.dp))
 
+                // Deadline – tappable field that opens the system date picker
                 OutlinedTextField(
-                    value = deadline, onValueChange = { deadline = it },
-                    label = { Text("Deadline (YYYY-MM-DD)") }, modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(8.dp), singleLine = true, colors = webTextFieldColors()
+                    value         = if (deadline.isBlank()) "" else deadline,
+                    onValueChange = {},
+                    readOnly      = true,
+                    label         = { Text("Deadline (optional)") },
+                    placeholder   = { Text("Tap to pick a date") },
+                    trailingIcon  = {
+                        Row {
+                            Icon(
+                                Icons.Default.CalendarMonth,
+                                contentDescription = "Pick date",
+                                tint     = SteadeNavyBlue,
+                                modifier = Modifier.clickable { openDatePicker() }
+                            )
+                            if (deadline.isNotBlank()) {
+                                Spacer(Modifier.width(8.dp))
+                                Icon(
+                                    Icons.Default.Clear,
+                                    contentDescription = "Clear date",
+                                    tint     = SteadeNavyBlue.copy(alpha = 0.5f),
+                                    modifier = Modifier.clickable { deadline = "" }
+                                )
+                            }
+                            Spacer(Modifier.width(4.dp))
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { openDatePicker() },
+                    shape  = RoundedCornerShape(8.dp),
+                    colors = webTextFieldColors()
                 )
                 Spacer(Modifier.height(12.dp))
 
+                // Description
                 OutlinedTextField(
-                    value = description, onValueChange = { description = it },
-                    label = { Text("Description") }, modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(8.dp), minLines = 2, colors = webTextFieldColors()
+                    value         = description,
+                    onValueChange = { description = it },
+                    label         = { Text("Description") },
+                    modifier      = Modifier.fillMaxWidth(),
+                    shape         = RoundedCornerShape(8.dp),
+                    minLines      = 2,
+                    colors        = webTextFieldColors()
                 )
                 Spacer(Modifier.height(16.dp))
 
+                // Icon picker
                 Text("Icon", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = SteadeNavyBlue)
                 Spacer(Modifier.height(8.dp))
-
-                Column(modifier = Modifier
-                    .heightIn(max = 200.dp)
-                    .verticalScroll(rememberScrollState())) {
+                Column(
+                    modifier = Modifier
+                        .heightIn(max = 200.dp)
+                        .verticalScroll(rememberScrollState())
+                ) {
                     goalIcons.chunked(5).forEach { row ->
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Row(
+                            modifier              = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
                             row.forEach { (key, icon) ->
-                                val isSelected = selectedIcon.first == key
+                                val sel = selectedIcon.first == key
                                 Box(
                                     modifier = Modifier
                                         .size(44.dp)
                                         .clip(CircleShape)
-                                        .background(if (isSelected) SteadeNavyBlue.copy(alpha = 0.15f) else Color.Transparent)
+                                        .background(if (sel) SteadeNavyBlue.copy(alpha = 0.15f) else Color.Transparent)
                                         .clickable { selectedIcon = key to icon },
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Icon(icon, contentDescription = key, tint = SteadeNavyBlue, modifier = Modifier.size(24.dp))
+                                    Icon(
+                                        icon,
+                                        contentDescription = key,
+                                        tint     = SteadeNavyBlue,
+                                        modifier = Modifier.size(24.dp)
+                                    )
                                 }
                             }
                             repeat(5 - row.size) { Spacer(Modifier.size(44.dp)) }
@@ -247,13 +393,14 @@ fun AddGoalDialog(onDismiss: () -> Unit, onGoalAdded: (String, String, String, S
 
                 Spacer(Modifier.height(24.dp))
 
+                // Buttons
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                     TextButton(onClick = onDismiss) { Text("Cancel", color = SteadeNavyBlue) }
                     Spacer(Modifier.width(8.dp))
                     Button(
-                        onClick = { if (name.isNotBlank()) onGoalAdded(name, deadline, description, selectedIcon.first) },
-                        colors = ButtonDefaults.buttonColors(containerColor = SteadeNavyBlue)
-                    ) { Text("Add Goal") }
+                        onClick = { if (name.isNotBlank()) onConfirm(name, deadline, description, selectedIcon.first) },
+                        colors  = ButtonDefaults.buttonColors(containerColor = SteadeNavyBlue)
+                    ) { Text(if (isEdit) "Edit Goal" else "Add Goal") }
                 }
             }
         }
@@ -261,15 +408,20 @@ fun AddGoalDialog(onDismiss: () -> Unit, onGoalAdded: (String, String, String, S
 }
 
 @Composable
-fun GoalCard(goal: ApiGoal, onDelete: (() -> Unit)? = null) {
-    Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp),
-        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
-        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.15f))) {
+fun GoalCard(goal: ApiGoal, onEdit: (() -> Unit)? = null, onDelete: (() -> Unit)? = null) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape    = RoundedCornerShape(16.dp),
+        border   = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
+        colors   = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.15f))
+    ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-
-                // Icon box — mirrors the web app's .goal-icon card element
+            Row(
+                modifier              = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment     = Alignment.CenterVertically
+            ) {
+                // Icon box
                 Box(
                     modifier = Modifier
                         .size(52.dp)
@@ -279,10 +431,10 @@ fun GoalCard(goal: ApiGoal, onDelete: (() -> Unit)? = null) {
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = materialIconMap[goal.icon] ?: Icons.Default.Sports,
+                        imageVector        = materialIconMap[goal.icon] ?: Icons.Default.Sports,
                         contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(28.dp)
+                        tint               = Color.White,
+                        modifier           = Modifier.size(28.dp)
                     )
                 }
 
@@ -290,15 +442,24 @@ fun GoalCard(goal: ApiGoal, onDelete: (() -> Unit)? = null) {
 
                 Column(modifier = Modifier.weight(1f)) {
                     Text(goal.displayName, color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                    if (!goal.deadline.isNullOrBlank())
-                        Text("Deadline: ${goal.deadline}", color = Color.White.copy(alpha = 0.6f), fontSize = 12.sp)
+                    // Show only YYYY-MM-DD portion of the deadline
+                    val deadlineDisplay = parseDeadlineDateOnly(goal.deadline)
+                    if (deadlineDisplay.isNotBlank())
+                        Text("Deadline: $deadlineDisplay", color = Color.White.copy(alpha = 0.6f), fontSize = 12.sp)
                     if (!goal.status.isNullOrBlank())
                         Text("Status: ${goal.status}", color = Color.White.copy(alpha = 0.6f), fontSize = 12.sp)
                 }
 
+                // Edit button
+                if (onEdit != null) {
+                    IconButton(onClick = onEdit) {
+                        Icon(Icons.Default.Edit, contentDescription = "Edit", tint = Color.White.copy(alpha = 0.75f))
+                    }
+                }
+                // Delete button
                 if (onDelete != null) {
                     IconButton(onClick = onDelete) {
-                        Icon(Icons.Default.Delete, null, tint = Color.White.copy(alpha = 0.55f))
+                        Icon(Icons.Default.Delete, contentDescription = "Delete", tint = Color.White.copy(alpha = 0.55f))
                     }
                 }
             }
@@ -311,15 +472,25 @@ fun GoalCard(goal: ApiGoal, onDelete: (() -> Unit)? = null) {
             if (goal.targetValue > 0) {
                 Spacer(Modifier.height(12.dp))
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    Text("${goal.currentValue.toInt()} / ${goal.targetValue.toInt()}",
-                        color = Color.White.copy(alpha = 0.8f), fontSize = 12.sp)
-                    Text("${(goal.progress * 100).toInt()}%", color = Color.White.copy(alpha = 0.8f), fontSize = 12.sp)
+                    Text(
+                        "${goal.currentValue.toInt()} / ${goal.targetValue.toInt()}",
+                        color    = Color.White.copy(alpha = 0.8f),
+                        fontSize = 12.sp
+                    )
+                    Text(
+                        "${(goal.progress * 100).toInt()}%",
+                        color    = Color.White.copy(alpha = 0.8f),
+                        fontSize = 12.sp
+                    )
                 }
                 Spacer(Modifier.height(6.dp))
-                LinearProgressIndicator(progress = { goal.progress },
-                    modifier = Modifier.fillMaxWidth().height(8.dp),
-                    color = Color.White, trackColor = Color.White.copy(alpha = 0.2f),
-                    strokeCap = StrokeCap.Round)
+                LinearProgressIndicator(
+                    progress   = { goal.progress },
+                    modifier   = Modifier.fillMaxWidth().height(8.dp),
+                    color      = Color.White,
+                    trackColor = Color.White.copy(alpha = 0.2f),
+                    strokeCap  = StrokeCap.Round
+                )
             }
         }
     }

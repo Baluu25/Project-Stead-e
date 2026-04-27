@@ -13,7 +13,7 @@ object RetrofitClient {
     const val BASE_URL = "http://192.168.0.68:8000/"
 
     private val gson: Gson = GsonBuilder()
-        .setLenient()          // tolerate any quirks in the JSON stream
+        .setLenient()
         .create()
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {

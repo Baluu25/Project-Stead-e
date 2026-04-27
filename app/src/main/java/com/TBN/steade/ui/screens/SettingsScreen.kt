@@ -41,30 +41,27 @@ fun SettingsScreen(navController: NavController, viewModel: SteadEViewModel) {
     val context = LocalContext.current
     val prefs   = remember { context.getSharedPreferences("SteadESettings", android.content.Context.MODE_PRIVATE) }
 
-    // ── Habit category toggles ──────────────────────────────────────────────
     var fitnessEnabled     by remember { mutableStateOf(prefs.getBoolean("cat_fitness",     true)) }
     var nutritionEnabled   by remember { mutableStateOf(prefs.getBoolean("cat_nutrition",   true)) }
     var mindfulnessEnabled by remember { mutableStateOf(prefs.getBoolean("cat_mindfulness", true)) }
     var studyEnabled       by remember { mutableStateOf(prefs.getBoolean("cat_study",       true)) }
     var workEnabled        by remember { mutableStateOf(prefs.getBoolean("cat_work",        true)) }
 
-    // ── UI state ────────────────────────────────────────────────────────────
     var showLogoutDialog by remember { mutableStateOf(false) }
     var showEasterEgg    by remember { mutableStateOf(false) }
     var copyrightTaps    by remember { mutableStateOf(0) }
     var refreshed        by remember { mutableStateOf(false) }
 
-    // Clear "Synced ✓" badge after 2 s
+    // Auto-clear the "Synced" badge after 2 seconds.
     LaunchedEffect(refreshed) {
         if (refreshed) { delay(2_000); refreshed = false }
     }
 
-    // Reset tap counter after 3 s of inactivity so partial taps don’t linger
+    // Reset the tap counter after 3 seconds of inactivity.
     LaunchedEffect(copyrightTaps) {
         if (copyrightTaps in 1..4) { delay(3_000); copyrightTaps = 0 }
     }
 
-    // ── Logout confirmation ─────────────────────────────────────────────────
     if (showLogoutDialog) {
         AlertDialog(
             onDismissRequest = { showLogoutDialog = false },
@@ -91,21 +88,10 @@ fun SettingsScreen(navController: NavController, viewModel: SteadEViewModel) {
     Box(modifier = Modifier.fillMaxSize()) {
         MainGradientBackground(showShadow = true) {
             Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState())
-                ) {
+                Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState())) {
                     Spacer(Modifier.height(32.dp))
-                    Text(
-                        "Settings",
-                        color      = Color.White,
-                        fontSize   = 28.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Text("Settings", color = Color.White, fontSize = 28.sp, fontWeight = FontWeight.Bold)
 
-                    // ── Habit Categories ────────────────────────────────────
                     Spacer(Modifier.height(28.dp))
                     SettingsSectionHeader("Habit Categories")
                     Spacer(Modifier.height(10.dp))
@@ -116,7 +102,6 @@ fun SettingsScreen(navController: NavController, viewModel: SteadEViewModel) {
                     CategoryToggle("Study",       studyEnabled)       { v -> studyEnabled       = v; prefs.edit().putBoolean("cat_study",       v).apply() }
                     CategoryToggle("Work",        workEnabled)        { v -> workEnabled        = v; prefs.edit().putBoolean("cat_work",        v).apply() }
 
-                    // ── Profile & Data ──────────────────────────────────────
                     Spacer(Modifier.height(28.dp))
                     SettingsSectionHeader("Profile & Data")
                     Spacer(Modifier.height(10.dp))
@@ -141,8 +126,8 @@ fun SettingsScreen(navController: NavController, viewModel: SteadEViewModel) {
                         }
                     )
 
-                    // ── Copyright + hidden easter-egg trigger ───────────────
                     Spacer(Modifier.height(40.dp))
+                    // Tap 5 times to unlock the easter egg mini-game.
                     Text(
                         "© 2025 SteadE · All rights reserved",
                         color     = Color.White.copy(alpha = 0.35f),
@@ -152,15 +137,11 @@ fun SettingsScreen(navController: NavController, viewModel: SteadEViewModel) {
                             .fillMaxWidth()
                             .clickable {
                                 copyrightTaps++
-                                if (copyrightTaps >= 5) {
-                                    copyrightTaps = 0
-                                    showEasterEgg = true
-                                }
+                                if (copyrightTaps >= 5) { copyrightTaps = 0; showEasterEgg = true }
                             }
                             .padding(vertical = 10.dp)
                     )
 
-                    // ── Log Out ─────────────────────────────────────────────
                     Spacer(Modifier.height(16.dp))
                     Button(
                         onClick  = { showLogoutDialog = true },
@@ -181,7 +162,6 @@ fun SettingsScreen(navController: NavController, viewModel: SteadEViewModel) {
             }
         }
 
-        // Easter egg overlay (full-screen, above everything)
         if (showEasterEgg) {
             Box(modifier = Modifier.fillMaxSize().zIndex(10f)) {
                 StackGame(onClose = { showEasterEgg = false })
@@ -190,18 +170,11 @@ fun SettingsScreen(navController: NavController, viewModel: SteadEViewModel) {
     }
 }
 
-// ── Shared section header ───────────────────────────────────────────────────
 @Composable
 fun SettingsSectionHeader(title: String) {
-    Text(
-        title,
-        color      = Color.White,
-        fontSize   = 17.sp,
-        fontWeight = FontWeight.SemiBold
-    )
+    Text(title, color = Color.White, fontSize = 17.sp, fontWeight = FontWeight.SemiBold)
 }
 
-// ── Category toggle row ─────────────────────────────────────────────────────
 @Composable
 fun CategoryToggle(label: String, isEnabled: Boolean, onToggle: (Boolean) -> Unit) {
     Card(
@@ -230,7 +203,6 @@ fun CategoryToggle(label: String, isEnabled: Boolean, onToggle: (Boolean) -> Uni
     }
 }
 
-// ── Tappable action row ─────────────────────────────────────────────────────
 @Composable
 fun SettingsActionRow(
     label  : String,
@@ -266,7 +238,7 @@ fun SettingsActionRow(
     }
 }
 
-// ── Easter-egg mini-game ────────────────────────────────────────────────────
+// Hidden mini-game unlocked by tapping the copyright text 5 times.
 @Composable
 fun StackGame(onClose: () -> Unit) {
     var score           by remember { mutableStateOf(0) }

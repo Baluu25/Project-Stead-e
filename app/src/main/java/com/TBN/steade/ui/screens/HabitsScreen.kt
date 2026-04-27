@@ -1,4 +1,4 @@
-﻿package com.TBN.steade.ui.screens
+package com.TBN.steade.ui.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -39,15 +40,23 @@ import com.TBN.steade.ui.viewmodel.SteadEViewModel
 
 @Composable
 fun HabitsScreen(navController: NavController, viewModel: SteadEViewModel) {
-    var showAddDialog by remember { mutableStateOf(false) }
+    var showDialog    by remember { mutableStateOf(false) }
+    var habitToEdit   by remember { mutableStateOf<ApiHabit?>(null) }
+
     LaunchedEffect(Unit) { viewModel.loadHabits() }
 
-    if (showAddDialog) {
-        AddHabitDialog(
-            onDismiss    = { showAddDialog = false },
-            onHabitAdded = { name, desc, cat, freq, icon, targetCount, unit, scheduledDays ->
-                viewModel.createHabit(name, desc, cat, freq, icon, targetCount, unit, scheduledDays)
-                showAddDialog = false
+    if (showDialog) {
+        HabitDialog(
+            habitToEdit  = habitToEdit,
+            onDismiss    = { showDialog = false; habitToEdit = null },
+            onConfirm    = { name, desc, cat, freq, icon, targetCount, unit, scheduledDays ->
+                if (habitToEdit != null) {
+                    viewModel.updateHabit(habitToEdit!!, name, desc, cat, freq, icon, targetCount, unit, scheduledDays)
+                } else {
+                    viewModel.createHabit(name, desc, cat, freq, icon, targetCount, unit, scheduledDays)
+                }
+                showDialog  = false
+                habitToEdit = null
             }
         )
     }
@@ -55,39 +64,65 @@ fun HabitsScreen(navController: NavController, viewModel: SteadEViewModel) {
     MainGradientBackground(showShadow = true) {
         Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
             Spacer(Modifier.height(32.dp))
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text("Habits", color = Color.White, fontSize = 28.sp, fontWeight = FontWeight.Bold)
-                FloatingActionButton(onClick = { showAddDialog = true },
+                FloatingActionButton(
+                    onClick = { habitToEdit = null; showDialog = true },
                     containerColor = Color.White, contentColor = SteadeNavyBlue,
-                    shape = RoundedCornerShape(14.dp), modifier = Modifier.size(48.dp)) {
+                    shape = RoundedCornerShape(14.dp), modifier = Modifier.size(48.dp)
+                ) {
                     Icon(Icons.Default.Add, null)
                 }
             }
             Spacer(Modifier.height(16.dp))
 
             when {
-                viewModel.habitsLoading -> Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = Color.White)
-                }
-                viewModel.habitsError != null -> Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
+                viewModel.habitsLoading -> Box(
+                    modifier = Modifier.weight(1f).fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) { CircularProgressIndicator(color = Color.White) }
+
+                viewModel.habitsError != null -> Box(
+                    modifier = Modifier.weight(1f).fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(viewModel.habitsError!!, color = Color.White.copy(alpha = 0.7f), fontSize = 14.sp, textAlign = TextAlign.Center)
+                        Text(
+                            viewModel.habitsError!!, color = Color.White.copy(alpha = 0.7f),
+                            fontSize = 14.sp, textAlign = TextAlign.Center
+                        )
                         Spacer(Modifier.height(12.dp))
-                        Button(onClick = { viewModel.loadHabits() },
-                            colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = SteadeNavyBlue)) { Text("Retry") }
+                        Button(
+                            onClick = { viewModel.loadHabits() },
+                            colors  = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = SteadeNavyBlue)
+                        ) { Text("Retry") }
                     }
                 }
+
                 else -> LazyColumn(modifier = Modifier.weight(1f)) {
                     items(viewModel.habits) { habit ->
-                        HabitCard(habit = habit, onDelete = { viewModel.deleteHabit(habit) })
+                        HabitCard(
+                            habit    = habit,
+                            onEdit   = { habitToEdit = habit; showDialog = true },
+                            onDelete = { viewModel.deleteHabit(habit) }
+                        )
                         Spacer(Modifier.height(10.dp))
                     }
                     if (viewModel.habits.isEmpty()) {
                         item {
-                            Box(modifier = Modifier.fillMaxWidth().padding(40.dp), contentAlignment = Alignment.Center) {
-                                Text("No habits yet.\nTap + to create your first habit!",
-                                    color = Color.White.copy(alpha = 0.6f), fontSize = 15.sp, textAlign = TextAlign.Center)
+                            Box(
+                                modifier = Modifier.fillMaxWidth().padding(40.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    "No habits yet.\nTap + to create your first habit!",
+                                    color = Color.White.copy(alpha = 0.6f),
+                                    fontSize = 15.sp, textAlign = TextAlign.Center
+                                )
                             }
                         }
                     }
@@ -100,56 +135,88 @@ fun HabitsScreen(navController: NavController, viewModel: SteadEViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddHabitDialog(
-    onDismiss: () -> Unit,
-    onHabitAdded: (String, String, String, String, String, Int, String, List<Int>?) -> Unit
+fun HabitDialog(
+    habitToEdit: ApiHabit?,
+    onDismiss:   () -> Unit,
+    onConfirm:   (String, String, String, String, String, Int, String, List<Int>?) -> Unit
 ) {
+    val isEdit      = habitToEdit != null
     val categories  = listOf("Nutrition", "Fitness", "Mindfulness", "Study", "Work")
     val frequencies = listOf("daily", "weekly", "monthly")
     val units       = listOf("times", "days", "km", "books", "minutes", "custom")
     val weekDays    = listOf("Su", "Mo", "Tu", "We", "Th", "Fr", "Sa")
 
-    var name          by remember { mutableStateOf("") }
-    var description   by remember { mutableStateOf("") }
-    var selectedCat   by remember { mutableStateOf("Fitness") }
-    var frequency     by remember { mutableStateOf("daily") }
-    var targetCount   by remember { mutableStateOf("1") }
-    var selectedUnit  by remember { mutableStateOf("times") }
-    var customUnit    by remember { mutableStateOf("") }
-    var selectedDays  by remember { mutableStateOf(emptySet<Int>()) }
-    var catExpanded   by remember { mutableStateOf(false) }
-    var freqExpanded  by remember { mutableStateOf(false) }
-    var unitExpanded  by remember { mutableStateOf(false) }
+    var name         by remember { mutableStateOf(habitToEdit?.name        ?: "") }
+    var description  by remember { mutableStateOf(habitToEdit?.description ?: "") }
+    var selectedCat  by remember { mutableStateOf(habitToEdit?.category    ?: "Fitness") }
+    var frequency    by remember { mutableStateOf(habitToEdit?.frequency   ?: "daily") }
+    var targetCount  by remember { mutableStateOf((habitToEdit?.targetCount ?: 1).toString()) }
 
-    val iconOptions    = habitCategoryIcons[selectedCat] ?: emptyList()
-    var selectedIconFa by remember(selectedCat) { mutableStateOf(iconOptions.firstOrNull()?.first ?: "fa-solid fa-star") }
+    // Detect custom unit
+    val presetUnits = listOf("times", "days", "km", "books", "minutes")
+    val rawUnit     = habitToEdit?.unit ?: "times"
+    var selectedUnit by remember { mutableStateOf(if (rawUnit in presetUnits) rawUnit else "custom") }
+    var customUnit   by remember { mutableStateOf(if (rawUnit in presetUnits) "" else rawUnit) }
 
-    AlertDialog(containerColor = Color.White, 
+    // Scheduled days
+    val initDays: Set<Int> = habitToEdit?.scheduledDays
+        ?.mapNotNull { d -> when (d) { is Number -> d.toInt(); is String -> d.toIntOrNull(); else -> null } }
+        ?.toSet() ?: emptySet()
+    var selectedDays by remember { mutableStateOf(initDays) }
+
+    var catExpanded  by remember { mutableStateOf(false) }
+    var freqExpanded by remember { mutableStateOf(false) }
+    var unitExpanded by remember { mutableStateOf(false) }
+
+    val iconOptions      = habitCategoryIcons[selectedCat] ?: emptyList()
+    var selectedIconFa   by remember(selectedCat) {
+        val initIcon = habitToEdit?.icon ?: (iconOptions.firstOrNull()?.first ?: "fa-solid fa-star")
+        mutableStateOf(initIcon)
+    }
+
+    AlertDialog(
+        containerColor   = Color.White,
         onDismissRequest = onDismiss,
-        title = { Text("Create New Habit", fontWeight = FontWeight.Bold, color = SteadeNavyBlue) },
-        text  = {
+        title = {
+            Text(
+                if (isEdit) "Edit Habit" else "Create New Habit",
+                fontWeight = FontWeight.Bold, color = SteadeNavyBlue
+            )
+        },
+        text = {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
 
                 // Name
-                OutlinedTextField(value = name, onValueChange = { name = it },
+                OutlinedTextField(
+                    value = name, onValueChange = { name = it },
                     label = { Text("Habit Name") }, modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(8.dp), colors = webTextFieldColors(), singleLine = true)
+                    shape = RoundedCornerShape(8.dp), colors = webTextFieldColors(), singleLine = true
+                )
                 Spacer(Modifier.height(10.dp))
 
                 // Description
-                OutlinedTextField(value = description, onValueChange = { description = it },
+                OutlinedTextField(
+                    value = description, onValueChange = { description = it },
                     label = { Text("Description") }, modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(8.dp), colors = webTextFieldColors(), minLines = 2)
+                    shape = RoundedCornerShape(8.dp), colors = webTextFieldColors(), minLines = 2
+                )
                 Spacer(Modifier.height(10.dp))
 
                 // Category
                 ExposedDropdownMenuBox(expanded = catExpanded, onExpandedChange = { catExpanded = !catExpanded }) {
-                    OutlinedTextField(value = selectedCat, onValueChange = {}, readOnly = true,
-                        label = { Text("Category") }, trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(catExpanded) },
-                        modifier = Modifier.menuAnchor().fillMaxWidth(), shape = RoundedCornerShape(8.dp), colors = webTextFieldColors())
+                    OutlinedTextField(
+                        value = selectedCat, onValueChange = {}, readOnly = true,
+                        label = { Text("Category") },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(catExpanded) },
+                        modifier = Modifier.menuAnchor().fillMaxWidth(),
+                        shape = RoundedCornerShape(8.dp), colors = webTextFieldColors()
+                    )
                     ExposedDropdownMenu(expanded = catExpanded, onDismissRequest = { catExpanded = false }) {
                         categories.forEach { cat ->
-                            DropdownMenuItem(text = { Text(cat) }, onClick = { selectedCat = cat; catExpanded = false; selectedDays = emptySet() })
+                            DropdownMenuItem(
+                                text = { Text(cat) },
+                                onClick = { selectedCat = cat; catExpanded = false; selectedDays = emptySet() }
+                            )
                         }
                     }
                 }
@@ -157,13 +224,19 @@ fun AddHabitDialog(
 
                 // Frequency
                 ExposedDropdownMenuBox(expanded = freqExpanded, onExpandedChange = { freqExpanded = !freqExpanded }) {
-                    OutlinedTextField(value = frequency.replaceFirstChar { it.uppercase() }, onValueChange = {}, readOnly = true,
-                        label = { Text("Frequency") }, trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(freqExpanded) },
-                        modifier = Modifier.menuAnchor().fillMaxWidth(), shape = RoundedCornerShape(8.dp), colors = webTextFieldColors())
+                    OutlinedTextField(
+                        value = frequency.replaceFirstChar { it.uppercase() }, onValueChange = {}, readOnly = true,
+                        label = { Text("Frequency") },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(freqExpanded) },
+                        modifier = Modifier.menuAnchor().fillMaxWidth(),
+                        shape = RoundedCornerShape(8.dp), colors = webTextFieldColors()
+                    )
                     ExposedDropdownMenu(expanded = freqExpanded, onDismissRequest = { freqExpanded = false }) {
                         frequencies.forEach { f ->
-                            DropdownMenuItem(text = { Text(f.replaceFirstChar { c -> c.uppercase() }) },
-                                onClick = { frequency = f; freqExpanded = false; selectedDays = emptySet() })
+                            DropdownMenuItem(
+                                text = { Text(f.replaceFirstChar { c -> c.uppercase() }) },
+                                onClick = { frequency = f; freqExpanded = false; selectedDays = emptySet() }
+                            )
                         }
                     }
                 }
@@ -212,34 +285,45 @@ fun AddHabitDialog(
                 Spacer(Modifier.height(10.dp))
 
                 // Target Count
-                OutlinedTextField(value = targetCount,
+                OutlinedTextField(
+                    value = targetCount,
                     onValueChange = { if (it.all { c -> c.isDigit() } && it.length <= 4) targetCount = it },
                     label = { Text("Target Count") }, modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(8.dp), colors = webTextFieldColors(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), singleLine = true)
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), singleLine = true
+                )
                 Spacer(Modifier.height(10.dp))
 
                 // Unit
                 ExposedDropdownMenuBox(expanded = unitExpanded, onExpandedChange = { unitExpanded = !unitExpanded }) {
-                    OutlinedTextField(value = selectedUnit.replaceFirstChar { it.uppercase() }, onValueChange = {}, readOnly = true,
-                        label = { Text("Unit") }, trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(unitExpanded) },
-                        modifier = Modifier.menuAnchor().fillMaxWidth(), shape = RoundedCornerShape(8.dp), colors = webTextFieldColors())
+                    OutlinedTextField(
+                        value = selectedUnit.replaceFirstChar { it.uppercase() }, onValueChange = {}, readOnly = true,
+                        label = { Text("Unit") },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(unitExpanded) },
+                        modifier = Modifier.menuAnchor().fillMaxWidth(),
+                        shape = RoundedCornerShape(8.dp), colors = webTextFieldColors()
+                    )
                     ExposedDropdownMenu(expanded = unitExpanded, onDismissRequest = { unitExpanded = false }) {
                         units.forEach { u ->
-                            DropdownMenuItem(text = { Text(u.replaceFirstChar { c -> c.uppercase() }) },
-                                onClick = { selectedUnit = u; unitExpanded = false })
+                            DropdownMenuItem(
+                                text = { Text(u.replaceFirstChar { c -> c.uppercase() }) },
+                                onClick = { selectedUnit = u; unitExpanded = false }
+                            )
                         }
                     }
                 }
                 if (selectedUnit == "custom") {
                     Spacer(Modifier.height(10.dp))
-                    OutlinedTextField(value = customUnit, onValueChange = { customUnit = it },
-                        label = { Text("Custom Unit (e.g. pages, glasses)") }, modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(8.dp), colors = webTextFieldColors(), singleLine = true)
+                    OutlinedTextField(
+                        value = customUnit, onValueChange = { customUnit = it },
+                        label = { Text("Custom Unit (e.g. pages, glasses)") },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(8.dp), colors = webTextFieldColors(), singleLine = true
+                    )
                 }
                 Spacer(Modifier.height(10.dp))
 
-                // Icon picker â€" category-specific Material Icons
+                // Icon picker
                 Text("Icon", fontSize = 13.sp, color = SteadeNavyBlue, fontWeight = FontWeight.SemiBold)
                 Spacer(Modifier.height(6.dp))
                 iconOptions.chunked(5).forEach { row ->
@@ -265,22 +349,24 @@ fun AddHabitDialog(
                     if (name.isNotBlank()) {
                         val unit = if (selectedUnit == "custom") customUnit.ifBlank { "times" } else selectedUnit
                         val days = if (frequency == "daily") null else selectedDays.sorted().ifEmpty { null }
-                        onHabitAdded(name, description, selectedCat, frequency, selectedIconFa, targetCount.toIntOrNull() ?: 1, unit, days)
+                        onConfirm(name, description, selectedCat, frequency, selectedIconFa, targetCount.toIntOrNull() ?: 1, unit, days)
                     }
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = SteadeNavyBlue)
-            ) { Text("Create") }
+            ) { Text(if (isEdit) "Edit Habit" else "Create") }
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
     )
 }
 
 @Composable
-fun HabitCard(habit: ApiHabit, onDelete: () -> Unit) {
-    Card(modifier = Modifier.fillMaxWidth().alpha(if (habit.isActive) 1f else 0.55f),
-        shape = RoundedCornerShape(16.dp),
+fun HabitCard(habit: ApiHabit, onEdit: () -> Unit, onDelete: () -> Unit) {
+    Card(
+        modifier = Modifier.fillMaxWidth().alpha(if (habit.isActive) 1f else 0.55f),
+        shape  = RoundedCornerShape(16.dp),
         border = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
-        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.15f))) {
+        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.15f))
+    ) {
         Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 habitIconToMaterialIcon(habit.icon),
@@ -294,13 +380,18 @@ fun HabitCard(habit: ApiHabit, onDelete: () -> Unit) {
                 if (!habit.description.isNullOrBlank())
                     Text(habit.description, color = Color.White.copy(alpha = 0.65f), fontSize = 13.sp, maxLines = 1)
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.padding(top = 4.dp)) {
-                    if (!habit.category.isNullOrBlank()) HabitChip(habit.category)
-                    if (!habit.frequency.isNullOrBlank()) HabitChip(habit.frequency.replaceFirstChar { it.uppercase() })
-                    if (habit.isCompletedToday) HabitChip("Done", icon = Icons.Default.Check)
+                    if (!habit.category.isNullOrBlank())  HabitChip(habit.category)
+                    if (!habit.frequency.isNullOrBlank())  HabitChip(habit.frequency.replaceFirstChar { it.uppercase() })
+                    if (habit.isCompletedToday)            HabitChip("Done", icon = Icons.Default.Check)
                 }
             }
+            // Edit button
+            IconButton(onClick = onEdit) {
+                Icon(Icons.Default.Edit, contentDescription = "Edit", tint = Color.White.copy(alpha = 0.75f))
+            }
+            // Delete button
             IconButton(onClick = onDelete) {
-                Icon(Icons.Default.Delete, null, tint = Color.White.copy(alpha = 0.55f))
+                Icon(Icons.Default.Delete, contentDescription = "Delete", tint = Color.White.copy(alpha = 0.55f))
             }
         }
     }
@@ -314,12 +405,10 @@ fun HabitChip(text: String, icon: ImageVector? = null) {
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
         ) {
             if (icon != null) {
-                Icon(icon, contentDescription = null,
-                    tint = Color.White.copy(alpha = 0.8f), modifier = Modifier.size(10.dp))
+                Icon(icon, contentDescription = null, tint = Color.White.copy(alpha = 0.8f), modifier = Modifier.size(10.dp))
                 Spacer(Modifier.width(3.dp))
             }
             Text(text, color = Color.White.copy(alpha = 0.8f), fontSize = 10.sp)
         }
     }
 }
-

@@ -1,4 +1,4 @@
-﻿package com.TBN.steade.ui.screens
+package com.TBN.steade.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -28,34 +28,27 @@ import com.TBN.steade.ui.navigation.Screen
 import com.TBN.steade.ui.theme.SteadeNavyBlue
 import com.TBN.steade.ui.viewmodel.SteadEViewModel
 
-// â"€â"€â"€ Shared text-field colours (white surface, fully black text) â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
+// Shared OutlinedTextField colours used by all forms in the app.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun webTextFieldColors() = OutlinedTextFieldDefaults.colors(
-    // text
     focusedTextColor          = Color(0xFF111111),
     unfocusedTextColor        = Color(0xFF111111),
     disabledTextColor         = Color(0xFF666666),
     errorTextColor            = Color(0xFF111111),
-    // container
     focusedContainerColor     = Color.White,
     unfocusedContainerColor   = Color.White,
     disabledContainerColor    = Color(0xFFF5F5F5),
     errorContainerColor       = Color.White,
-    // border
     focusedBorderColor        = Color(0xFF25408F),
     unfocusedBorderColor      = Color(0xFFDDDDDD),
     errorBorderColor          = Color(0xFFD32F2F),
-    // label
     focusedLabelColor         = Color(0xFF25408F),
     unfocusedLabelColor       = Color(0xFF888888),
-    // placeholder
     focusedPlaceholderColor   = Color(0xFFAAAAAA),
     unfocusedPlaceholderColor = Color(0xFFAAAAAA),
-    // cursor
     cursorColor               = Color(0xFF25408F),
     errorCursorColor          = Color(0xFFD32F2F),
-    // trailing icon
     focusedTrailingIconColor   = Color(0xFF555555),
     unfocusedTrailingIconColor = Color(0xFF888888),
     errorTrailingIconColor     = Color(0xFFD32F2F)
@@ -64,17 +57,16 @@ fun webTextFieldColors() = OutlinedTextFieldDefaults.colors(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavController, viewModel: SteadEViewModel) {
-    var email           by remember { mutableStateOf("") }
-    var password        by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
+    var email            by remember { mutableStateOf("") }
+    var password         by remember { mutableStateOf("") }
+    var passwordVisible  by remember { mutableStateOf(false) }
     var showForgotDialog by remember { mutableStateOf(false) }
-    var forgotEmail     by remember { mutableStateOf("") }
-    var resetSent       by remember { mutableStateOf(false) }
+    var forgotEmail      by remember { mutableStateOf("") }
+    var resetSent        by remember { mutableStateOf(false) }
 
-    val isEmailValid  = remember(email)      { android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() }
-    val isForgotValid = remember(forgotEmail){ android.util.Patterns.EMAIL_ADDRESS.matcher(forgotEmail).matches() }
+    val isEmailValid  = remember(email)       { android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() }
+    val isForgotValid = remember(forgotEmail) { android.util.Patterns.EMAIL_ADDRESS.matcher(forgotEmail).matches() }
 
-    // â"€â"€ Forgot-password dialog â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
     if (showForgotDialog) {
         AlertDialog(
             onDismissRequest = { showForgotDialog = false; resetSent = false; forgotEmail = "" },
@@ -121,8 +113,7 @@ fun LoginScreen(navController: NavController, viewModel: SteadEViewModel) {
         )
     }
 
-    // â"€â"€ Main content â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
-    DarkGradientBackground() {
+    DarkGradientBackground {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -147,7 +138,6 @@ fun LoginScreen(navController: NavController, viewModel: SteadEViewModel) {
             )
             Spacer(Modifier.height(32.dp))
 
-            // â"€â"€ White card â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
             Surface(
                 shape           = RoundedCornerShape(20.dp),
                 color           = Color.White,
@@ -156,7 +146,6 @@ fun LoginScreen(navController: NavController, viewModel: SteadEViewModel) {
             ) {
                 Column(modifier = Modifier.padding(24.dp)) {
 
-                    // Email field
                     Text("Email", color = SteadeNavyBlue, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
                     Spacer(Modifier.height(6.dp))
                     OutlinedTextField(
@@ -176,7 +165,6 @@ fun LoginScreen(navController: NavController, viewModel: SteadEViewModel) {
 
                     Spacer(Modifier.height(18.dp))
 
-                    // Password field
                     Text("Password", color = SteadeNavyBlue, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
                     Spacer(Modifier.height(6.dp))
                     OutlinedTextField(
@@ -201,17 +189,12 @@ fun LoginScreen(navController: NavController, viewModel: SteadEViewModel) {
                         colors               = webTextFieldColors()
                     )
 
-                    // Forgot password link
-                    Row(
-                        modifier              = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
-                    ) {
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                         TextButton(onClick = { showForgotDialog = true }) {
                             Text("Forgot Password?", color = SteadeNavyBlue, fontSize = 13.sp)
                         }
                     }
 
-                    // API error
                     if (viewModel.authError != null) {
                         Spacer(Modifier.height(4.dp))
                         Text(viewModel.authError!!, color = Color.Red, fontSize = 13.sp)
@@ -220,8 +203,6 @@ fun LoginScreen(navController: NavController, viewModel: SteadEViewModel) {
 
                     Spacer(Modifier.height(4.dp))
 
-                    // Sign In button â€" always enabled when fields have valid content,
-                    // never hidden, shows spinner while loading
                     Button(
                         onClick  = {
                             viewModel.authError = null
@@ -254,7 +235,6 @@ fun LoginScreen(navController: NavController, viewModel: SteadEViewModel) {
 
                     Spacer(Modifier.height(18.dp))
 
-                    // Navigate to Register
                     Row(
                         modifier              = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center,
@@ -279,6 +259,3 @@ fun LoginScreen(navController: NavController, viewModel: SteadEViewModel) {
         }
     }
 }
-
-
-

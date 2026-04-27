@@ -28,6 +28,13 @@ interface SteadEApiService {
         @Body request: CreateHabitRequest
     ): Response<ApiHabit>
 
+    @PUT("api/habits/{id}")
+    suspend fun updateHabit(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int,
+        @Body request: CreateHabitRequest
+    ): Response<ApiHabit>
+
     @DELETE("api/habits/{id}")
     suspend fun deleteHabit(
         @Header("Authorization") token: String,
@@ -41,6 +48,13 @@ interface SteadEApiService {
     @POST("api/goals")
     suspend fun createGoal(
         @Header("Authorization") token: String,
+        @Body request: CreateGoalRequest
+    ): Response<ApiGoal>
+
+    @PUT("api/goals/{id}")
+    suspend fun updateGoal(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int,
         @Body request: CreateGoalRequest
     ): Response<ApiGoal>
 
