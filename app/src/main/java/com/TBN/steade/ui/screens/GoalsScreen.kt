@@ -233,7 +233,6 @@ fun AddGoalDialog(onDismiss: () -> Unit, onGoalAdded: (String, String, String, S
                                         .size(44.dp)
                                         .clip(CircleShape)
                                         .background(if (isSelected) SteadeNavyBlue.copy(alpha = 0.15f) else Color.Transparent)
-                                        .border(if (isSelected) 2.dp else 0.dp, SteadeNavyBlue, CircleShape)
                                         .clickable { selectedIcon = key to icon },
                                     contentAlignment = Alignment.Center
                                 ) {

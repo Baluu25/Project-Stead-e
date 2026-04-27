@@ -1,11 +1,9 @@
 package com.TBN.steade.ui.screens
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -132,30 +130,21 @@ fun AchievementCard(achievement: ApiAchievement, isFromApi: Boolean) {
     ) {
         Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
 
-            // Icon circle
-            Box(
-                modifier          = Modifier
-                    .size(52.dp)
-                    .clip(CircleShape)
-                    .background(if (unlocked) Color(0xFFFFD700).copy(alpha = 0.18f) else Color.White.copy(alpha = 0.1f)),
-                contentAlignment  = Alignment.Center
-            ) {
-                val iconStr = achievement.icon
-                if (iconStr.endsWith(".png") || iconStr.endsWith(".jpg") || iconStr.endsWith(".webp")) {
-                    AsyncImage(
-                        model            = "${RetrofitClient.BASE_URL}images/achievements/$iconStr",
-                        contentDescription = achievement.title,
-                        contentScale     = ContentScale.Fit,
-                        modifier         = Modifier.size(36.dp)
-                    )
-                } else {
-                    Icon(
-                        achievementIconToMaterial(iconStr),
-                        contentDescription = achievement.title,
-                        tint     = if (unlocked) Color(0xFFFFD700) else Color.White.copy(alpha = 0.45f),
-                        modifier = Modifier.size(30.dp)
-                    )
-                }
+            val iconStr = achievement.icon
+            if (iconStr.endsWith(".png") || iconStr.endsWith(".jpg") || iconStr.endsWith(".webp")) {
+                AsyncImage(
+                    model              = "${RetrofitClient.BASE_URL}images/achievements/$iconStr",
+                    contentDescription = achievement.title,
+                    contentScale       = ContentScale.Fit,
+                    modifier           = Modifier.size(48.dp)
+                )
+            } else {
+                Icon(
+                    achievementIconToMaterial(iconStr),
+                    contentDescription = achievement.title,
+                    tint     = if (unlocked) Color.White else Color.White.copy(alpha = 0.45f),
+                    modifier = Modifier.size(40.dp)
+                )
             }
 
             Spacer(Modifier.width(12.dp))
@@ -166,7 +155,7 @@ fun AchievementCard(achievement: ApiAchievement, isFromApi: Boolean) {
                         fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
                     if (unlocked) {
                         Icon(Icons.Default.EmojiEvents, contentDescription = null,
-                            tint = Color(0xFFFFD700), modifier = Modifier.size(18.dp))
+                            tint = Color.White, modifier = Modifier.size(18.dp))
                     }
                 }
                 Text(achievement.description, color = Color.White.copy(alpha = 0.65f),
@@ -175,7 +164,7 @@ fun AchievementCard(achievement: ApiAchievement, isFromApi: Boolean) {
                 LinearProgressIndicator(
                     progress  = { progress },
                     modifier  = Modifier.fillMaxWidth().height(4.dp),
-                    color     = if (unlocked) Color(0xFF4CAF50) else Color.White.copy(alpha = 0.6f),
+                    color     = Color.White.copy(alpha = if (unlocked) 1f else 0.6f),
                     trackColor = Color.White.copy(alpha = 0.15f),
                     strokeCap = androidx.compose.ui.graphics.StrokeCap.Round
                 )
@@ -184,11 +173,11 @@ fun AchievementCard(achievement: ApiAchievement, isFromApi: Boolean) {
                     val dateStr = achievement.unlockedAt?.take(10) ?: ""
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Default.CheckCircle, contentDescription = null,
-                            tint = Color(0xFF4CAF50), modifier = Modifier.size(12.dp))
+                            tint = Color.White, modifier = Modifier.size(12.dp))
                         Spacer(Modifier.width(3.dp))
                         Text(
                             if (dateStr.isNotEmpty()) "Unlocked $dateStr" else "Unlocked",
-                            color = Color(0xFF4CAF50), fontSize = 11.sp, fontWeight = FontWeight.Bold
+                            color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold
                         )
                     }
                 } else {
