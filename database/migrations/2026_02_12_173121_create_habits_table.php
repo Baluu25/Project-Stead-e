@@ -15,7 +15,7 @@ return new class extends Migration
            $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('category');
             $table->enum('frequency', ['daily', 'weekly', 'monthly', 'custom']);
             $table->bigInteger('target_count')->default(1);

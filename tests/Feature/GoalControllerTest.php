@@ -57,11 +57,11 @@ class GoalControllerTest extends TestCase
         $response = $this->postJson('/api/goals', $payload);
 
         $response->assertCreated()
-                 ->assertJsonPath('title', 'Run a total of 100 km');
+                 ->assertJsonPath('title', 'Run 100 km');
 
         $this->assertDatabaseHas('goals', [
             'user_id' => $user->id,
-            'title'   => 'Run a total of 100 km',
+            'title'   => 'Run 100 km',
         ]);
     }
 

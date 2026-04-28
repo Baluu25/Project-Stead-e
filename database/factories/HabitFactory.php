@@ -41,7 +41,7 @@ class HabitFactory extends Factory
             'fa-solid fa-person-swimming',
         ],
         
-        'Mindfullness' => [
+        'Mindfulness' => [
             'fa-solid fa-brain',
             'fa-solid fa-heart',
             'fa-solid fa-spa',
