@@ -95,6 +95,28 @@
       @enderror
     </div>
 
+    <div class="form-group">
+      <label class="form-label">Gender</label>
+      <select id="gender" class="form-control @error('gender') is-invalid @enderror">
+        <option value="" disabled {{ old('gender') ? '' : 'selected' }}>Select gender</option>
+        <option value="male"   {{ old('gender') == 'male'   ? 'selected' : '' }}>Male</option>
+        <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
+        <option value="other"  {{ old('gender') == 'other'  ? 'selected' : '' }}>Other</option>
+      </select>
+      @error('gender')
+        <div class="invalid-feedback">{{ $message }}</div>
+      @enderror
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Birthday</label>
+      <input type="date" id="birthdate" class="form-control @error('birthdate') is-invalid @enderror"
+             value="{{ old('birthdate') }}">
+      @error('birthdate')
+        <div class="invalid-feedback">{{ $message }}</div>
+      @enderror
+    </div>
+
     <div class="form-buttons">
       <button type="button" class="btn btn-primary" onclick="nextStep()">Continue</button>
     </div>
@@ -171,6 +193,8 @@
     <input type="hidden" name="username"  id="final_username">
     <input type="hidden" name="email"     id="final_email">
     <input type="hidden" name="password"  id="final_password">
+    <input type="hidden" name="gender"    id="final_gender">
+    <input type="hidden" name="birthdate" id="final_birthdate">
     {{-- Carry forward step 2 value --}}
     <input type="hidden" name="user_goal" id="final_user_goal">
 
@@ -234,7 +258,7 @@
 @if ($errors->any())
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    @if ($errors->has('name') || $errors->has('username') || $errors->has('email') || $errors->has('password'))
+    @if ($errors->has('name') || $errors->has('username') || $errors->has('email') || $errors->has('password') || $errors->has('gender') || $errors->has('birthdate'))
         showStepDirect(1);
     @elseif ($errors->has('user_goal'))
         showStepDirect(2);

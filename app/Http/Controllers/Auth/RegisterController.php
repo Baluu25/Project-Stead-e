@@ -54,6 +54,8 @@ class RegisterController extends Controller
             'username' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
+            'gender'    => ['nullable', 'in:male,female,other'],
+            'birthdate' => ['nullable', 'date'],
             'user_goal' => ['required', 'in:weight_loss,consistency,quit_habit,explore'],
             'preferred_categories'  => ['required', 'array', 'min:1'],
             'preferred_categories.*'=> ['in:Fitness,Nutrition,Mindfulness,Study,Work'],
@@ -70,11 +72,13 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $user = User::create([
-            'name' => $data['name'],
+            'name'     => $data['name'],
             'username' => $data['username'],
-            'email'  => $data['email'],
+            'email'    => $data['email'],
             'password' => Hash::make($data['password']),
-            'user_goal'  => $data['user_goal'],
+            'gender'   => $data['gender'] ?? null,
+            'birthdate'=> $data['birthdate'] ?? null,
+            'user_goal'=> $data['user_goal'],
             'preferred_categories' => $data['preferred_categories'],
         ]);
 
