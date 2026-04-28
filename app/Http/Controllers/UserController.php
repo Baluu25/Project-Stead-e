@@ -37,9 +37,14 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show()
+    public function show(Request $request)
     {
         $user = auth()->user();
+
+        if ($request->expectsJson() || $request->is('api/*')) {
+            return response()->json($user);
+        }
+
         return view('profile', compact('user'));
     }
 
@@ -90,6 +95,10 @@ class UserController extends Controller
         }
 
         $user->update($validated);
+
+        if ($request->expectsJson() || $request->is('api/*')) {
+            return response()->json($user->fresh());
+        }
 
         return redirect()->route('profile')->with('success', 'Profile updated successfully!');
     }
