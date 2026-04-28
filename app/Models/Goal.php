@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Goal extends Model {
+    use HasFactory;
+
     protected $fillable = [
         'user_id', 'title', 'description', 'icon',
         'category', 'target_value', 'current_value',

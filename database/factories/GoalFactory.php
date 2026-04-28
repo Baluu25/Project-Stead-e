@@ -23,7 +23,7 @@ class GoalFactory extends Factory
             'category'      => fake()->randomElement(['Fitness', 'Nutrition', 'Mindfulness', 'Study', 'Work']),
             'target_value'  => fake()->numberBetween(10, 200),
             'current_value' => 0,
-            'unit'          => fake()->randomElement(['km', 'db', 'perc', 'kg', 'l']),
+            'unit'          => fake()->randomElement(['days', 'times', 'km', 'books', 'minutes', 'custom']),
             'status'        => fake()->randomElement(['not-started', 'in-progress', 'completed']),
             'deadline'      => fake()->optional()->dateTimeBetween('now', '+1 year')?->format('Y-m-d'),
             'icon'          => 'fa-solid fa-star',
