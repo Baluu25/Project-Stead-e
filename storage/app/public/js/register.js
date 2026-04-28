@@ -1,5 +1,5 @@
 let currentStep = 1;
-const totalSteps = 3;
+const totalSteps = 4;
 
 function nextStep() {
     if (!validateStep(currentStep)) return;
@@ -54,11 +54,14 @@ function validateStep(step) {
         return true;
     }
     if (step === 2) {
+        return true;
+    }
+    if (step === 3) {
         const selected = document.querySelector('input[name="user_goal"]:checked');
         if (!selected) return alert('Please select a goal'), false;
         return true;
     }
-    if (step === 3) {
+    if (step === 4) {
         const selected = document.querySelectorAll('input[name="preferred_categories[]"]:checked');
         if (selected.length === 0) return alert('Please select at least one focus area'), false;
         return true;
@@ -78,12 +81,15 @@ function updateProgress() {
 }
 
 function submitFinalForm() {
-    if (!validateStep(3)) return;
+    if (!validateStep(4)) return;
     document.getElementById('final_name').value      = document.getElementById('name').value;
     document.getElementById('final_username').value  = document.getElementById('username').value;
     document.getElementById('final_email').value     = document.getElementById('email').value;
     document.getElementById('final_password').value  = document.getElementById('password').value;
-    document.getElementById('final_gender').value    = document.getElementById('gender').value;
+    const genderRadio = document.querySelector('input[name="gender"]:checked');
+    if (genderRadio) {
+        document.getElementById('final_gender').value = genderRadio.value;
+    }
     document.getElementById('final_birthdate').value = document.getElementById('birthdate').value;
     const goalRadio = document.querySelector('input[name="user_goal"]:checked');
     if (goalRadio) {
@@ -115,7 +121,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // radio option cards
     document.querySelectorAll('.option-card:not(.category-card)').forEach(function (card) {
         card.addEventListener('click', function (e) {
             if (e.target.type === 'radio') return;
@@ -130,7 +135,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Checkbox option-cards
     document.querySelectorAll('.category-card').forEach(function (card) {
         card.addEventListener('click', function (e) {
             e.preventDefault();
@@ -141,7 +145,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Password show/hide toggle
     const toggleBtn = document.getElementById('togglePassword');
     if (toggleBtn) {
         toggleBtn.addEventListener('click', function () {
