@@ -14,17 +14,21 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $data = $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', 'unique:users'],
-            'email'    => ['required', 'email', 'unique:users'],
-            'password' => ['required', 'confirmed', Password::defaults()],
+            'name'      => ['required', 'string', 'max:255'],
+            'username'  => ['required', 'string', 'max:255', 'unique:users'],
+            'email'     => ['required', 'email', 'unique:users'],
+            'password'  => ['required', 'confirmed', Password::defaults()],
+            'gender'    => ['nullable', 'in:male,female,other'],
+            'birthdate' => ['nullable', 'date'],
         ]);
 
         $user = User::create([
-            'name'     => $data['name'],
-            'username' => $data['username'],
-            'email'    => $data['email'],
-            'password' => Hash::make($data['password']),
+            'name'      => $data['name'],
+            'username'  => $data['username'],
+            'email'     => $data['email'],
+            'password'  => Hash::make($data['password']),
+            'gender'    => $data['gender'] ?? null,
+            'birthdate' => $data['birthdate'] ?? null,
         ]);
 
         // Seed the default achievement rows for this brand-new user
