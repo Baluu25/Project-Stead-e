@@ -79,10 +79,12 @@ function updateProgress() {
 
 function submitFinalForm() {
     if (!validateStep(3)) return;
-    document.getElementById('final_name').value     = document.getElementById('name').value;
-    document.getElementById('final_username').value = document.getElementById('username').value;
-    document.getElementById('final_email').value    = document.getElementById('email').value;
-    document.getElementById('final_password').value = document.getElementById('password').value;
+    document.getElementById('final_name').value      = document.getElementById('name').value;
+    document.getElementById('final_username').value  = document.getElementById('username').value;
+    document.getElementById('final_email').value     = document.getElementById('email').value;
+    document.getElementById('final_password').value  = document.getElementById('password').value;
+    document.getElementById('final_gender').value    = document.getElementById('gender').value;
+    document.getElementById('final_birthdate').value = document.getElementById('birthdate').value;
     const goalRadio = document.querySelector('input[name="user_goal"]:checked');
     if (goalRadio) {
         document.getElementById('final_user_goal').value = goalRadio.value;
