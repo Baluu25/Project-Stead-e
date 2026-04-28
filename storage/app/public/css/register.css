@@ -290,7 +290,8 @@ body {
   margin-top: 0.5rem;
 }
 
-#step6 .options-grid {
+#step3 .options-grid,
+#step4 .options-grid {
   grid-template-columns: repeat(2, 1fr);
 }
 
@@ -403,7 +404,8 @@ body {
     grid-template-columns: 1fr;
   }
 
-  #step6 .options-grid {
+  #step3 .options-grid,
+  #step4 .options-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -475,7 +477,8 @@ body {
     width: 100%;
   }
 
-  #step6 .options-grid {
+  #step3 .options-grid,
+  #step4 .options-grid {
     grid-template-columns: 1fr;
   }
 }
