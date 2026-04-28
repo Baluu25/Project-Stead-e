@@ -25,10 +25,6 @@ class User extends Authenticatable
         'password',
         'gender',
         'birthdate',
-        'weight',
-        'height',
-        'sleep_time',
-        'wake_time',
         'user_goal',
         'preferred_categories',
         'is_admin'
