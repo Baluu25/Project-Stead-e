@@ -121,6 +121,10 @@
                         <div class="footer-legal-links">
                             <a href="{{ route('privacy') }}">Privacy Policy</a>
                             <a href="{{ route('terms') }}">Terms of Service</a>
+<<<<<<< HEAD
+=======
+                            <a href="#">Cookie Policy</a>
+>>>>>>> 4c1d2a96c53e1d46d7887d7cbb547c21e28093e9
                         </div>
                     </div>
                 </div>
