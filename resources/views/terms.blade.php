@@ -35,7 +35,7 @@
 
         <section>
             <h2>4. Intellectual Property</h2>
-            <p>All content, features, and functionality of the Service — including but not limited to text, graphics, logos, and software — are the exclusive property of Stead-E and are protected by applicable intellectual property laws. You may not reproduce, distribute, or create derivative works without our express written permission.</p>
+            <p>All content, features, and functionality of the Service, including but not limited to text, graphics, logos, and software that are the exclusive property of Stead-E and are protected by applicable intellectual property laws. You may not reproduce, distribute, or create derivative works without our express written permission.</p>
         </section>
 
         <section>
