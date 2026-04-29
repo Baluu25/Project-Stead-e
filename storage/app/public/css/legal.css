@@ -1,0 +1,99 @@
+:root {
+  --color-btn-blue: #25408F;
+}
+
+.legal-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 6rem 1rem 3rem;
+}
+
+.legal-card {
+  background: white;
+  border-radius: 15px;
+  padding: 3rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  color: #333;
+  width: 60vw;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.legal-card h1 {
+  font-weight: 800;
+  color: var(--color-btn-blue);
+  margin-bottom: 0.25rem;
+}
+
+.legal-card .legal-date {
+  color: #888;
+  font-size: 0.9rem;
+  margin-bottom: 2.5rem;
+  display: block;
+}
+
+.legal-card h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-btn-blue);
+  margin-bottom: 0.6rem;
+}
+
+.legal-card p,
+.legal-card ul {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #444;
+}
+
+.legal-card ul {
+  padding-left: 1.5rem;
+  margin-bottom: 0;
+}
+
+.legal-card ul li {
+  margin-bottom: 0.4rem;
+}
+
+.legal-card a {
+  color: var(--color-btn-blue);
+  text-decoration: underline;
+}
+
+.legal-card section {
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 2rem;
+}
+
+.legal-card section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+@media (max-width: 767px) {
+  .legal-card {
+    width: 100%;
+    padding: 2rem 1.25rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .legal-card {
+    width: 85vw;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1399px) {
+  .legal-card {
+    width: 70vw;
+  }
+}
+
+@media (min-width: 1400px) {
+  .legal-card {
+    width: 55vw;
+    max-width: 900px;
+  }
+}
