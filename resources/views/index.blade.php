@@ -149,16 +149,16 @@
             <div class="review-header">
               <div class="reviewer-info">
                 <div class="reviewer-avatar">
-                  <img src="" alt="John Doe">
+                  <img src="images/reviews/arthur-radish.png" alt="Arthur Radish">
                 </div>
                 <div class="reviewer-details">
-                  <h5 class="reviewer-name">John Doe</h5>
+                  <h5 class="reviewer-name">Arthur Radish</h5>
                   <div class="review-rating">
                     <span class="star">★</span>
                     <span class="star">★</span>
                     <span class="star">★</span>
                     <span class="star">★</span>
-                    <span class="star">★</span>
+                    <span class="star"></span>
                   </div>
                 </div>
               </div>
@@ -173,10 +173,10 @@
             <div class="review-header">
               <div class="reviewer-info">
                 <div class="reviewer-avatar">
-                  <img src="" alt="Sarah Johnson">
+                  <img src="images/reviews/andrew-bartell.png" alt="Andrew Bartell">
                 </div>
                 <div class="reviewer-details">
-                  <h5 class="reviewer-name">Sarah Johnson</h5>
+                  <h5 class="reviewer-name">Andrew Bartell</h5>
                   <div class="review-rating">
                     <span class="star">★</span>
                     <span class="star">★</span>
@@ -197,10 +197,10 @@
             <div class="review-header">
               <div class="reviewer-info">
                 <div class="reviewer-avatar">
-                  <img src="" alt="Mike Rodriguez">
+                  <img src="images/reviews/emma-thompson.jpg" alt="Emma Thompson">
                 </div>
                 <div class="reviewer-details">
-                  <h5 class="reviewer-name">Mike Rodriguez</h5>
+                  <h5 class="reviewer-name">Emma Thompson</h5>
                   <div class="review-rating">
                     <span class="star">★</span>
                     <span class="star">★</span>
@@ -221,10 +221,10 @@
             <div class="review-header">
               <div class="reviewer-info">
                 <div class="reviewer-avatar">
-                  <img src="" alt="Emma Thompson">
+                  <img src="images/reviews/h-harold.png" alt="H. Harold">
                 </div>
                 <div class="reviewer-details">
-                  <h5 class="reviewer-name">Emma Thompson</h5>
+                  <h5 class="reviewer-name">H. Harold</h5>
                   <div class="review-rating">
                     <span class="star">★</span>
                     <span class="star">★</span>
@@ -245,7 +245,7 @@
             <div class="review-header">
               <div class="reviewer-info">
                 <div class="reviewer-avatar">
-                  <img src="" alt="Alex Kim">
+                  <img src="images/reviews/alex-kim.jpg" alt="Alex Kim">
                 </div>
                 <div class="reviewer-details">
                   <h5 class="reviewer-name">Alex Kim</h5>
@@ -269,10 +269,10 @@
             <div class="review-header">
               <div class="reviewer-info">
                 <div class="reviewer-avatar">
-                  <img src="" alt="Lisa Wang">
+                  <img src="images/reviews/steve-k.png" alt="Steve K.">
                 </div>
                 <div class="reviewer-details">
-                  <h5 class="reviewer-name">Lisa Wang</h5>
+                  <h5 class="reviewer-name">Steve K.</h5>
                   <div class="review-rating">
                     <span class="star">★</span>
                     <span class="star">★</span>

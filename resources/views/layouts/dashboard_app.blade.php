@@ -155,9 +155,8 @@
                     </div>
                     <div class="col-md-6 text-md-end">
                         <div class="footer-legal-links">
-                            <a href="#">Privacy Policy</a>
-                            <a href="#">Terms of Service</a>
-                            <a href="#">Cookie Policy</a>
+                            <a href="{{ route('privacy') }}">Privacy Policy</a>
+                            <a href="{{ route('terms') }}">Terms of Service</a>
                         </div>
                     </div>
                 </div>

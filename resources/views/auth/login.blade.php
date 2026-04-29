@@ -115,9 +115,6 @@
                         
                         <div class="register-redirect mt-4">
                             <p>Don't have an account? <a href="{{ route('register') }}">Create account</a></p>
-                            @if (Route::has('password.request'))
-                                <p>Forgot password? <a href="{{ route('password.request') }}">Reset password</a></p>
-                            @endif
                         </div>
                     </div>
                 </div>
