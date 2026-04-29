@@ -21,6 +21,11 @@ class Achievement extends Model
         'unlocked_at',
     ];
 
+    protected $casts = [
+        'progress'    => 'integer',
+        'unlocked_at' => 'datetime',
+    ];
+
     public static function syncForUser(int $userId): array
     {
         $currentStreak       = self::calculateCurrentStreak($userId);
@@ -84,12 +89,14 @@ class Achievement extends Model
 
         return $streak;
     }
+
     private static function calculateTotalCompletions(int $userId): int
     {
         return (int) HabitCompletion::where('user_id', $userId)
             ->where('is_skipped', false)
             ->count();
     }
+
     private static function calculateCategoryCompletions(int $userId): array
     {
         return HabitCompletion::where('habit_completions.user_id', $userId)
@@ -100,5 +107,5 @@ class Achievement extends Model
             ->groupBy('habits.category')
             ->pluck('count', 'category')
             ->toArray();
-    }   
+    }
 }

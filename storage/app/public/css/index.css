@@ -213,15 +213,17 @@
   transform: scale(1.05);
 }
 
-.download-image-col{
-  display: flex;
-  justify-content: center;
+.download-image-col {
+  position: absolute;
+  bottom: 0;
+  right: -20px;
+  padding: 0;
 }
 
 .download-image {
-  width: 350px;
+  width: 500px;
   height: auto;
-  margin: auto;
+  display: block;
 }
 
 /* reviews section */
@@ -266,12 +268,6 @@
   font-size: 1.2rem;
   margin-right: 1rem;
   flex-shrink: 0;
-}
-
-.reviewer-avatar img {
-  width: 50px;
-  height: 50px;
-  border-radius: 100%;
 }
 
 .reviewer-name {
