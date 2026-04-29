@@ -6,19 +6,11 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreGoalRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
@@ -28,7 +20,7 @@ class StoreGoalRequest extends FormRequest
             'category'     => 'required|string',
             'target_value' => 'required|integer|min:1',
             'unit'         => 'required|string',
-            'deadline'     => 'nullable|date|after:today',
+            'deadline'     => 'nullable|date|after_or_equal:today',
         ];
     }
 }
