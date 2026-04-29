@@ -99,8 +99,8 @@
                     <h5 class="footer-heading">Support</h5>
                     <ul class="footer-links">
                         <li><a href="{{ url("/contact") }}">Contact Us</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="{{ route('privacy') }}">Privacy Policy</a></li>
+                        <li><a href="{{ route('terms') }}">Terms of Service</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-2 col-md-12">
@@ -119,8 +119,8 @@
                     </div>
                     <div class="col-md-6 text-md-end">
                         <div class="footer-legal-links">
-                            <a href="#">Privacy Policy</a>
-                            <a href="#">Terms of Service</a>
+                            <a href="{{ route('privacy') }}">Privacy Policy</a>
+                            <a href="{{ route('terms') }}">Terms of Service</a>
                             <a href="#">Cookie Policy</a>
                         </div>
                     </div>
