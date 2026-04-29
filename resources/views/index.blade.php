@@ -3,6 +3,18 @@
 @section('title', 'Home')
 @section('styles')
   <link rel="stylesheet" href="{{ asset('storage/css/index.css') }}">
+  <style>
+    .reviewer-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+    }
+    .reviewer-avatar img[src=""] {
+      display: none;
+    }
+  </style>
 @endsection
 
 @section('content')
@@ -110,18 +122,13 @@
       <div class="download-card">
         <div class="row align-items-center h-100">
           <div class="col-lg-6 download-text-content">
-            <h3 class="download-title">Get Stead-E Now</h3>
+            <h3 class="download-title">Coming Soon</h3>
             <p class="download-text">
-              Start your journey to better habits today. Download Stead-E for free and join thousands of users who are already shaping their future.
+              We're working hard to bring Stead-E to your device. Stay tuned — the app will be available for download very soon!
             </p>
             <p class="download-text">
-              Available now on the Google Play Store with more platforms coming soon.
+              The mobile app is currently under development. We'll be launching on the Google Play Store and more platforms soon.
             </p>
-            <div class="mt-4">
-              <a href="#" class="google-play-btn">
-                <img src="images/google_play_badge.webp" alt="Get it on Google Play" class="play-store-badge">
-              </a>
-            </div>
           </div>
           <div class="col-lg-6 download-image-col">
             <div class="download-image-wrapper">
@@ -141,7 +148,9 @@
           <div class="review-card">
             <div class="review-header">
               <div class="reviewer-info">
-                <div class="reviewer-avatar">JD</div>
+                <div class="reviewer-avatar">
+                  <img src="" alt="John Doe">
+                </div>
                 <div class="reviewer-details">
                   <h5 class="reviewer-name">John Doe</h5>
                   <div class="review-rating">
@@ -163,7 +172,9 @@
           <div class="review-card">
             <div class="review-header">
               <div class="reviewer-info">
-                <div class="reviewer-avatar">SJ</div>
+                <div class="reviewer-avatar">
+                  <img src="" alt="Sarah Johnson">
+                </div>
                 <div class="reviewer-details">
                   <h5 class="reviewer-name">Sarah Johnson</h5>
                   <div class="review-rating">
@@ -185,7 +196,9 @@
           <div class="review-card">
             <div class="review-header">
               <div class="reviewer-info">
-                <div class="reviewer-avatar">MR</div>
+                <div class="reviewer-avatar">
+                  <img src="" alt="Mike Rodriguez">
+                </div>
                 <div class="reviewer-details">
                   <h5 class="reviewer-name">Mike Rodriguez</h5>
                   <div class="review-rating">
@@ -207,7 +220,9 @@
           <div class="review-card">
             <div class="review-header">
               <div class="reviewer-info">
-                <div class="reviewer-avatar">ET</div>
+                <div class="reviewer-avatar">
+                  <img src="" alt="Emma Thompson">
+                </div>
                 <div class="reviewer-details">
                   <h5 class="reviewer-name">Emma Thompson</h5>
                   <div class="review-rating">
@@ -229,7 +244,9 @@
           <div class="review-card">
             <div class="review-header">
               <div class="reviewer-info">
-                <div class="reviewer-avatar">AK</div>
+                <div class="reviewer-avatar">
+                  <img src="" alt="Alex Kim">
+                </div>
                 <div class="reviewer-details">
                   <h5 class="reviewer-name">Alex Kim</h5>
                   <div class="review-rating">
@@ -251,7 +268,9 @@
           <div class="review-card">
             <div class="review-header">
               <div class="reviewer-info">
-                <div class="reviewer-avatar">LW</div>
+                <div class="reviewer-avatar">
+                  <img src="" alt="Lisa Wang">
+                </div>
                 <div class="reviewer-details">
                   <h5 class="reviewer-name">Lisa Wang</h5>
                   <div class="review-rating">
