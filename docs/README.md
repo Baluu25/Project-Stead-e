@@ -50,7 +50,7 @@ Development follows **Clean Code** principles and a **RESTful** architecture.
 
 The system uses a relational database. Main tables and their relationships:
 
-![Database Diagram](images/database_diagram.jpg)
+![Database Diagram](images/database-connections.png)
 
 | Table               | Description                                                                 |
 | :------------------ | :-------------------------------------------------------------------------- |
