@@ -110,22 +110,17 @@
       <div class="download-card">
         <div class="row align-items-center h-100">
           <div class="col-lg-6 download-text-content">
-            <h3 class="download-title">Get Stead-E Now</h3>
+            <h3 class="download-title">Coming Soon</h3>
             <p class="download-text">
               Start your journey to better habits today. Download Stead-E for free and join thousands of users who are already shaping their future.
             </p>
             <p class="download-text">
-              Available now on the Google Play Store with more platforms coming soon.
+              Coming soon to the Google Play Store and more platforms.
             </p>
-            <div class="mt-4">
-              <a href="#" class="google-play-btn">
-                <img src="images/google_play_badge.webp" alt="Get it on Google Play" class="play-store-badge">
-              </a>
-            </div>
           </div>
           <div class="col-lg-6 download-image-col">
             <div class="download-image-wrapper">
-              <img src="images/hand_img.png" alt="Hand holding phone" class="download-image">
+              <img src="images/phone-view.png" alt="phone view" class="download-image">
             </div>
           </div>
         </div>
@@ -141,9 +136,9 @@
           <div class="review-card">
             <div class="review-header">
               <div class="reviewer-info">
-                <div class="reviewer-avatar">JD</div>
+                <div class="reviewer-avatar"><img src="images/reviews/radics-emanuel.png" alt=""></div>
                 <div class="reviewer-details">
-                  <h5 class="reviewer-name">John Doe</h5>
+                  <h5 class="reviewer-name">Arthur Radish</h5>
                   <div class="review-rating">
                     <span class="star">★</span>
                     <span class="star">★</span>
@@ -163,9 +158,9 @@
           <div class="review-card">
             <div class="review-header">
               <div class="reviewer-info">
-                <div class="reviewer-avatar">SJ</div>
+                <div class="reviewer-avatar"><img src="images/reviews/radics-emanuel.png" alt=""></div></div>
                 <div class="reviewer-details">
-                  <h5 class="reviewer-name">Sarah Johnson</h5>
+                  <h5 class="reviewer-name">Andrew Bartell</h5>
                   <div class="review-rating">
                     <span class="star">★</span>
                     <span class="star">★</span>
